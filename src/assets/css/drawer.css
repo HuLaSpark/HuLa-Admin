@@ -1,0 +1,121 @@
+/*修改默认的抽屉框头部的margin*/
+:deep(.el-drawer__header) {
+  margin-bottom: 0;
+}
+
+.drawer-header-close {
+  width: 100%;
+  margin-bottom: 50px;
+}
+
+.drawer-header-close:focus,
+.drawer-header-close:hover {
+  background-color: #e86060;
+  outline: 0;
+}
+
+/*抽屉框overflow*/
+:deep(.el-drawer__body) {
+  overflow: hidden;
+}
+
+/*修改默认表格栏颜色*/
+:deep(.el-table .warning-row) {
+  --el-table-tr-bg-color: var(--el-color-warning-light-9);
+}
+
+:deep(.el-table .success-row) {
+  --el-table-tr-bg-color: var(--el-color-success-light-9);
+}
+
+:deep(.el-table .danger-row) {
+  --el-table-tr-bg-color: var(--el-color-danger-light-9);
+}
+
+/*修改输入框旁字体样式*/
+:deep(.el-form-item__label) {
+  font-weight: bold;
+  padding: 0;
+}
+
+/*修改element plus默认输入框圆角*/
+:deep(.el-input__wrapper) {
+  border-radius: 10px;
+}
+
+/*修改element plus默认status-icon颜色*/
+:deep(.el-input__suffix-inner) {
+  color: green;
+}
+
+/*修改element plus默认输入框外边框颜色*/
+:deep(.el-input) {
+  --el-input-focus-border: #189f58;
+  --el-input-focus-border-color: #189f58;
+}
+
+/*修改element plus按钮偏移*/
+.modal-default-button {
+  float: right;
+}
+
+/*操作图标样式*/
+.operation {
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.2em;
+  cursor: pointer;
+  margin: 0 10px;
+}
+
+/*修改默认下拉框el-select的样式*/
+:deep(.el-select .el-input.is-focus .el-input__wrapper) {
+  box-shadow: 0 0 0 1px green inset !important;
+}
+
+:deep(.el-select) {
+  --el-select-input-focus-border-color: green;
+}
+
+.el-select-dropdown__item.selected {
+  color: green;
+  font-weight: bold;
+}
+
+/*多选框的颜色和样式*/
+:deep(.el-checkbox__input.is-checked .el-checkbox__inner) {
+  background-color: #189f58;
+  border-color: #189f58;
+}
+
+:deep(.el-checkbox__inner:hover) {
+  border-color: #189f58;
+}
+
+/*多选时半选的样式*/
+:deep(.el-checkbox__input.is-indeterminate .el-checkbox__inner) {
+  background-color: #189f58;
+  border-color: #189f58;
+}
+
+/*上传完成后浏览样式*/
+.avatar-uploader .avatar {
+  width: 100px;
+  height: 100px;
+  display: block;
+}
+
+/*上传外边框*/
+:deep(.avatar-uploader .el-upload) {
+  border: 1px dashed var(--el-border-color);
+  border-radius: 50%;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: var(--el-transition-duration-fast);
+}
+
+/*上传边框的颜色*/
+:deep(.avatar-uploader .el-upload:hover) {
+  border-color: green;
+}

@@ -1,0 +1,4 @@
+/dist/*
+/public/*
+src/style/reset.css
+/node_modules/*

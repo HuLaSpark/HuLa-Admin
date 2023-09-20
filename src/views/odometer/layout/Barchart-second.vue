@@ -1,0 +1,133 @@
+<template>
+  <div id="Barchart-second" class="barchart"></div>
+</template>
+
+<script setup lang="ts">
+import { onMounted, watch } from 'vue'
+import * as echarts from 'echarts'
+import { mainStore } from '@/stores/main'
+import { storeToRefs } from 'pinia'
+type EChartsOption = echarts.EChartsOption
+
+const color = 'rgb(201,196,196)'
+const store = mainStore()
+const { TEXT_COLOR, THEME, BGC } = storeToRefs(store)
+let myChart: echarts.ECharts
+
+watch(THEME, () => {
+  /*监听主题是否切换，如果切换就重新绘制图表*/
+  myChart.setOption({
+    backgroundColor: BGC.value,
+    legend: {
+      textStyle: {
+        color: TEXT_COLOR.value
+      }
+    },
+    title: {
+      textStyle: {
+        color: TEXT_COLOR.value
+      }
+    }
+  })
+})
+onMounted(() => {
+  setTimeout(() => {
+    // 绘制图表
+    const chartDom = document.getElementById('Barchart-second')!
+    function setChartHeight() {
+      chartDom.style.width = '350px'
+      chartDom.style.height = window.innerHeight - chartDom.getBoundingClientRect().top - 72 + 'px'
+    }
+    setChartHeight()
+    window.addEventListener('resize', setChartHeight)
+    myChart = echarts.init(chartDom)
+    let option: EChartsOption
+
+    option = {
+      barWidth: 20,
+      title: {
+        text: '车辆一周的审核情况',
+        textStyle: {
+          color: TEXT_COLOR.value
+        },
+        subtext: 'Weekly vehicle audit status'
+      },
+      xAxis: {
+        type: 'category',
+        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+      },
+      yAxis: {
+        type: 'value'
+      },
+      series: [
+        {
+          data: [
+            {
+              value: 180,
+              itemStyle: {
+                color: color
+              }
+            },
+            200,
+            {
+              value: 60,
+              itemStyle: {
+                color: color
+              }
+            },
+            {
+              value: 120,
+              itemStyle: {
+                color: color
+              }
+            },
+            {
+              value: 40,
+              itemStyle: {
+                color: color
+              }
+            },
+            {
+              value: 90,
+              itemStyle: {
+                color: color
+              }
+            },
+            {
+              value: 110,
+              itemStyle: {
+                color: 'rgb(201,196,196)'
+              }
+            }
+          ],
+          type: 'bar'
+        }
+      ]
+    }
+    option && myChart.setOption(option)
+    if (window.matchMedia('(max-width: 1366px)').matches) {
+      chartDom.style.width = '240px'
+      chartDom.style.height = window.innerHeight - chartDom.getBoundingClientRect().top - 52 + 'px'
+      myChart.resize()
+    }
+  }, 10)
+})
+</script>
+
+<style scoped>
+@import '@/assets/css/barchar.css';
+
+@media screen and (max-width: 1920px) {
+  .barchart {
+    background: v-bind(BGC);
+    margin-left: 30px;
+  }
+}
+
+@media screen and (max-width: 1366px) {
+  .barchart {
+    background: v-bind(BGC);
+    margin-left: 15px;
+  }
+}
+</style>

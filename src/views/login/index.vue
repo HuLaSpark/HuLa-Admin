@@ -1,91 +1,113 @@
 <template>
-    <div class="cn-en">
-        <n-switch/>
-        <p>{{ t('switch') }}</p>
-        <div style="display: flex">
-        </div>
-    </div>
-    <div class="login-logo">
-        <img src="/vue.svg" alt="">
-    </div>
-    <div class="login">
-        <h1>{{ t('login') }} WT</h1>
-        <!-- 登录错误提示框 -->
-<!--        <n-alert title="Error 类型" type="error">-->
-<!--            I'm back in the U.S.S.R.-->
-<!--        </n-alert>-->
-        <!-- 登录表单 -->
-        <n-card class="form">
-            <n-form ref="formRef" :rules="rules as any" :model="formValue">
-                <div style="margin: 10px 0">
-                    <n-form-item path="userName" :label="t('un_or_el')" :show-require-mark="false" label-style="font-size: 14px;color: #cccccc">
-                        <n-input v-model:value="formValue.userName" style="border-radius: 8px" :placeholder="t('input_username_email')">
-                            <template #prefix>
-                                <n-icon color="#000"><UserOutlined/></n-icon>
-                            </template>
-                        </n-input>
-                    </n-form-item>
+  <!-- 头部操作项 -->
+  <HeaderGroup />
 
-                    <div class="paw-title">
-                        <p style="font-size: 14px;color: #cccccc">{{ t('password') }}</p>
-                        <p style="font-size: 12px;color: #337ecc;cursor: pointer">{{ t('forgot_password') }}</p>
-                    </div>
-                    <n-form-item path="password" :label="t('password')" :show-label="false">
-                        <n-input v-model:value="formValue.password" style="border-radius: 8px" :placeholder="t('input_paw')">
-                            <template #prefix>
-                                <n-icon color="#000"><UnlockOutlined/></n-icon>
-                            </template>
-                        </n-input>
-                    </n-form-item>
-                </div>
+  <!-- logo -->
+  <!--	<div class="login-logo">-->
+  <!--		<img src="/vue.svg" alt="" />-->
+  <!--	</div>-->
 
-                <n-button type="primary" style="width: 100%" @click="handleValidateClick">Login
-                </n-button>
-            </n-form>
-        </n-card>
-        <div class="FirstVisit">
-            <h1>{{ t('et_problems') }}</h1>
-            <h2>{{ t('contact_admin') }}</h2>
-        </div>
-        <div class="BottomBar">
+  <div style="display: flex; justify-content: center; align-items: center">
+    <i class="products-icon is-enter"></i>
+  </div>
 
-            <p>Copyright © 2022-2023 Nyh.All Rights Reserved.</p>
-        </div>
-    </div>
+  <!-- 登录表单 -->
+  <LoginForm />
+
+  <!--  模态框-->
+  <Teleport to="body">
+    <!-- 使用这个 modal 组件，传入 prop -->
+    <modal :show="showModal" @close="showModal = false">
+      <template #header>
+        <h3 class="msg">{{ emailMsg }}</h3>
+      </template>
+      <template #body>
+        <n-form
+          ref="formRef"
+          :show-require-mark="false"
+          label-placement="left"
+          :model="ruleEmail"
+          :rules="emailRules as any">
+          <n-form-item path="email" :label="t('email')">
+            <n-space>
+              <n-input
+                :placeholder="t('placeholder')"
+                style="border-radius: 8px"
+                v-model:value="ruleEmail.email"
+                clearable />
+              <n-button type="primary" quaternary @click="handleCodeInput(formRef)">{{ t('send') }}</n-button>
+            </n-space>
+          </n-form-item>
+        </n-form>
+      </template>
+      <template #footer>
+        <n-button class="close_btn" type="error" quaternary @click="emailClose">{{ t('close') }}</n-button>
+      </template>
+    </modal>
+  </Teleport>
+
+  <!-- 验证码输入框  -->
+  <Teleport to="body">
+    <!-- 使用这个 modal 组件，传入 prop -->
+    <modal :show="showCode" width="350px" @close="showCode = false">
+      <template #header>
+        <h3 class="msg">{{ codeMsg }}</h3>
+      </template>
+      <template #body>
+        <CodeInput :email="ruleEmail.email" @input="code" :code-length="6" :input-size="50"></CodeInput>
+      </template>
+      <template #footer>
+        <CountDown :rule-form-ref="formRef" :time="60"></CountDown>
+        <n-button quaternary type="primary" class="close_btn" @click="codeInputClose">{{ t('close') }}</n-button>
+      </template>
+    </modal>
+  </Teleport>
 </template>
 
 <script setup lang="ts">
-import {i18n} from "@/i18n"
-import { UserOutlined, UnlockOutlined } from '@ant-design/icons-vue'
-import { FormInst, useMessage } from 'naive-ui'
+import { i18n } from '@/i18n'
+import { useLogin } from '@/hooks/useLogin'
+import check from '@/hooks/useCheck'
+import Modal from '@/components/modal/index.vue'
+import useModal from '@/hooks/useModal'
+import { animation } from '@/components/modal/type'
+import CodeInput from '@/components/codeinput/index.vue'
+import CountDown from '@/components/countdown/index.vue'
+import HeaderGroup from '@/views/login/head/index.vue'
+import LoginForm from '@/views/login/form/index.vue'
 
+/*在layout中挂载需要挂载全局的hook*/
+window.$message = useMessage()
+window.$notification = useNotification()
 const { t } = i18n.global
-const message = useMessage()
-const formRef = ref<FormInst | null>(null)
-
-const formValue = ref({
-    userName: "",
-    password: ""
+/*验证码输入框内容*/
+const code = ref<any>('')
+const { formRef, showModal, emailMsg, codeMsg, ruleEmail, showCode, handleCodeInput } = useLogin()
+const { validateEmail } = check()
+/*引入全局的关闭方法*/
+const { close } = useModal()
+const emailRules = reactive({
+  email: [{ required: true, asyncValidator: validateEmail, trigger: 'blur' }]
 })
 
-const rules = reactive({
-    userName: {required: true, message: '请输入用户名或邮箱', trigger: 'blur'},
-    password: {required: true, message: '请输入密码', trigger: 'blur'},
-})
+/*邮箱弹出框关闭*/
+const emailClose = () => {
+  close().then(() => {
+    emailMsg.value = t('change_paw')
+    codeMsg.value = t('code_input')
+  })
+}
 
-const handleValidateClick  = (e: MouseEvent) => {
-    e.preventDefault()
-    formRef.value?.validate((errors) => {
-        if (!errors) {
-            message.success('输入正确')
-        } else {
-            console.log(errors)
-            message.error('输入错误')
-        }
-    })
+/*自定义输入验证码关闭方法*/
+const codeInputClose = async () => {
+  animation.value = 'modal-container animate__animated animate__rotateOutDownRight'
+  await nextTick(() => {
+    showCode.value = false
+    animation.value = 'modal-container animate__animated animate__shakeX'
+  })
 }
 </script>
 
 <style scoped>
-@import "@/assets/css/login.css";
+@import '@/assets/css/login.css';
 </style>

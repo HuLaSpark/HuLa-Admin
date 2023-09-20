@@ -12,7 +12,13 @@
     "lib": ["ESNext", "DOM"],
     "skipLibCheck": true,
     "noEmit": true,
-    "types": [  "vite/client" ],
+    "types": [
+      "vite/client",
+      "xterm-addon-fit",
+      "node",
+      "vitest/globals",
+      "@types/lodash-es"
+    ],
     "baseUrl": "./",
     "paths": {
       "@/*": [
@@ -26,7 +32,8 @@
     "src/**/*.tsx",
     "src/**/*.vue",
     "shime-vue.d.ts",
-    "auto-imports.d.ts"
+    "auto-imports.d.ts",
+    "tests/*.ts"
   ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
