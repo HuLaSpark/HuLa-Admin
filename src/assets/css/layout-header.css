@@ -1,0 +1,50 @@
+.header-unfold {
+  width: calc(100vw - 110px);
+  height: 50px;
+  border-radius: 10px;
+  margin: 10px;
+}
+.header-shrink {
+  width: calc(100vw - 240px);
+  height: 50px;
+  border-radius: 10px;
+  margin: 10px;
+}
+.operation-list {
+  height: 50px;
+  line-height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  cursor: pointer;
+  padding: 0 15px 0 10px;
+}
+.operation-list-box {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  cursor: pointer;
+}
+.header-unfold .operation-list-box:hover .n-icon {
+  animation: twinkle 0.3s ease-in-out;
+}
+.header-shrink .operation-list-box:hover .n-icon {
+  animation: twinkle 0.3s ease-in-out;
+}
+.header-unfold .operation-list-box:hover .n-avatar {
+  animation: twinkle 0.3s ease-in-out;
+}
+.header-shrink .operation-list-box:hover .n-avatar {
+  animation: twinkle 0.3s ease-in-out;
+}
+@keyframes twinkle {
+  0% {
+    transform: scale(0);
+  }
+  80% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}

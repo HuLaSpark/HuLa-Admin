@@ -1,27 +1,25 @@
 interface Dict {
-    id:number
-    code:string
-    value:string
-    type:string
-    deleted:number
+  id: number
+  code: string
+  value: string
+  type: string
+  deleted: number
 }
-interface parameter{
-    pageNum: number
-    pageSize: number
-    code: string
+interface parameter {
+  pageNum: number
+  pageSize: number
+  code: string
 }
 
 interface deleteId {
-    id?: number
-    ids?: number[]
+  id?: number
+  ids?: number[]
 }
 
 interface value {
-    code: string
-    data?: any
-    msg: string
+  code: string
+  data?: any
+  msg: string
 }
 
-export type {
-    Dict,deleteId,value,parameter
-}
+export type { Dict, deleteId, value, parameter }

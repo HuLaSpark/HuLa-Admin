@@ -1,0 +1,16 @@
+@media screen and (max-width: 1920px) {
+  .barchart {
+    padding: 15px;
+    border-radius: 10px;
+    margin-top: 10px;
+  }
+}
+
+@media screen and (max-width: 1366px) {
+  .barchart {
+    width: 220px;
+    padding: 5px 15px 0 15px;
+    border-radius: 10px;
+    margin-top: 10px;
+  }
+}
