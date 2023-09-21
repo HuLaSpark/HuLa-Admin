@@ -88,7 +88,7 @@ export const createAxios = (config?: AxiosRequestConfig): AxiosInstance => {
       if (res.code === RCodeEnum.UNAUTHORIZED) {
         window.$message.error(res.msg)
       }
-      /*判断响应体中的错误码，如果是TIMEOUT则是登录时间内长时间不操作需要验证登录，如果是RENEW-PAW-ERROR是续签时候密码错误*/
+      /*判断响应体中的错误码，如果是TIMEOUT则是登录时间内长时间不操作需要验证登录，如果是RENEW_PAW_ERROR是续签时候密码错误*/
       if (res.code === RCodeEnum.TIMEOUT) {
         /*传入错误信息*/
         /*window.$message.error(res.msg)*/
@@ -97,7 +97,7 @@ export const createAxios = (config?: AxiosRequestConfig): AxiosInstance => {
         })
       }
       /*如果密码错误返回错误信息*/
-      if (res.code === RCodeEnum.PAW_ERROR) {
+      if (res.code === RCodeEnum.RENEW_PAW_ERROR) {
         handleVerify(res.msg)
       }
       //判断响应体中的错误码，如果是401则需要重新登录

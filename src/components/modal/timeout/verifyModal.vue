@@ -53,11 +53,11 @@ const uid = userInfoStore.getUserUId
 const userExit = () => {
   Loading.hourglass()
   delay(() => {
+    show.value = false
     userInfoStore.logout()
-    useLogin()
-      .exit(uid)
-      .then(() => (show.value = false))
-  }, 1000)
+    Loading.remove()
+    useLogin().exit(uid)
+  }, 300)
 }
 const { butShow, validateRenewPassword } = check()
 const rules = reactive({

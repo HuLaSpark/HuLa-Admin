@@ -22,7 +22,6 @@
         </n-card>
       </n-config-provider>
     </div>
-    <n-switch :value="olForm.test" @update:value="test" />
   </n-space>
 </template>
 
@@ -39,8 +38,7 @@ const store = mainStore()
 const loading = ref(false)
 const { THEME } = storeToRefs(store)
 const olForm = reactive({
-  themeStatus: false,
-  test: false
+  themeStatus: false
 })
 // 定义跟踪变化的副本对象
 let form = shallowReactive(cloneDeep(olForm))
@@ -62,9 +60,6 @@ const switchTheme = () => {
     olForm.themeStatus = !olForm.themeStatus
     theme.value = olForm.themeStatus ? darkTheme : null
   }, 1000)
-}
-const test = () => {
-  olForm.test = !olForm.test
 }
 watchEffect(() => {
   form = shallowReactive(cloneDeep(olForm))

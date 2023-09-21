@@ -60,7 +60,7 @@ const chineseSwitch = () => {
     NDataLanguage.value = dateZhCN
     i18nStore.setChinese()
     locale.value = i18nStore.locale as never
-  }, 1000)
+  }, 500)
 }
 const englishSwitch = () => {
   loading.value = true
@@ -70,7 +70,7 @@ const englishSwitch = () => {
     NDataLanguage.value = null
     i18nStore.setEnglish()
     locale.value = i18nStore.locale as never
-  }, 1000)
+  }, 500)
 }
 </script>
 

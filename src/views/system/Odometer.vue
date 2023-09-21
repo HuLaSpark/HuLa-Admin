@@ -1,23 +1,23 @@
 <template>
   <div style="display: flex">
     <div>
-      <div style="display: flex">
+      <div v-if="defer(4)" style="display: flex">
         <!--顶部卡片-->
         <Cardchart />
         <CardchartSecond />
         <CardchartThird />
       </div>
       <!--折线图组件-->
-      <Areachart />
+      <Areachart v-if="defer(8)" />
       <!--柱状图组件-->
-      <div style="display: flex">
+      <div v-if="defer(12)" style="display: flex">
         <Barchart />
         <Barchart2 />
         <Barchart3 />
       </div>
     </div>
     <!--饼图组件-->
-    <Piechart />
+    <Piechart v-if="defer(16)" />
   </div>
 </template>
 <script setup lang="ts">
@@ -29,7 +29,9 @@ import Barchart3 from '@/views/odometer/layout/Barchart-third.vue'
 import Cardchart from '@/views/odometer/layout/Cardchart.vue'
 import CardchartSecond from '@/views/odometer/layout/Cardchart-second.vue'
 import CardchartThird from '@/views/odometer/layout/Cardchart-third.vue'
+import { useDefer } from '@/hooks/useDefer'
 
+const defer = useDefer(16)
 window.$message = useMessage()
 window.$notification = useNotification()
 </script>

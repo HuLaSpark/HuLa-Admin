@@ -64,7 +64,7 @@
   </Teleport>
 </template>
 
-<script setup lang="ts">
+<script async setup lang="ts">
 import { i18n } from '@/i18n'
 import { useLogin } from '@/hooks/useLogin'
 import check from '@/hooks/useCheck'

@@ -1,26 +1,7 @@
-## 0.0.0 (2023-09-02)
+## 0.0.0 (2023-09-20)
 
-* :lipstick: style(custom): 完善changelog配置文件 ([33641f4](https://gitee.com/nongyehong/vue3-ts/commits/33641f4))
-* :lipstick: style(custom): 修改eslint和prettier的样式冲突 ([6dbba58](https://gitee.com/nongyehong/vue3-ts/commits/6dbba58))
-* :sparkles: feat(custom): 新增commitizen做ui界面git提交，新增changelog自动生成git信息md ([ba4c5f5](https://gitee.com/nongyehong/vue3-ts/commits/ba4c5f5))
+* :rewind: revert(custom): 回退到重构版本 ([39fe8f8](https://gitee.com/nongyehong/vue3-ts/commits/39fe8f8))
 * 初始化仓库 ([3fec13e](https://gitee.com/nongyehong/vue3-ts/commits/3fec13e))
-* 对登录页面代码进行分层，使用remixicon来做图标库，降低typescript的版本到4.9兼容echarts5 ([f756a75](https://gitee.com/nongyehong/vue3-ts/commits/f756a75))
-* 改用pnpm来做包管理工具，使用br做压缩算法，完善一些其余的功能 ([ccd9adf](https://gitee.com/nongyehong/vue3-ts/commits/ccd9adf))
-* 格式化代码 ([de70b44](https://gitee.com/nongyehong/vue3-ts/commits/de70b44))
-* 实现登录页面记住我功能(第一版) ([c1a4b68](https://gitee.com/nongyehong/vue3-ts/commits/c1a4b68))
-* 使用eslint和prettier来规范代码 ([698d384](https://gitee.com/nongyehong/vue3-ts/commits/698d384))
-* 使用vitest来做单元测试，后续需要完善单元测试，完善仪表板图表样式 ([e52a2b1](https://gitee.com/nongyehong/vue3-ts/commits/e52a2b1))
-* 统一node版本，使用only-allow插件统一使用包管理工具 ([2317f26](https://gitee.com/nongyehong/vue3-ts/commits/2317f26))
-* 完善登录页面样式 ([a28b76b](https://gitee.com/nongyehong/vue3-ts/commits/a28b76b))
-* 完善顶部操作栏功能 ([fa2fc5b](https://gitee.com/nongyehong/vue3-ts/commits/fa2fc5b))
-* 完善设置抽屉框功能 ([4f55988](https://gitee.com/nongyehong/vue3-ts/commits/4f55988))
-* 完善重构登录页面样式和功能(剩余登录功能) ([5830031](https://gitee.com/nongyehong/vue3-ts/commits/5830031))
-* 优化代码，使用vite-plugin-vue-devtools工具来完善开发 ([000046a](https://gitee.com/nongyehong/vue3-ts/commits/000046a))
-* 优化首页ui和增加登陆页面功能性ui ([37c6f9a](https://gitee.com/nongyehong/vue3-ts/commits/37c6f9a))
-* 重构布局页面的头部样式 ([750fc55](https://gitee.com/nongyehong/vue3-ts/commits/750fc55))
-* 重构侧边栏菜单样式 ([5813eae](https://gitee.com/nongyehong/vue3-ts/commits/5813eae))
-* 重构代码第一版(登录页面完成主题切换和登录请求) ([b37e130](https://gitee.com/nongyehong/vue3-ts/commits/b37e130))
-* chore: 新增stylelint、commitlint来管理代码规范和提交规范 ([5c6fb90](https://gitee.com/nongyehong/vue3-ts/commits/5c6fb90))
 
 
 

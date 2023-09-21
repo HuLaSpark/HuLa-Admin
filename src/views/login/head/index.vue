@@ -51,7 +51,7 @@ const switchTheme = (value: boolean) => {
     loading.value = false
     THEME.value = value
     store.toggleTheme()
-  }, 1000)
+  }, 500)
 }
 
 /*监听语言是否被切换，如何发生变化则调用i18n修改loginText*/
