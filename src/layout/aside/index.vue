@@ -3,7 +3,7 @@
     <div class="aside-head">
       <img id="unfold-img" v-if="collapsed" src="/vue.svg" alt="" />
       <img id="collapsed-img" v-else src="/vue.svg" alt="" />
-      <p v-show="!collapsed" class="aside-title">Vue3+Ts</p>
+      <p v-show="!collapsed" class="aside-title">HuLa</p>
     </div>
     <n-layout has-sider>
       <n-layout-sider

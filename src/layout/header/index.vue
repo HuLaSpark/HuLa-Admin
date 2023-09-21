@@ -175,7 +175,7 @@ const userExit = () => {
     Loading.remove()
     userInfoStore.logout()
     useLogin().exit(uid)
-  }, 1000)
+  }, 500)
 }
 </script>
 

@@ -15,7 +15,7 @@ export enum RCodeEnum {
   /**自定义成功提示*/
   SUCCESS = 'U00002',
   /**验证密码错误*/
-  PAW_ERROR = 'U00003',
+  RENEW_PAW_ERROR = 'U00003',
   /**无权限*/
   UNAUTHORIZED = 'U00004',
   /**服务器出现问题*/

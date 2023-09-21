@@ -9,9 +9,9 @@ import pinia from '@/stores/index'
 import { i18n } from '@/i18n'
 
 const app = createApp(App)
-pinia.use(piniaPluginPersistedstate)
-app.use(pinia)
 app.use(router)
+app.use(pinia)
 app.use(i18n)
 app.use(VueAnimXyz)
+pinia.use(piniaPluginPersistedstate)
 app.mount('#app')

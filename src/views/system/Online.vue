@@ -158,7 +158,19 @@ const modalUserInfo = reactive({
 const activeColor: any = ref<string>()
 const errorHandler = () => true
 
-const { pageSize, total, disabled, verify, loading, showModal, tableData, load, kick, onlineBan, tableRowClassNameOnline } = useOnline()
+const {
+  pageSize,
+  total,
+  disabled,
+  verify,
+  loading,
+  showModal,
+  tableData,
+  load,
+  kick,
+  onlineBan,
+  tableRowClassNameOnline
+} = useOnline()
 
 const { judgmentAuth } = useAuth()
 

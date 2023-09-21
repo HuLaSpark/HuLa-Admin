@@ -76,8 +76,9 @@ export const useLogin = () => {
                 duration: 1500,
                 keepAliveOnHover: true
               })
-            }, 1000)
+            }, 300)
           } else {
+            Loading.remove()
             loginText.value = t('login')
             signInLoading.value = false
             disabled.value = false
@@ -98,6 +99,7 @@ export const useLogin = () => {
         })
       })
       .catch(() => {
+        Loading.remove()
         disabled.value = false
       })
   }
