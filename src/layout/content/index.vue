@@ -3,7 +3,9 @@
     <div v-if="$route.path !== '/odometer'" class="content" v-show="show">
       <div class="animate__animated animate__fadeInRight">
         <div class="routerView">
-          <router-view />
+          <n-scrollbar style="max-height: calc(100vh - 152px)">
+            <router-view />
+          </n-scrollbar>
         </div>
       </div>
     </div>
@@ -15,7 +17,6 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
 import Odometer from '@/views/system/Odometer.vue'
 import { mainStore } from '@/stores/main'
 import { storeToRefs } from 'pinia'

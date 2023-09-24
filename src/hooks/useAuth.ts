@@ -1,7 +1,11 @@
-import { FlagEnum } from '@/enums'
+import { FlagEnum, RoleEnum } from '@/enums'
 
 type AuthMap = {
   [key: string]: FlagEnum
+}
+
+type RoleText = {
+  [key in RoleEnum]: string
 }
 
 export const useAuth = () => {
@@ -13,5 +17,14 @@ export const useAuth = () => {
     }
     return authMap[flag] || 'info'
   }
-  return { judgmentAuth }
+  const judgmentRole = (flag: keyof RoleText) => {
+    const roleText: RoleText = {
+      [RoleEnum.HL_SYS_ADMIN]: '超级管理员',
+      [RoleEnum.HL_SYS_MANAGE]: '管理员',
+      [RoleEnum.HL_SYS_USER]: '普通用户'
+    }
+    return roleText[flag]
+  }
+
+  return { judgmentAuth, judgmentRole }
 }

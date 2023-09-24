@@ -164,5 +164,7 @@
   "is_standard": "don't type any other characters😡",
   "enable": "on",
   "forbidden": "off",
-  "no_data": "No Data"
+  "no_data": "No Data",
+  "403": "403 Access is prohibited",
+  "403_content": "There are always doors that are closed to you"
 }
