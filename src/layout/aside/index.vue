@@ -1,8 +1,8 @@
 <template>
   <div class="aside">
     <div class="aside-head">
-      <img id="unfold-img" v-if="collapsed" src="/vue.svg" alt="" />
-      <img id="collapsed-img" v-else src="/vue.svg" alt="" />
+      <img id="unfold-img" v-if="collapsed" src="/logo.png" alt="" />
+      <img id="collapsed-img" v-else src="/logo.png" alt="" />
       <p v-show="!collapsed" class="aside-title">HuLa</p>
     </div>
     <n-layout has-sider>
@@ -137,20 +137,19 @@ const menuOptions: MenuOption[] = menus.map((menu: Menu) => {
   color: v-bind(TEXT_COLOR);
 }
 .aside-head #collapsed-img {
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 30px;
   margin: 1em;
   cursor: pointer;
   filter: drop-shadow(0 0 1em #2c964b);
 }
 .aside-head #unfold-img {
-  width: 18px;
-  height: 18px;
-  margin: 1em;
+  width: 28px;
+  height: 28px;
+  margin: 1em 0;
   cursor: pointer;
-  filter: drop-shadow(0 0 1em #2c964b);
 }
-/*图标的放大效果*/
+/*!*图标的放大效果*!
 @keyframes logo-spin {
   0% {
     transform: scale(1);
@@ -163,7 +162,7 @@ const menuOptions: MenuOption[] = menus.map((menu: Menu) => {
   }
 }
 
-/*自动循环*/
+!*自动循环*!
 @media (prefers-reduced-motion: no-preference) {
   .aside-head #collapsed-img {
     animation: logo-spin infinite 2s linear;
@@ -171,7 +170,7 @@ const menuOptions: MenuOption[] = menus.map((menu: Menu) => {
   .aside-head #unfold-img {
     animation: logo-spin infinite 2s linear;
   }
-}
+}*/
 :deep(.n-menu .n-menu-item-content) {
   font-weight: bold;
 }

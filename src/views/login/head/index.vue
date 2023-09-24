@@ -1,6 +1,6 @@
 <template>
   <div class="cn-en">
-    <n-text depth="3">v1.0.5-alpha</n-text>
+    <n-text depth="3">{{ version }}</n-text>
     <n-icon color="#ccc"><ArrowUpRight /></n-icon>
     <n-divider vertical />
     <n-switch :rubber-band="false" :value="THEME" :loading="loading" @update:value="switchTheme">
@@ -36,7 +36,9 @@ import { useLogin } from '@/hooks/useLogin'
 import { Moon, Sun, BrandGit, ArrowUpRight } from '@vicons/tabler'
 import Language from '@/components/Language/index.vue'
 import { delay } from 'lodash-es'
+import { pkgJson } from '@/components/aboutUs/model'
 
+const { version } = pkgJson
 const gitee = 'https://gitee.com/nongyehong'
 const { locale, t } = i18n.global
 const store = mainStore()

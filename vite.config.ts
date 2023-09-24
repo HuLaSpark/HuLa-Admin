@@ -6,6 +6,8 @@ import { NaiveUiResolver } from 'unplugin-vue-components/resolvers'
 import viteCompression from 'vite-plugin-compression' //vite开启gzip压缩
 import path from 'path' //使用path需要按照@types/node依赖
 import vueDevTools from 'vite-plugin-vue-devtools'
+import vueJsx from '@vitejs/plugin-vue-jsx'
+import { viteDefine } from './build/config'
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
@@ -29,9 +31,11 @@ export default defineConfig(({ mode }) => {
       // 这需要你安装 happy-dom 作为对等依赖（peer dependency）
       environment: 'happy-dom'
     },
+    define: viteDefine,
     plugins: [
       vue(),
       vueDevTools(),
+      vueJsx(),
       AutoImport({
         imports: ['vue', { 'naive-ui': ['useDialog', 'useMessage', 'useNotification', 'useLoadingBar'] }]
       }),
