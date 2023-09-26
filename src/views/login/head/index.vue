@@ -36,7 +36,7 @@ import { useLogin } from '@/hooks/useLogin'
 import { Moon, Sun, BrandGit, ArrowUpRight } from '@vicons/tabler'
 import Language from '@/components/Language/index.vue'
 import { delay } from 'lodash-es'
-import { pkgJson } from '@/components/aboutUs/model'
+import { pkgJson } from '@/views/composables/aboutUs/model'
 
 const { version } = pkgJson
 const gitee = 'https://gitee.com/nongyehong'

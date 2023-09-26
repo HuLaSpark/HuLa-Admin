@@ -30,7 +30,9 @@ import Cardchart from '@/views/odometer/layout/Cardchart.vue'
 import CardchartSecond from '@/views/odometer/layout/Cardchart-second.vue'
 import CardchartThird from '@/views/odometer/layout/Cardchart-third.vue'
 import { useDefer } from '@/hooks/useDefer'
+import Mit from '@/utils/Bus'
 
+Mit.emit('pagination', true)
 const defer = useDefer(16)
 window.$message = useMessage()
 window.$notification = useNotification()

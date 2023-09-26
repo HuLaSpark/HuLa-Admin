@@ -5,6 +5,7 @@
  **/
 import type { RCodeEnum } from '@/enums'
 
+/*响应请求体*/
 export type Response = {
   code: RCodeEnum
   msg: string
@@ -16,7 +17,7 @@ export type Response = {
   success: boolean
   version: string
 }
-
+/*菜单*/
 export type Menu = {
   path: null | string
   page: string
@@ -25,13 +26,13 @@ export type Menu = {
   icon: string
   children?: Menu[]
 }
-
+/*分页搜索*/
 export type parameter = {
   pageNum: number
   pageSize: number
   name: string
 }
-
+/*用户*/
 export type User = {
   id: number
   uid: string
@@ -45,7 +46,7 @@ export type User = {
   createTime: string
   updateTime: string
 }
-
+/*分页用户*/
 export type pageUser = {
   id: number
   userName: string
@@ -57,7 +58,7 @@ export type pageUser = {
   createTime: string
   updateTime: string
 }
-
+/*更新用户*/
 export type UpdateUser = {
   id: number
   userName: string
@@ -65,7 +66,7 @@ export type UpdateUser = {
   status: number
   avatar: string
 }
-
+/*记住我*/
 export type Renew = {
   userName: string
   password: string

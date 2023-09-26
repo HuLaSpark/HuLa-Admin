@@ -7,7 +7,9 @@ import viteCompression from 'vite-plugin-compression' //vite开启gzip压缩
 import path from 'path' //使用path需要按照@types/node依赖
 import vueDevTools from 'vite-plugin-vue-devtools'
 import vueJsx from '@vitejs/plugin-vue-jsx'
-import { viteDefine } from './build/config'
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import { viteDefine } from './build/config/define'
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {

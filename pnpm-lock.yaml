@@ -28,6 +28,9 @@ dependencies:
   lodash-es:
     specifier: ^4.17.21
     version: registry.npmmirror.com/lodash-es@4.17.21
+  mitt:
+    specifier: ^3.0.1
+    version: registry.npmmirror.com/mitt@3.0.1
   naive-ui:
     specifier: ^2.34.4
     version: registry.npmmirror.com/naive-ui@2.34.4(vue@3.3.4)
@@ -914,7 +917,7 @@ packages:
       lodash.merge: registry.npmmirror.com/lodash.merge@4.6.2
       lodash.uniq: registry.npmmirror.com/lodash.uniq@4.5.0
       resolve-from: registry.npmmirror.com/resolve-from@5.0.0
-      ts-node: registry.npmmirror.com/ts-node@10.9.1(@types/node@20.4.7)(typescript@4.9.3)
+      ts-node: registry.npmmirror.com/ts-node@10.9.1(@types/node@20.3.2)(typescript@4.9.3)
       typescript: registry.npmmirror.com/typescript@4.9.3
     transitivePeerDependencies:
       - '@swc/core'
@@ -3649,7 +3652,7 @@ packages:
     dependencies:
       '@types/node': registry.npmmirror.com/@types/node@20.4.7
       cosmiconfig: registry.npmmirror.com/cosmiconfig@8.3.6(typescript@4.9.3)
-      ts-node: registry.npmmirror.com/ts-node@10.9.1(@types/node@20.4.7)(typescript@4.9.3)
+      ts-node: registry.npmmirror.com/ts-node@10.9.1(@types/node@20.3.2)(typescript@4.9.3)
       typescript: registry.npmmirror.com/typescript@4.9.3
     dev: true
 
@@ -6524,6 +6527,12 @@ packages:
     version: 1.2.8
     dev: true
 
+  registry.npmmirror.com/mitt@3.0.1:
+    resolution: {integrity: sha512-vKivATfr97l2/QBCYAkXYDbrIWPM2IIKEl7YPhjCvKlG3kE2gm+uBo6nEXK3M5/Ffh/FLpKExzOQ3JJoJGFKBw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/mitt/-/mitt-3.0.1.tgz}
+    name: mitt
+    version: 3.0.1
+    dev: false
+
   registry.npmmirror.com/mkdirp@0.5.6:
     resolution: {integrity: sha512-FP+p8RB8OWpF3YZBCrP5gtADmtXApB5AMLn+vdyA+PyxCjrCs00mjyUozssO33cwDeT3wNGdLxJ5M//YqtHAJw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/mkdirp/-/mkdirp-0.5.6.tgz}
     name: mkdirp
@@ -8718,7 +8727,7 @@ packages:
     engines: {node: '>=12'}
     dev: true
 
-  registry.npmmirror.com/ts-node@10.9.1(@types/node@20.4.7)(typescript@4.9.3):
+  registry.npmmirror.com/ts-node@10.9.1(@types/node@20.3.2)(typescript@4.9.3):
     resolution: {integrity: sha512-NtVysVPkxxrwFGUUxGYhfux8k78pQB3JqYBXlLRZgdGUqTO5wU/UyHop5p70iEbGhB7q5KmiZiU0Y3KlJrScEw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/ts-node/-/ts-node-10.9.1.tgz}
     id: registry.npmmirror.com/ts-node/10.9.1
     name: ts-node
@@ -8740,7 +8749,7 @@ packages:
       '@tsconfig/node12': registry.npmmirror.com/@tsconfig/node12@1.0.11
       '@tsconfig/node14': registry.npmmirror.com/@tsconfig/node14@1.0.3
       '@tsconfig/node16': registry.npmmirror.com/@tsconfig/node16@1.0.4
-      '@types/node': registry.npmmirror.com/@types/node@20.4.7
+      '@types/node': registry.npmmirror.com/@types/node@20.3.2
       acorn: registry.npmmirror.com/acorn@8.10.0
       acorn-walk: registry.npmmirror.com/acorn-walk@8.2.0
       arg: registry.npmmirror.com/arg@4.1.3
