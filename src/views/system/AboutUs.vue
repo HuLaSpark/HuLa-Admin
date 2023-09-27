@@ -55,9 +55,9 @@ import { DevDependency, ProDependency } from '@/views/composables/aboutUs/index'
 import Mit from '@/utils/Bus'
 import { AdjustmentsHorizontal, BrandGit, Package, Versions } from '@vicons/tabler'
 import { pkgJson } from '@/views/composables/aboutUs/model'
-import { aboutUs } from '@/stores/aboutUs'
+import { indexedDB } from '@/stores/indexedDB'
 
-const localAboutUs = aboutUs().getAboutUs
+const aboutUsDB = indexedDB()
 const gitee = 'https://gitee.com/nongyehong'
 const { version } = pkgJson
 const latestBuildTime = PROJECT_BUILD_TIME
@@ -69,23 +69,29 @@ const linkOpen = (val: any) => {
 
 const handleDev = (val: boolean) => {
   dev.value.show = val
-  aboutUs().setAboutUs('dev', dev.value.title, val)
+  aboutUsDB.setAboutUsDB('dev', { title: dev.value.title, show: val })
 }
 
 const handlePro = (val: boolean) => {
   pro.value.show = val
-  aboutUs().setAboutUs('pro', pro.value.title, val)
+  aboutUsDB.setAboutUsDB('pro', { title: pro.value.title, show: val })
 }
 
 Mit.emit('pagination', true)
 
 onMounted(() => {
-  if (Object.keys(localAboutUs).length === 0) {
-    aboutUs().setAboutUs('dev', dev.value.title, dev.value.show)
-    aboutUs().setAboutUs('pro', pro.value.title, pro.value.show)
+  if (Object.keys(aboutUsDB).length === 0) {
+    aboutUsDB.setAboutUsDB('dev', { title: dev.value.title, show: dev.value.show })
+    aboutUsDB.setAboutUsDB('pro', { title: pro.value.title, show: pro.value.show })
+    // aboutUs().setAboutUs('dev', dev.value.title, dev.value.show)
+    // aboutUs().setAboutUs('pro', pro.value.title, pro.value.show)
   } else {
-    dev.value.show = aboutUs().getShow('dev')
-    pro.value.show = aboutUs().getShow('pro')
+    aboutUsDB.getAboutUsDB('dev').then((r: any) => {
+      dev.value.show = r.show
+    })
+    aboutUsDB.getAboutUsDB('pro').then((r: any) => {
+      pro.value.show = r.show
+    })
   }
 })
 </script>

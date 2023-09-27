@@ -5,6 +5,11 @@
   "engines": {
     "node": "16.x || 18.x"
   },
+  "lint-staged": {
+    "*.{js,jsx,vue,ts,tsx}": [
+      "eslint src"
+    ]
+  },
   "scripts": {
     "dev": "vite --mode dev",
     "pro": "vite --mode pro",
@@ -21,8 +26,9 @@
     "commitlint": "commitlint --config commitlint.config.js -e -V",
     "preinstall": "npx only-allow pnpm",
     "prepare": "npx husky install",
-    "commit": "git add . && git-cz && conventional-changelog -p cz-config.js -i CHANGELOG.md -s -r 0",
-    "changelog": "conventional-changelog -p cz-config.js -i CHANGELOG.md -s -r 0"
+    "commit": "git add . && lint-staged && git-cz && conventional-changelog -p cz-config.js -i CHANGELOG.md -s -r 0",
+    "changelog": "conventional-changelog -p cz-config.js -i CHANGELOG.md -s -r 0",
+    "lint:staged": "lint-staged"
   },
   "dependencies": {
     "@animxyz/core": "^0.6.6",
@@ -33,6 +39,7 @@
     "axios": "^1.4.0",
     "dayjs": "^1.11.10",
     "echarts": "5.4.1",
+    "localforage": "^1.10.0",
     "lodash-es": "^4.17.21",
     "mitt": "^3.0.1",
     "naive-ui": "^2.34.4",
@@ -72,7 +79,8 @@
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-vue": "^9.15.1",
     "husky": "^8.0.3",
-    "only-allow": "^1.1.1",
+    "lint-staged": "^14.0.1",
+    "only-allow": "^1.2.0",
     "prettier": "^2.8.8",
     "sass": "^1.63.6",
     "sass-loader": "^13.3.2",
@@ -88,7 +96,7 @@
     "stylelint-prettier": "^3.0.0",
     "stylelint-scss": "^5.0.1",
     "tsx": "^3.12.10",
-    "typescript": "4.9.3",
+    "typescript": "5.2.2",
     "unplugin-auto-import": "^0.16.4",
     "unplugin-vue-components": "^0.25.1",
     "vite": "^4.4.9",

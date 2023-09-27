@@ -1,5 +1,5 @@
 <template>
-  <n-card hoverable :bordered="false" size="small" style="border-radius: 8px" v-show="pro.show">
+  <n-card hoverable :bordered="false" size="small" style="border-radius: 8px" v-if="pro.show">
     <n-blockquote style="display: flex; align-items: center; gap: 10px">
       <n-text depth="3">{{ pro.title }}</n-text>
       <n-popover trigger="hover">
@@ -7,7 +7,10 @@
           <n-icon style="cursor: pointer"><Help /></n-icon>
         </template>
         <n-text depth="3">
-          <n-text type="warning">黄色</n-text>表示依赖有新版本，<n-text type="success">绿色</n-text>表示最新版
+          <n-space vertical>
+            <span> <n-text type="warning">黄色</n-text>表示当前库的版本更新到第一个数字中的最新版本 </span>
+            <span> <n-text type="success">绿色</n-text>表示固定版本 </span>
+          </n-space>
         </n-text>
       </n-popover>
     </n-blockquote>

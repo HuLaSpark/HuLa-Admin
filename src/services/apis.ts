@@ -24,5 +24,7 @@ export default {
   /*修改 用户*/
   editUser: (form: UpdateUser): Promise<Response> => PUT(urls.userCRUD, form),
   /*续签 请求*/
-  renew: (user: Renew): Promise<Response> => POST(urls.renew, user)
+  renew: (user: Renew): Promise<Response> => POST(urls.renew, user),
+  /*获取角色列表*/
+  getRoleList: (): Promise<Response> => GET(urls.roleList)
 }

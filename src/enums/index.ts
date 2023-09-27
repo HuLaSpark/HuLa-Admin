@@ -23,16 +23,32 @@ export enum RCodeEnum {
   /**超时未操作*/
   TIMEOUT = 'U00006'
 }
+/**URL*/
+export enum URLEnum {
+  /**无权限*/
+  PASS = '/pass',
+  /**系统用户*/
+  USER = '/SysUser',
+  /**角色*/
+  ROLE = '/SysRole'
+}
 /**权限类型*/
 export enum FlagEnum {
-  HL_SYS_ADMIN = 'error',
+  HL_ROOT = 'error',
   HL_SYS_MANAGE = 'success',
-  HL_SYS_USER = 'warning'
+  HL_ORD_USER = 'warning'
 }
 
 /**角色类型*/
 export enum RoleEnum {
-  HL_SYS_ADMIN = 'hl_sys_admin',
+  HL_ROOT = 'hl_root',
   HL_SYS_MANAGE = 'hl_sys_manage',
-  HL_SYS_USER = 'hl_sys_user'
+  HL_ORD_USER = 'hl_ord_user'
+}
+
+/**角色类型前缀*/
+export enum RoleFixEnum {
+  HL_ROOT = 'hl_root',
+  HL_SYS = 'hl_sys',
+  HL_ORD = 'hl_ord'
 }

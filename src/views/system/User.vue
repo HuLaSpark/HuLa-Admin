@@ -35,13 +35,13 @@
 
 <script setup lang="tsx">
 import { useBase } from '@/hooks/useBase'
-import type { DataTableColumns, DataTableRowKey, DataTableBaseColumn, DataTableFilterState } from 'naive-ui'
+import type { DataTableBaseColumn, DataTableColumns, DataTableFilterState, DataTableRowKey } from 'naive-ui'
+import { NIcon, NIconWrapper, NSpace, NSwitch, NTag, NTooltip } from 'naive-ui'
 import apis from '@/services/apis'
 import paging from '@/hooks/usePaging'
 import { pageUser, Response, User } from '@/services/types'
 import { i18n } from '@/i18n'
 import type { Ref } from 'vue'
-import { NIcon, NIconWrapper, NSpace, NSwitch, NTag, NTooltip } from 'naive-ui'
 import { RoleEnum } from '@/enums'
 import { EditCircle, LetterM, LetterR, LetterU, Power, TrashX, X } from '@vicons/tabler'
 import { Report } from 'notiflix'
@@ -104,8 +104,8 @@ const statusColumn = reactive<DataTableBaseColumn<pageUser>>({
       <NSwitch
         value={active.value}
         onUpdateValue={(value: boolean) => {
-          if (row.role === RoleEnum.HL_SYS_ADMIN) {
-            Report.warning('不允许修改' + RoleEnum.HL_SYS_ADMIN + '角色用户', '', '好吧，算你狠')
+          if (row.role === RoleEnum.HL_ROOT) {
+            Report.warning('不允许修改' + RoleEnum.HL_ROOT + '角色用户', '', '好吧，算你狠')
             return false
           }
           active.value = !value
@@ -129,7 +129,7 @@ const columns: Ref<DataTableColumns<pageUser>> = ref([
   {
     type: 'selection',
     disabled(row: pageUser) {
-      return row.role === RoleEnum.HL_SYS_ADMIN
+      return row.role === RoleEnum.HL_ROOT
     }
   },
   {
@@ -145,12 +145,10 @@ const columns: Ref<DataTableColumns<pageUser>> = ref([
         <NTag
           style={{ borderRadius: '6px' }}
           bordered={false}
-          type={
-            row.role === RoleEnum.HL_SYS_ADMIN ? 'error' : row.role === RoleEnum.HL_SYS_MANAGE ? 'info' : 'success'
-          }>
+          type={row.role === RoleEnum.HL_ROOT ? 'error' : row.role === RoleEnum.HL_SYS_MANAGE ? 'info' : 'success'}>
           <NIcon
             component={
-              row.role === RoleEnum.HL_SYS_ADMIN ? LetterR : row.role === RoleEnum.HL_SYS_MANAGE ? LetterM : LetterU
+              row.role === RoleEnum.HL_ROOT ? LetterR : row.role === RoleEnum.HL_SYS_MANAGE ? LetterM : LetterU
             }></NIcon>
           {roleText}
         </NTag>
@@ -228,13 +226,31 @@ const handleCheck = (rowKeys: DataTableRowKey[]) => {
 const handleUpdateFilter = (filters: DataTableFilterState, sourceColumn: DataTableBaseColumn) => {
   statusColumn.filterOptionValue = filters[sourceColumn.key] as number
 }
+
 /*点击表格栏事件*/
 // const rowProps = (row: pageUser) => {
 //   return {
 //     style: 'cursor: pointer',
 //     onClick: (event: MouseEvent) => {
 //       event.stopPropagation()
-//       window.$message.info(row.role)
+//       if ('Notification' in window) {
+//         // 请求通知权限
+//         Notification.requestPermission().then((permission) => {
+//           if (permission === 'granted') {
+//             // 用户同意通知权限
+//             new Notification('Hello, World!', {
+//               body: row.role,
+//               icon: 'icon.png' // 可以替换成你的图标路径
+//             })
+//           } else if (permission === 'denied') {
+//             // 用户拒绝通知权限
+//             console.warn('用户拒绝了通知权限。')
+//           } else {
+//             // 用户还未做出选择
+//             console.warn('用户尚未做出通知权限选择。')
+//           }
+//         })
+//       }
 //     }
 //   }
 // }

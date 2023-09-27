@@ -31,8 +31,8 @@
     <div class="aside-footer" @click="handleCollapsed">
       <n-tooltip trigger="hover">
         <template #trigger>
-          <n-icon v-if="collapsed" :size="28"><ArrowBigRightLines /></n-icon>
-          <n-icon v-else :size="28"><ArrowBigLeftLines /></n-icon>
+          <n-icon v-if="collapsed" :size="28" :depth="3"><ArrowBigRightLines /></n-icon>
+          <n-icon v-else :size="28" :depth="3"><ArrowBigLeftLines /></n-icon>
         </template>
         <span v-if="collapsed">{{ t('unfold') }}</span>
         <span v-else>{{ t('fold') }}</span>
@@ -128,7 +128,6 @@ const menuOptions: MenuOption[] = menus.map((menu: Menu) => {
   cursor: pointer;
   bottom: 0;
   width: 100%;
-  color: #c7c2c2;
   border-radius: 10px;
 }
 .aside-title {

@@ -54,18 +54,18 @@
 
 <script setup lang="tsx">
 import type { FormInst } from 'naive-ui'
+import { NTag, SelectOption } from 'naive-ui'
 import { i18n } from '@/i18n'
 import Modal from '@/components/modal/index.vue'
 import type { VNodeChild } from 'vue'
-import { NTag, SelectOption, SelectGroupOption } from 'naive-ui'
-import { RoleEnum } from '@/enums'
-import { UserSearch, UserCheck } from '@vicons/tabler'
+import { RoleEnum, RoleFixEnum } from '@/enums'
+import { UserCheck, UserSearch } from '@vicons/tabler'
 import { delay } from 'lodash-es'
 import { useBase } from '@/hooks/useBase'
 import apis from '@/services/apis'
 import paging from '@/hooks/usePaging'
 import UserVar from './UserVar'
-import { User } from '@/services/types'
+import { Role, User } from '@/services/types'
 
 defineOptions({ name: 'UserDrawer' })
 
@@ -79,45 +79,92 @@ const handleShowSelect = () => {
   if (selectData.value.length > 0) return
   loadingSelect.value = true
   delay(() => {
-    selectData.value = options
-    loadingSelect.value = false
+    apis.getRoleList().then((r: any) => {
+      // 使用一个 Map 来存储 group 的数据，以 flag 作为键
+      const groupMap = new Map<
+        string,
+        {
+          type: string
+          label: string
+          key: number
+          children: Array<{ label: string; value: string }>
+        }
+      >()
+
+      // 遍历角色数据并更新 groupMap
+      r.data.forEach((role: Role) => {
+        const label = getLabelForRole(role.flag)
+
+        if (!groupMap.has(label)) {
+          // 如果组不存在，创建一个新的组
+          groupMap.set(label, {
+            type: 'group',
+            label: label,
+            key: role.id,
+            children: []
+          })
+        }
+        // 找到对应的组，将数据添加到 children 中
+        const existingGroup = groupMap.get(label) as any
+        existingGroup.children.push({
+          label: role.name,
+          value: role.flag
+        })
+      })
+
+      // 最后，将 groupMap 中的数据转为一个数组，作为 selectData.value
+      selectData.value = Array.from(groupMap.values())
+      loadingSelect.value = false
+    })
   }, 500)
 }
-const options: Array<SelectOption | SelectGroupOption> = [
-  {
-    type: 'group',
-    label: '最高权限',
-    key: 'Rubber Soul Album',
-    children: [
-      {
-        label: '超级管理员',
-        value: RoleEnum.HL_SYS_ADMIN
-      }
-    ]
-  },
-  {
-    type: 'group',
-    label: '中级权限',
-    key: 'Let It Be Album',
-    children: [
-      {
-        label: '管理员',
-        value: RoleEnum.HL_SYS_MANAGE
-      }
-    ]
-  },
-  {
-    type: 'group',
-    label: '低级权限',
-    key: 'Let It Be Album',
-    children: [
-      {
-        label: '普通用户',
-        value: RoleEnum.HL_SYS_USER
-      }
-    ]
+const getLabelForRole = (flag: string) => {
+  // 根据 flag 的前缀来判断权限等级
+  if (flag.startsWith(RoleFixEnum.HL_ROOT)) {
+    return '超级权限'
+  } else if (flag.startsWith(RoleFixEnum.HL_SYS)) {
+    return '高级权限'
+  } else if (flag.startsWith(RoleFixEnum.HL_ORD)) {
+    return '普通权限'
+  } else {
+    return 'Unknown'
   }
-]
+}
+// const options: Array<SelectOption | SelectGroupOption> = [
+//   {
+//     type: 'group',
+//     label: '最高权限',
+//     key: 'Rubber Soul Album',
+//     children: [
+//       {
+//         label: '超级管理员',
+//         value: RoleEnum.HL_SYS_ADMIN
+//       }
+//     ]
+//   },
+//   {
+//     type: 'group',
+//     label: '中级权限',
+//     key: 'Let It Be Album',
+//     children: [
+//       {
+//         label: '管理员',
+//         value: RoleEnum.HL_SYS_MANAGE
+//       }
+//     ]
+//   },
+//   {
+//     type: 'group',
+//     label: '低级权限',
+//     key: 'Let It Be Album',
+//     children: [
+//       {
+//         label: '普通用户',
+//         value: RoleEnum.HL_SYS_USER
+//       }
+//     ]
+//   }
+// ]
 
 /*选项框分组*/
 const renderLabel = (option: SelectOption): VNodeChild => {
@@ -126,9 +173,7 @@ const renderLabel = (option: SelectOption): VNodeChild => {
     <NTag
       style={{ borderRadius: '6px' }}
       bordered={false}
-      type={
-        option.value === RoleEnum.HL_SYS_ADMIN ? 'error' : option.value === RoleEnum.HL_SYS_MANAGE ? 'info' : 'success'
-      }>
+      type={option.value === RoleEnum.HL_ROOT ? 'error' : option.value === RoleEnum.HL_SYS_MANAGE ? 'info' : 'success'}>
       {option.label as string}
     </NTag>
   )

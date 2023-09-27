@@ -11,17 +11,17 @@ type RoleText = {
 export const useAuth = () => {
   const judgmentAuth = (flag: keyof AuthMap) => {
     const authMap: AuthMap = {
-      hl_sys_admin: FlagEnum.HL_SYS_ADMIN,
+      hl_root: FlagEnum.HL_ROOT,
       hl_sys_manage: FlagEnum.HL_SYS_MANAGE,
-      hl_sys_user: FlagEnum.HL_SYS_USER
+      hl_ord_user: FlagEnum.HL_ORD_USER
     }
     return authMap[flag] || 'info'
   }
   const judgmentRole = (flag: keyof RoleText) => {
     const roleText: RoleText = {
-      [RoleEnum.HL_SYS_ADMIN]: '超级管理员',
+      [RoleEnum.HL_ROOT]: '超级管理员',
       [RoleEnum.HL_SYS_MANAGE]: '管理员',
-      [RoleEnum.HL_SYS_USER]: '普通用户'
+      [RoleEnum.HL_ORD_USER]: '普通用户'
     }
     return roleText[flag]
   }
