@@ -6,12 +6,12 @@ const { t } = i18n.global
 const input = ref()
 const showModal = ref<boolean>(false)
 const drawerShow = ref<boolean>(false)
-const formRef = ref<FormInst | null>()
+const formRef = ref(<FormInst>{})
 const showSelect = ref<boolean>(false)
 const loadingSelect = ref<boolean>(false)
 const selectData = ref<Array<SelectOption | SelectGroupOption>>([])
 /*编辑框中的数据*/
-const editedData = ref<User>()
+const editedData = ref(<User>{})
 // /*表格的数据*/
 // const state = reactive({
 //   form: {} as User

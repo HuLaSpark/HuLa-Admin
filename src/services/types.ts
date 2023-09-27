@@ -71,3 +71,15 @@ export type Renew = {
   userName: string
   password: string
 }
+/*角色*/
+export type Role = {
+  id: number
+  name: string
+  flag: string
+}
+/*角色权限的类型*/
+export type RoleType = {
+  HL_ROOT: 'hl_root'
+  HL_SYS: 'hl_sys_manage'
+  HL_ORD: 'hl_ord_user' | 'hl_ord_cs'
+}
