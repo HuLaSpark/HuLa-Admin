@@ -1,14 +1,30 @@
 <template>
   <!--抽屉-->
-  <n-drawer v-model:show="drawerShow" :width="350" :on-mask-click="clone">
+  <n-drawer
+    to="#drawer-target"
+    v-model:show="drawerShow"
+    :width="350"
+    :on-mask-click="clone"
+    :on-esc="clone"
+    :close-on-esc="false">
     <n-drawer-content :title="t('edit')" closable>
+      <!--警告-->
+      <n-alert title="Warning 类型" type="warning" closable v-show="alertShow">{{ alert }}</n-alert>
+
+      <!--上传头像-->
+      <n-space vertical align="center">
+        <n-upload style="border-radius: 10px" list-type="image-card" :max="1">点击上传</n-upload>
+      </n-space>
+
       <n-form ref="formRef" :model="editedData" :rules="rules" style="padding: 10px 0">
         <n-form-item :label="t('user_name')" path="userName">
-          <n-input style="border-radius: 8px" v-model:value="editedData.userName" :placeholder="t('placeholder')" />
+          <n-input v-model:value="editedData.userName" :placeholder="t('placeholder')" />
         </n-form-item>
         <n-form-item :label="t('role_flag')" path="role">
           <n-select
             style="border-radius: 8px"
+            :render-tag="renderTag"
+            v-model:value="editedData.role"
             v-model:show="showSelect"
             :placeholder="t('select')"
             :render-label="renderLabel"
@@ -24,6 +40,12 @@
               </transition>
             </template>
           </n-select>
+        </n-form-item>
+        <n-form-item :label="t('email')" path="email">
+          <n-input v-model:value="editedData.email" :placeholder="t('placeholder')" />
+        </n-form-item>
+        <n-form-item :label="t('phone_number')" path="mobile">
+          <n-input v-model:value="editedData.mobile" :placeholder="t('placeholder')" />
         </n-form-item>
       </n-form>
       <template #footer>
@@ -53,26 +75,32 @@
 </template>
 
 <script setup lang="tsx">
-import type { FormInst } from 'naive-ui'
-import { NTag, SelectOption } from 'naive-ui'
+import type { FormInst, SelectRenderTag } from 'naive-ui'
+import { NTag, SelectOption, NIcon, NAlert } from 'naive-ui'
 import { i18n } from '@/i18n'
 import Modal from '@/components/modal/index.vue'
 import type { VNodeChild } from 'vue'
 import { RoleEnum, RoleFixEnum } from '@/enums'
-import { UserCheck, UserSearch } from '@vicons/tabler'
+import { LetterM, LetterR, LetterU, UserCheck, UserSearch } from '@vicons/tabler'
 import { delay } from 'lodash-es'
 import { useBase } from '@/hooks/useBase'
 import apis from '@/services/apis'
 import paging from '@/hooks/usePaging'
 import UserVar from './UserVar'
 import { Role, User } from '@/services/types'
+import { userStore } from '@/stores/user'
+import { renderMessage } from '@/customize/messageIze'
+import { useAuth } from '@/hooks/useAuth'
 
 defineOptions({ name: 'UserDrawer' })
 
 const { t } = i18n.global
 const { pageNum, pageSize } = paging
+const alertShow = ref(false)
+const alert = ref()
 const { input, showModal, showSelect, formRef, loadingSelect, selectData, rules, drawerShow, editedData } = UserVar()
 const { performAction, loading } = useBase()
+const { judgmentRole } = useAuth()
 
 /*点击选中框后进行异步查询选项框内容*/
 const handleShowSelect = () => {
@@ -87,14 +115,15 @@ const handleShowSelect = () => {
           type: string
           label: string
           key: number
-          children: Array<{ label: string; value: string }>
+          children: Array<{ label: string; value: string; disabled?: boolean }>
         }
       >()
 
+      // 获取当前登录用户的角色
+      const userRole = userStore().getRole
       // 遍历角色数据并更新 groupMap
       r.data.forEach((role: Role) => {
         const label = getLabelForRole(role.flag)
-
         if (!groupMap.has(label)) {
           // 如果组不存在，创建一个新的组
           groupMap.set(label, {
@@ -106,9 +135,11 @@ const handleShowSelect = () => {
         }
         // 找到对应的组，将数据添加到 children 中
         const existingGroup = groupMap.get(label) as any
+        const disabled = userRole !== 'hl_sys_manage' && role.flag === RoleEnum.HL_SYS_MANAGE
         existingGroup.children.push({
           label: role.name,
-          value: role.flag
+          value: role.flag,
+          disabled
         })
       })
 
@@ -118,6 +149,7 @@ const handleShowSelect = () => {
     })
   }, 500)
 }
+/*判断用户的等级*/
 const getLabelForRole = (flag: string) => {
   // 根据 flag 的前缀来判断权限等级
   if (flag.startsWith(RoleFixEnum.HL_ROOT)) {
@@ -130,55 +162,53 @@ const getLabelForRole = (flag: string) => {
     return 'Unknown'
   }
 }
-// const options: Array<SelectOption | SelectGroupOption> = [
-//   {
-//     type: 'group',
-//     label: '最高权限',
-//     key: 'Rubber Soul Album',
-//     children: [
-//       {
-//         label: '超级管理员',
-//         value: RoleEnum.HL_SYS_ADMIN
-//       }
-//     ]
-//   },
-//   {
-//     type: 'group',
-//     label: '中级权限',
-//     key: 'Let It Be Album',
-//     children: [
-//       {
-//         label: '管理员',
-//         value: RoleEnum.HL_SYS_MANAGE
-//       }
-//     ]
-//   },
-//   {
-//     type: 'group',
-//     label: '低级权限',
-//     key: 'Let It Be Album',
-//     children: [
-//       {
-//         label: '普通用户',
-//         value: RoleEnum.HL_SYS_USER
-//       }
-//     ]
-//   }
-// ]
-
 /*选项框分组*/
 const renderLabel = (option: SelectOption): VNodeChild => {
   if (option.type === 'group') return option.label + '(Cool!)'
+  return (
+    <div
+      onClick={() => {
+        if (option.disabled) {
+          handleDisableValue(option.label as string)
+        }
+      }}>
+      <NTag
+        disabled={option.disabled}
+        style={{ borderRadius: '6px' }}
+        bordered={false}
+        type={
+          option.value === RoleEnum.HL_ROOT ? 'error' : option.value === RoleEnum.HL_SYS_MANAGE ? 'info' : 'success'
+        }>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+          <NIcon
+            component={
+              option.value === RoleEnum.HL_ROOT ? LetterR : option.value === RoleEnum.HL_SYS_MANAGE ? LetterM : LetterU
+            }></NIcon>
+          {option.label as string}
+        </div>
+      </NTag>
+    </div>
+  )
+}
+/*渲染默认角色标签*/
+const renderTag: SelectRenderTag = ({ option }) => {
+  const roleText = judgmentRole(option.value as RoleEnum)
   return (
     <NTag
       style={{ borderRadius: '6px' }}
       bordered={false}
       type={option.value === RoleEnum.HL_ROOT ? 'error' : option.value === RoleEnum.HL_SYS_MANAGE ? 'info' : 'success'}>
-      {option.label as string}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+        <NIcon
+          component={
+            option.value === RoleEnum.HL_ROOT ? LetterR : option.value === RoleEnum.HL_SYS_MANAGE ? LetterM : LetterU
+          }></NIcon>
+        {roleText as string}
+      </div>
     </NTag>
   )
 }
-// 在保存按钮点击时将临时对象的数据合并到 state.form 中
+//保存按钮点击
 const saveData = () => {
   // 这里可以进行保存操作，然后更新表格数据
   // ...
@@ -201,6 +231,15 @@ const AddInfo = async (formEl: any) => {
       })
   )
 }
+
+/*选择禁用选项的提示*/
+const handleDisableValue = (label: string) => {
+  window.$message.error(label, {
+    render: renderMessage,
+    closable: true
+  })
+}
+
 const clone = () => {
   showModal.value = true
   drawerShow.value = true
@@ -214,6 +253,15 @@ const shutDown = (formRef: FormInst) => {
 </script>
 
 <style scoped>
+/*上传框样式*/
+:deep(.n-upload-file-list .n-upload-file.n-upload-file--image-card-type),
+:deep(.n-upload-trigger.n-upload-trigger--image-card .n-upload-dragger) {
+  border-radius: 10px;
+}
+/*输入框样式*/
+:deep(.n-input) {
+  border-radius: 8px;
+}
 /*选择框样式*/
 :deep(.n-base-selection) {
   border-radius: 8px;

@@ -1,9 +1,3 @@
-/*表格标签样式*/
-:deep(.n-tag__content) {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
 /*表格开关的颜色样式*/
 :deep(.n-switch .n-switch__rail) {
   background: #ce304f;

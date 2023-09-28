@@ -2,7 +2,7 @@
   <div>
     <div v-if="!pagination" class="content" v-show="show">
       <div class="animate__animated animate__fadeInRight">
-        <div class="routerView">
+        <div class="routerView" id="drawer-target">
           <n-scrollbar style="max-height: calc(100vh - 152px)">
             <router-view />
           </n-scrollbar>
@@ -133,4 +133,10 @@ onMounted(() => {
     background: v-bind(BGC_OTHER);
   }
 }
+/*抽屉遮罩样式*/
+:deep(.n-drawer-mask),
+:deep(.n-drawer) {
+  border-radius: 10px;
+}
+/*end*/
 </style>

@@ -43,7 +43,8 @@ export enum FlagEnum {
 export enum RoleEnum {
   HL_ROOT = 'hl_root',
   HL_SYS_MANAGE = 'hl_sys_manage',
-  HL_ORD_USER = 'hl_ord_user'
+  HL_ORD_USER = 'hl_ord_user',
+  HL_ORD_CS = 'hl_ord_cs'
 }
 
 /**角色类型前缀*/

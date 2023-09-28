@@ -19,7 +19,8 @@ const editedData = ref(<User>{})
 /*校验规则*/
 const rules = reactive({
   userName: { required: true, message: t('user_name') + t('no_null'), trigger: 'blur' },
-  mobile: { required: true, message: '请输入mobile', trigger: 'blur' }
+  email: { required: true, message: t('email') + t('no_null'), trigger: 'blur' },
+  mobile: { required: true, message: t('phone_number') + t('no_null'), trigger: 'blur' }
 })
 
 export default () => ({

@@ -21,7 +21,8 @@ export const useAuth = () => {
     const roleText: RoleText = {
       [RoleEnum.HL_ROOT]: '超级管理员',
       [RoleEnum.HL_SYS_MANAGE]: '管理员',
-      [RoleEnum.HL_ORD_USER]: '普通用户'
+      [RoleEnum.HL_ORD_USER]: '普通用户',
+      [RoleEnum.HL_ORD_CS]: '测试员'
     }
     return roleText[flag]
   }

@@ -43,6 +43,7 @@ declare module 'vue' {
     NModal: typeof import('naive-ui')['NModal']
     NNotificationProvider: typeof import('naive-ui')['NNotificationProvider']
     NOption: typeof import('naive-ui')['NOption']
+    NP: typeof import('naive-ui')['NP']
     NPopconfirm: typeof import('naive-ui')['NPopconfirm']
     NPopover: typeof import('naive-ui')['NPopover']
     NPopselect: typeof import('naive-ui')['NPopselect']
