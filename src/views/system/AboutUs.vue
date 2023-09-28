@@ -4,7 +4,7 @@
       <n-blockquote style="display: flex; align-items: center; justify-content: space-between">
         <n-text depth="3">项目信息</n-text>
         <div class="clone">
-          <n-popselect trigger="click">
+          <n-popselect trigger="hover">
             <template #empty>
               <n-space vertical>
                 <n-checkbox @update:checked="handleDev" :checked="dev.show">{{ dev.title }}</n-checkbox>

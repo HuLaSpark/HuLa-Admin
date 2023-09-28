@@ -25,10 +25,16 @@
           </div>
         </template>
       </n-data-table>
+      <n-tag
+        v-show="checkedRowKeysRef.length > 0"
+        :bordered="false"
+        type="success"
+        style="margin: 20px 0; padding: 0 20px; border-radius: 6px">
+        选中了 {{ checkedRowKeysRef.length }} 条数据
+      </n-tag>
     </n-spin>
     <loading-bar-trigger />
   </n-loading-bar-provider>
-
   <!--抽屉-->
   <UserDrawer />
 </template>
@@ -146,11 +152,13 @@ const columns: Ref<DataTableColumns<pageUser>> = ref([
           style={{ borderRadius: '6px' }}
           bordered={false}
           type={row.role === RoleEnum.HL_ROOT ? 'error' : row.role === RoleEnum.HL_SYS_MANAGE ? 'info' : 'success'}>
-          <NIcon
-            component={
-              row.role === RoleEnum.HL_ROOT ? LetterR : row.role === RoleEnum.HL_SYS_MANAGE ? LetterM : LetterU
-            }></NIcon>
-          {roleText}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+            <NIcon
+              component={
+                row.role === RoleEnum.HL_ROOT ? LetterR : row.role === RoleEnum.HL_SYS_MANAGE ? LetterM : LetterU
+              }></NIcon>
+            {roleText}
+          </div>
         </NTag>
       )
     }
