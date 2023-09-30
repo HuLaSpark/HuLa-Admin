@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="!pagination" class="content" v-show="show">
+    <div v-if="!$route.meta.pagination" class="content" v-show="show">
       <div class="animate__animated animate__fadeInRight">
         <div class="routerView" id="drawer-target">
           <n-scrollbar style="max-height: calc(100vh - 152px)">
@@ -10,7 +10,7 @@
       </div>
     </div>
 
-    <div v-if="pagination" v-show="show">
+    <div v-if="$route.meta.pagination" v-show="show">
       <div v-if="$route.path === '/odometer'" class="odometer">
         <Odometer />
       </div>
@@ -30,18 +30,10 @@
 import Odometer from '@/views/system/Odometer.vue'
 import { mainStore } from '@/stores/main'
 import { storeToRefs } from 'pinia'
-import Mit from '@/utils/Bus'
 
 const store = mainStore()
 const { BGC_OTHER, BGC } = storeToRefs(store)
 const show = ref(false)
-/*页面是否是分块*/
-const pagination = ref<boolean>(false)
-
-// 接收指定事件传递的值
-Mit.on('pagination', (value) => {
-  pagination.value = value as boolean
-})
 
 onMounted(() => {
   show.value = true

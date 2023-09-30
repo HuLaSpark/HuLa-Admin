@@ -44,13 +44,18 @@ const olForm = reactive({
 let form = shallowReactive(cloneDeep(olForm))
 const theme = ref()
 const emit = defineEmits(['saveSettings'])
-const props = defineProps<{
+// TODO 新版本3.3的defineProps解构例子 (nyh-2023-09-29 23:38:16)
+/**
+ * 使用旧版解构
+ * const { warn, showWarn } = toRefs(props)
+ * 新版vite.config开启解构语法可以直接解构并且具有响应式
+ * 解构出来的值是reactive类型
+ * */
+const { warn, showWarn } = defineProps<{
   //子组件接收父组件传递过来的值
   warn?: string
   showWarn: boolean
 }>()
-//使用父组件传递过来的值
-const { warn, showWarn } = toRefs(props)
 
 /*切换主题*/
 const switchTheme = () => {
@@ -61,6 +66,53 @@ const switchTheme = () => {
     theme.value = olForm.themeStatus ? darkTheme : null
   }, 1000)
 }
+/*获取localStorage已使用和剩余的容量*/
+function getLocalStorageUsage() {
+  // 获取已使用的LocalStorage大小（以字节为单位）
+  let usedBytes = 0
+  for (const key in localStorage) {
+    if (Object.prototype.hasOwnProperty.call(localStorage, key)) {
+      usedBytes += localStorage[key].length * 2 // 每个字符占两个字节
+    }
+  }
+
+  // 将字节转换为KB或MB
+  let usedSize
+  if (usedBytes < 1024) {
+    usedSize = usedBytes + ' Bytes'
+  } else if (usedBytes < 1024 * 1024) {
+    usedSize = (usedBytes / 1024).toFixed(2) + ' KB'
+  } else {
+    usedSize = (usedBytes / (1024 * 1024)).toFixed(2) + ' MB'
+  }
+
+  // 获取LocalStorage总容量（浏览器限制为约5-10MB）
+  const totalBytes = 5 * 1024 * 1024 // 假设总容量为5MB
+
+  // 计算剩余容量
+  const remainingBytes = totalBytes - usedBytes
+
+  // 将剩余容量转换为KB或MB
+  let remainingSize
+  if (remainingBytes < 1024) {
+    remainingSize = remainingBytes + ' Bytes'
+  } else if (remainingBytes < 1024 * 1024) {
+    remainingSize = (remainingBytes / 1024).toFixed(2) + ' KB'
+  } else {
+    remainingSize = (remainingBytes / (1024 * 1024)).toFixed(2) + ' MB'
+  }
+
+  return {
+    used: usedSize,
+    remaining: remainingSize
+  }
+}
+
+// 示例用法
+const localStorageUsage = getLocalStorageUsage()
+console.log('已使用容量:', localStorageUsage.used)
+console.log('剩余容量:', localStorageUsage.remaining)
+
 watchEffect(() => {
   form = shallowReactive(cloneDeep(olForm))
   emit('saveSettings', form)

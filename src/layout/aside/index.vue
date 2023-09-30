@@ -16,6 +16,7 @@
         @expand="collapsed = false">
         <n-scrollbar style="max-height: 700px">
           <n-menu
+            ref="menuInstRef"
             :root-indent="32"
             :indent="22"
             :style="collapsed ? '' : 'padding: 0 5px 0 0'"
@@ -57,10 +58,25 @@ const { t } = i18n.global
 const route = useRoute()
 const activeKey = ref<any>(route.path.split('/')[1])
 const collapsed = ref(false)
+const menuInstRef = ref()
 const store = mainStore()
 const menuStore = userStore()
 const menus = menuStore.getMenus
 const { BGC, TEXT_COLOR } = storeToRefs(store)
+
+/*使用全局搜索的时候传入值后自动展开目录菜单项*/
+watchEffect(() => {
+  menuInstRef.value?.showOption(activeKey.value)
+})
+
+/*当url变化的时候侧边栏选项跟着变化*/
+watch(
+  () => route.path,
+  (newPath) => {
+    // 在路径变化时更新 activeKey
+    activeKey.value = newPath.split('/')[1]
+  }
+)
 
 const emit = defineEmits(['collapsed'])
 const handleCollapsed = () => {

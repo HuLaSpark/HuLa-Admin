@@ -52,7 +52,6 @@
 
 <script setup lang="ts">
 import { DevDependency, ProDependency } from '@/views/composables/aboutUs/index'
-import Mit from '@/utils/Bus'
 import { AdjustmentsHorizontal, BrandGit, Package, Versions } from '@vicons/tabler'
 import { pkgJson } from '@/views/composables/aboutUs/model'
 import { indexedDB } from '@/stores/indexedDB'
@@ -77,14 +76,10 @@ const handlePro = (val: boolean) => {
   aboutUsDB.setAboutUsDB('pro', { title: pro.value.title, show: val })
 }
 
-Mit.emit('pagination', true)
-
 onMounted(() => {
   if (Object.keys(aboutUsDB).length === 0) {
     aboutUsDB.setAboutUsDB('dev', { title: dev.value.title, show: dev.value.show })
     aboutUsDB.setAboutUsDB('pro', { title: pro.value.title, show: pro.value.show })
-    // aboutUs().setAboutUs('dev', dev.value.title, dev.value.show)
-    // aboutUs().setAboutUs('pro', pro.value.title, pro.value.show)
   } else {
     aboutUsDB.getAboutUsDB('dev').then((r: any) => {
       dev.value.show = r.show

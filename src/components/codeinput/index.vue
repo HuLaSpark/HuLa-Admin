@@ -29,7 +29,7 @@ const { showCode, showModal } = useState
 const { t } = i18n.global
 const store = mainStore()
 const { BGC_OTHER } = storeToRefs(store)
-const props = defineProps({
+const { codeLength, inputSize, email } = defineProps({
   // 验证码长度
   codeLength: { type: Number, default: 0 },
   // 输入框大小
@@ -38,7 +38,7 @@ const props = defineProps({
   email: { default: null }
 })
 
-const code = ref<Array<string>>(Array(props.codeLength).fill('')) // 验证码数组
+const code = ref<Array<string>>(Array(codeLength).fill('')) // 验证码数组
 const inputRefs = ref<Array<HTMLInputElement | null>>([]) // 输入框引用数组
 const focusedIndex = ref<number>(0) // 当前聚焦的输入框索引
 
@@ -62,7 +62,7 @@ const onInput = async (value: string, index: number) => {
     // 如果输入的是数字
     code.value[index] = value // 将输入框的值设为输入的数字
     // 输入时自动聚焦下一个输入框
-    if (index < props.codeLength - 1) {
+    if (index < codeLength - 1) {
       // 如果当前输入框不是最后一个
       inputRefs.value[index + 1]?.focus() // 将焦点聚焦到下一个输入框
     } else {
@@ -108,7 +108,7 @@ const onPaste = (event: ClipboardEvent) => {
       i++ // 将字符数组的索引指向下一个字符
     }
     // 将剩余的粘贴字符放入后续的输入框中
-    for (; i < pastedChars.length && currentIndex < props.codeLength; i++) {
+    for (; i < pastedChars.length && currentIndex < codeLength; i++) {
       const char = pastedChars[i]
       if (/\d/.test(char)) {
         // 如果是数字
@@ -118,7 +118,7 @@ const onPaste = (event: ClipboardEvent) => {
       }
     }
     // 粘贴输入完毕后执行
-    if (currentIndex === props.codeLength) {
+    if (currentIndex === codeLength) {
       handlePawReset()
     }
   }
@@ -126,7 +126,6 @@ const onPaste = (event: ClipboardEvent) => {
 
 /*重置密码方法*/
 const handlePawReset = async () => {
-  const email = props.email
   const emailCode = code.value.join('')
   await passwordReset({ email, emailCode }).then((r) => {
     if (r.code === '00000') {

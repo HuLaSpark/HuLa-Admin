@@ -27,7 +27,7 @@ import { storeToRefs } from 'pinia'
 const store = mainStore()
 const { BGC, TEXT_COLOR } = storeToRefs(store)
 /*传入是否需要显示show，和框体宽度width，不传入宽度就默认为auto*/
-defineProps<{
+const { show, width } = defineProps<{
   show: boolean
   width?: string
 }>()

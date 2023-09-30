@@ -42,11 +42,27 @@
           </n-select>
         </n-form-item>
         <n-form-item :label="t('email')" path="email">
-          <n-input v-model:value="editedData.email" :placeholder="t('placeholder')" />
+          <n-input disabled v-model:value="editedData.email" :placeholder="t('placeholder')" />
         </n-form-item>
         <n-form-item :label="t('phone_number')" path="mobile">
-          <n-input v-model:value="editedData.mobile" :placeholder="t('placeholder')" />
+          <n-input disabled v-model:value="editedData.mobile" :placeholder="t('placeholder')" />
         </n-form-item>
+
+        <n-space vertical :size="20">
+          <n-space align="center">
+            <span>诞生于：</span>
+            <n-tag :bordered="false" style="border-radius: 10px" type="primary">
+              {{ handRelativeTime(editedData.createTime) }}
+            </n-tag>
+          </n-space>
+
+          <n-space align="center">
+            <span>最后一次活动：</span>
+            <n-tag :bordered="false" style="border-radius: 10px" type="info">
+              {{ handRelativeTime(editedData.updateTime) }}
+            </n-tag>
+          </n-space>
+        </n-space>
       </n-form>
       <template #footer>
         <n-button style="width: 100%" :loading="loading" secondary type="primary">{{ t('save') }}</n-button>
@@ -75,8 +91,8 @@
 </template>
 
 <script setup lang="tsx">
-import type { FormInst, SelectRenderTag } from 'naive-ui'
-import { NTag, SelectOption, NIcon, NAlert } from 'naive-ui'
+import type { FormInst, SelectRenderTag, SelectOption } from 'naive-ui'
+import { NTag, NIcon, NAlert } from 'naive-ui'
 import { i18n } from '@/i18n'
 import Modal from '@/components/modal/index.vue'
 import type { VNodeChild } from 'vue'
@@ -91,8 +107,7 @@ import { Role, User } from '@/services/types'
 import { userStore } from '@/stores/user'
 import { renderMessage } from '@/customize/messageIze'
 import { useAuth } from '@/hooks/useAuth'
-
-defineOptions({ name: 'UserDrawer' })
+import { handRelativeTime } from '@/utils/day'
 
 const { t } = i18n.global
 const { pageNum, pageSize } = paging

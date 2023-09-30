@@ -1,6 +1,9 @@
 <template>
   <div :class="collapsed ? 'header-unfold' : 'header-shrink'">
     <div class="operation-list">
+      <GlobalSearch />
+      <n-divider vertical />
+      <!--首页-->
       <div class="operation-list-box">
         <n-tooltip trigger="hover" style="padding: 5px 8px 5px 8px">
           <template #trigger>
@@ -10,6 +13,7 @@
         </n-tooltip>
       </div>
       <n-divider vertical />
+      <!--全屏-->
       <div class="operation-list-box">
         <n-tooltip trigger="hover" style="padding: 5px 8px 5px 8px">
           <template #trigger>
@@ -22,6 +26,7 @@
       <!--切换语言组件-->
       <Language />
       <n-divider vertical />
+      <!--终端-->
       <div class="operation-list-box">
         <n-tooltip trigger="hover" style="padding: 5px 8px 5px 8px">
           <template #trigger>
@@ -31,6 +36,7 @@
         </n-tooltip>
       </div>
       <n-divider vertical />
+      <!--清理缓存-->
       <div class="operation-list-box">
         <n-tooltip trigger="hover" style="padding: 5px 8px 5px 8px">
           <template #trigger>
@@ -40,8 +46,8 @@
         </n-tooltip>
       </div>
       <n-divider vertical />
+      <!--	头像	-->
       <div class="operation-list-box">
-        <!--	头像	-->
         <n-popover trigger="hover" placement="bottom" :width="250">
           <template #trigger>
             <n-badge :type="networkIcon" dot processing>
@@ -95,7 +101,7 @@
       <Settings />
     </div>
   </div>
-
+  <!--终端弹框-->
   <n-modal
     v-model:show="showModal"
     title="终端"
@@ -115,12 +121,13 @@ import { DeviceDesktop, Maximize, Trash, Terminal2, Power, AlertTriangle } from 
 import { i18n } from '@/i18n'
 import Language from '@/components/Language/index.vue'
 import Terminal from '@/components/terminal/index.vue'
-import Settings from '@/components/settings/index.vue'
+import Settings from '@/layout/common/settings/index.vue'
 import screenfull from 'screenfull'
 import { useLogin } from '@/hooks/useLogin'
 import { useAuth } from '@/hooks/useAuth'
 import { Loading } from 'notiflix'
 import { delay } from 'lodash-es'
+import GlobalSearch from '@/layout/common/global-search/index.vue'
 
 const { t } = i18n.global
 const message = useMessage()
@@ -137,11 +144,9 @@ const networkIcon = ref()
 const { judgmentAuth } = useAuth()
 
 /*获取父组件传来的值*/
-const props = defineProps({
-  collapsed: Boolean
-})
-const { collapsed } = toRefs(props)
-
+const { collapsed } = defineProps<{
+  collapsed: boolean
+}>()
 /*判断当前网络状态*/
 window.addEventListener('online', () => {
   console.log('设备已连接网络')

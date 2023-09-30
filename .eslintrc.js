@@ -36,6 +36,12 @@ module.exports = {
 	plugins: ['@typescript-eslint', 'vue'],
 	rules: {
 		'@typescript-eslint/no-non-null-assertion': 'off',
+		/**
+		 * 使用新vue3.3的defineProps解构语法需要关闭这个校验
+		 * eslint-plugin-vue新版本已废弃 vue/no-setup-props-destructure,如果新版本eslint-plugin-vue
+		 * 需要改成vue/no-setup-props-reactivity-loss规则
+		 * */
+		'vue/no-setup-props-destructure': 'off',
 		'no-undef': 'off',
 		'no-var': 'error', // 不能使用var
 		'no-multiple-empty-lines': ['warn', { max: 2 }], // 不允许多个空行
