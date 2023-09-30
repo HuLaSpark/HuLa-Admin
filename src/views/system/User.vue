@@ -3,36 +3,42 @@
   <n-loading-bar-provider :to="loadingBarTargetRef" container-style="position: absolute;">
     <div ref="loadingBarTargetRef" style="position: absolute; inset: 0; overflow: hidden; pointer-events: none" />
     <!--   表格     -->
-    <n-spin :show="loading">
-      <n-data-table
-        striped
-        :bordered="false"
-        :single-line="false"
-        single-column
-        :row-key="rowKey"
-        :columns="columns"
-        :data="tableData"
-        @update:filters="handleUpdateFilter"
-        @update:checked-row-keys="handleCheck">
-        <!--为空时表格状态-->
-        <template #empty>
-          <n-result v-if="!NoAccess" status="403" :title="t('403')" :description="t('403_content')"> </n-result>
-          <div v-else style="display: flex; justify-content: center">
-            <div style="display: flex; align-items: center; flex-direction: column">
-              <img src="@/assets/svg/default.svg" alt="" style="width: 220px; height: 220px" />
-              <span style="color: #c0c0c0; letter-spacing: 2px">{{ t('no_data') }}</span>
-            </div>
+    <n-data-table
+      :loading="loading"
+      striped
+      :bordered="false"
+      :single-line="false"
+      single-column
+      :row-key="rowKey"
+      :columns="columns"
+      :data="tableData"
+      @update:filters="handleUpdateFilter"
+      @update:checked-row-keys="handleCheck">
+      <!--为空时表格状态-->
+      <template #empty>
+        <n-result v-if="!NoAccess" status="403" :title="t('403')" :description="t('403_content')"> </n-result>
+        <div style="display: flex; justify-content: center">
+          <div style="display: flex; align-items: center; flex-direction: column">
+            <img src="@/assets/svg/default.svg" alt="" style="width: 220px; height: 220px" />
+            <span style="color: #c0c0c0; letter-spacing: 2px">{{ t('no_data') }}</span>
           </div>
-        </template>
-      </n-data-table>
-      <n-tag
-        v-show="checkedRowKeysRef.length > 0"
-        :bordered="false"
-        type="success"
-        style="margin: 20px 0; padding: 0 20px; border-radius: 6px">
-        选中了 {{ checkedRowKeysRef.length }} 条数据
-      </n-tag>
-    </n-spin>
+        </div>
+      </template>
+      <!--加载的时候展示-->
+      <template #loading>
+        <n-spin :show="loading">
+          <template #icon><n-icon :component="BrandAsana" /></template>
+          <template #description>{{ t('loading') }}</template>
+        </n-spin>
+      </template>
+    </n-data-table>
+    <n-tag
+      v-show="checkedRowKeysRef.length > 0"
+      :bordered="false"
+      type="success"
+      style="margin: 20px 0; padding: 0 20px; border-radius: 6px">
+      选中了 {{ checkedRowKeysRef.length }} 条数据
+    </n-tag>
     <loading-bar-trigger />
   </n-loading-bar-provider>
   <!--抽屉-->
@@ -49,10 +55,9 @@ import { pageUser, Response, User } from '@/services/types'
 import { i18n } from '@/i18n'
 import type { Ref } from 'vue'
 import { RoleEnum } from '@/enums'
-import { EditCircle, LetterM, LetterR, LetterU, Power, TrashX, X } from '@vicons/tabler'
+import { EditCircle, LetterM, LetterR, LetterU, Power, TrashX, X, BrandAsana } from '@vicons/tabler'
 import { Report } from 'notiflix'
 import { useAuth } from '@/hooks/useAuth'
-import Mit from '@/utils/Bus'
 import { UserDrawer } from '@/views/composables/drawer/index'
 import UserVar from '@/views/composables/drawer/UserDrawer/UserVar'
 
@@ -262,10 +267,6 @@ const handleUpdateFilter = (filters: DataTableFilterState, sourceColumn: DataTab
 //     }
 //   }
 // }
-
-onMounted(() => {
-  Mit.emit('pagination', false)
-})
 </script>
 
 <style lang="scss" scoped>

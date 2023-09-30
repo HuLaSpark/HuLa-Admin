@@ -1,6 +1,6 @@
 <template>
   <div class="countdown">
-    <n-button quaternary :disabled="countdown > 0" @click="startCountdown(props.ruleFormRef)">
+    <n-button quaternary :disabled="countdown > 0" @click="startCountdown(ruleFormRef)">
       {{ countdown > 0 ? `${countdown}s` : t('new_obtain_code') }}
     </n-button>
   </div>
@@ -15,7 +15,7 @@ const { t } = i18n.global
 
 const { handleCodeInput } = useLogin()
 
-const props = defineProps<{
+const { time, ruleFormRef } = defineProps<{
   time: number
   ruleFormRef: any
 }>()
@@ -26,7 +26,7 @@ const startCountdown = (ruleFormRef: any) => {
   if (countdown.value > 0) {
     return
   }
-  countdown.value = props.time
+  countdown.value = time
   const timer = setInterval(() => {
     countdown.value--
     if (countdown.value === 0) {
@@ -38,7 +38,7 @@ const startCountdown = (ruleFormRef: any) => {
 
 /*开始进来就倒计时一次*/
 onMounted(() => {
-  startCountdown(props.ruleFormRef)
+  startCountdown(ruleFormRef)
 })
 </script>
 

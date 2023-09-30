@@ -70,7 +70,7 @@ const englishSwitch = () => {
     NDataLanguage.value = null
     i18nStore.setEnglish()
     locale.value = i18nStore.locale as never
-  }, 500)
+  }, 1000)
 }
 </script>
 

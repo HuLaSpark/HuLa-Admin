@@ -32,7 +32,11 @@ export default defineConfig(({ mode }) => {
     },
     define: viteDefine,
     plugins: [
-      vue(),
+      /**
+       * 设置defineModel
+       * 设置defineProps解构语法
+       * */
+      vue({ script: { propsDestructure: true, defineModel: true } }),
       vueDevTools(),
       vueJsx(),
       AutoImport({

@@ -32,8 +32,7 @@ const active = ref(false)
 const store = mainStore()
 const { THEME } = storeToRefs(store)
 const Form = reactive({
-  themeStatus: false,
-  test: false
+  themeStatus: false
 })
 const loading = ref(false)
 const drawerWidth = ref()
@@ -46,14 +45,10 @@ const showDrawer = () => {
   Form.themeStatus = THEME.value
 }
 const save = (val: any) => {
-  if (JSON.stringify(val) === JSON.stringify(Form)) {
+  if (JSON.stringify({ ...val }) === JSON.stringify({ ...Form })) {
     showWarn.value = true
     warn.value = '表单内容没有修改'
-    return false
-  } else if (JSON.stringify(val.themeStatus) === JSON.stringify(Form.themeStatus)) {
-    showWarn.value = true
-    warn.value = '主题没有修改'
-    return false
+    return
   }
   loading.value = true
   setTimeout(() => {

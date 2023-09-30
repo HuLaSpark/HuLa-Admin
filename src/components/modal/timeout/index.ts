@@ -33,6 +33,11 @@ const verify = async () => {
         // router.push(window.location.pathname)
         router.go(0)
       })
+    } else if (res.code === RCodeEnum.FAIL) {
+      animation.value = 'modal-container animate__animated animate__fadeOutLeftBig'
+      nextTick(() => {
+        show.value = false
+      })
     }
   })
 }

@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import { userStore } from '@/stores/user'
 import type { MenuItem } from '@/interface/IRouter'
+import { paginationPage } from './paginationArray'
 
 const modules = import.meta.glob('../views/system/*.vue')
 const routes: Array<RouteRecordRaw> = [
@@ -83,6 +84,8 @@ router.beforeEach(async (to: any, from: any, next: any) => {
   const user = store.loginInfo.sysUser
   const hasUser = user && user.id
   const noPermissionPaths = ['/login', '/404'] // 定义无需登录的路由
+  /*判断页面是否需要分页*/
+  paginationPage.includes(to.name) ? (to.meta.pagination = true) : (to.meta.pagination = false)
   if (!hasUser && !noPermissionPaths.includes(to.path)) {
     // 用户没登录,  假如你当前跳转login页面，然后login页面没有用户信息，这个时候你再去往 login页面跳转，就会发生无限循环跳转
     // 获取缓存的用户数据
