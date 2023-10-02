@@ -1,6 +1,14 @@
 <template>
   <n-space vertical>
-    <n-alert title="提醒" type="warning" v-if="showWarn"> {{ warn }}</n-alert>
+    <div :class="animation" v-if="showWarn" class="alert">
+      <span style="display: flex; align-items: center; gap: 20px">
+        <img src="@/assets/svg/warning.svg" style="width: 100px; height: 100px" alt="" />
+        <span style="color: #ee9f20; font-weight: bold">{{ warn }}</span>
+      </span>
+      <div style="padding: 5px 0; cursor: pointer" @click="alertOff">
+        <n-icon :component="X" />
+      </div>
+    </div>
     <div class="box">
       <span>{{ t('eye_shield') }}</span>
       <n-switch :rubber-band="false" :value="olForm.themeStatus" :loading="loading" @update:value="switchTheme">
@@ -26,12 +34,13 @@
 </template>
 
 <script setup lang="ts">
-import { Moon, Sun } from '@vicons/tabler'
+import { Moon, Sun, X } from '@vicons/tabler'
 import { i18n } from '@/i18n'
 import { mainStore } from '@/stores/main'
 import { storeToRefs } from 'pinia'
 import { darkTheme } from 'naive-ui'
 import { cloneDeep } from 'lodash-es'
+import { animation } from '@/components/modal/type'
 
 const { t } = i18n.global
 const store = mainStore()
@@ -43,7 +52,7 @@ const olForm = reactive({
 // 定义跟踪变化的副本对象
 let form = shallowReactive(cloneDeep(olForm))
 const theme = ref()
-const emit = defineEmits(['saveSettings'])
+const emit = defineEmits(['saveSettings', 'alertOff'])
 // TODO 新版本3.3的defineProps解构例子 (nyh-2023-09-29 23:38:16)
 /**
  * 使用旧版解构
@@ -107,15 +116,20 @@ function getLocalStorageUsage() {
     remaining: remainingSize
   }
 }
-
+/*关闭警告*/
+const alertOff = () => {
+  emit('alertOff')
+}
 // 示例用法
 const localStorageUsage = getLocalStorageUsage()
 console.log('已使用容量:', localStorageUsage.used)
 console.log('剩余容量:', localStorageUsage.remaining)
 
+/*监听表单是否有被修改*/
 watchEffect(() => {
   form = shallowReactive(cloneDeep(olForm))
   emit('saveSettings', form)
+  emit('alertOff')
 })
 onMounted(() => {
   olForm.themeStatus = THEME.value
@@ -137,5 +151,15 @@ onMounted(() => {
 }
 .box span {
   font-weight: bold;
+}
+.alert {
+  width: 100%;
+  height: fit-content;
+  background: #fcf5eb;
+  box-sizing: border-box;
+  padding: 0 10px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
 }
 </style>

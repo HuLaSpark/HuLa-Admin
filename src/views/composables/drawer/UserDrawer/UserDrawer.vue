@@ -108,6 +108,7 @@ import { userStore } from '@/stores/user'
 import { renderMessage } from '@/customize/messageIze'
 import { useAuth } from '@/hooks/useAuth'
 import { handRelativeTime } from '@/utils/day'
+import { animation } from '@/components/modal/type'
 
 const { t } = i18n.global
 const { pageNum, pageSize } = paging
@@ -256,6 +257,8 @@ const handleDisableValue = (label: string) => {
 }
 
 const clone = () => {
+  // TODO animation是全局的值，如果当其他地方的值改变了，就要在其他地方初始化的时候来初始化动画 (nyh-2023-10-03 03:56:34)
+  animation.value = 'modal-container animate__animated animate__shakeX'
   showModal.value = true
   drawerShow.value = true
 }

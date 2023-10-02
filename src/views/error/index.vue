@@ -1,13 +1,12 @@
 <template>
   <div class="result">
-    <n-result status="error" :title="t('error_tip')" :description="t('not_found')">
-      <template #footer>
-        <!-- $router.replace 跳转到指定url路径，但是history栈中不会有记录，点击返回会跳转到上个页面 (直接替换当前页面) -->
-        <n-button secondary type="error" @click="$router.replace('/odometer')"
-          ><n-icon :size="16" style="margin: 0 5px"><ArrowBack /></n-icon>{{ t('BD_board') }}</n-button
-        >
-      </template>
-    </n-result>
+    <div class="result box">
+      <img src="@/assets/svg/404.svg" style="width: 380px; height: 380px" alt="" />
+      <!-- $router.replace 跳转到指定url路径，但是history栈中不会有记录，点击返回会跳转到上个页面 (直接替换当前页面) -->
+      <n-button style="width: fit-content" secondary type="error" @click="$router.replace('/odometer')">
+        <n-icon :size="16" style="margin: 0 5px"><ArrowBack /></n-icon>{{ t('BD_board') }}
+      </n-button>
+    </div>
   </div>
 </template>
 
@@ -20,6 +19,13 @@ const { t } = i18n.global
 
 <style scoped>
 .result {
-  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.box {
+  flex-direction: column;
+  gap: 30px;
+  padding: 50px 0;
 }
 </style>

@@ -3,7 +3,7 @@
   "private": true,
   "version": "v1.0.5-alpha",
   "engines": {
-    "node": "16.x || 18.x"
+    "node": "16.x || 18.x || 20.x"
   },
   "lint-staged": {
     "*.{js,jsx,vue,ts,tsx}": [

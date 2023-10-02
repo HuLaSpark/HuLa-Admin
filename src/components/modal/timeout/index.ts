@@ -8,9 +8,11 @@ const show = ref<boolean>(false)
 const msg = ref<string>()
 const ruleForm = reactive({
   userName: '',
-  password: ''
+  password: '',
+  uid: ''
 })
 export const handleVerify = (Msg: any) => {
+  animation.value = 'modal-container animate__animated animate__shakeX'
   show.value = true
   msg.value = Msg
 }
@@ -20,9 +22,9 @@ const verify = async () => {
   /*获取到pinia中的userInfoStore*/
   const userInfoStore = userStore()
   /*使用userInfoStore中的getUser获取用户信息*/
-  const user = userInfoStore.getUser
   /*把user中的用户名赋值给ruleForm中*/
-  ruleForm.userName = user.userName
+  ruleForm.userName = userInfoStore.getUser.userName
+  ruleForm.uid = userInfoStore.getUserUId
   await apis.renew(ruleForm).then((res) => {
     if (res.code === RCodeEnum.OK) {
       animation.value = 'modal-container animate__animated animate__fadeOutLeftBig'
