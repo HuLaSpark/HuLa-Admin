@@ -10,7 +10,7 @@
 
   <n-drawer v-model:show="active" :width="drawerWidth">
     <n-drawer-content :title="t('settings')" closable>
-      <Content @saveSettings="(args) => (Form = args)" :show-warn="showWarn" :warn="warn" />
+      <Content @saveSettings="(args) => (Form = args)" @alertOff="handleAlertOff" :show-warn="showWarn" :warn="warn" />
       <template #footer>
         <n-button style="width: 100%" :loading="loading" secondary type="primary" @click="save(Form)">{{
           t('save')
@@ -26,6 +26,7 @@ import { i18n } from '@/i18n'
 import Content from './content.vue'
 import { storeToRefs } from 'pinia'
 import { mainStore } from '@/stores/main'
+import { animation } from '@/components/modal/type'
 
 const { t, locale } = i18n.global
 const active = ref(false)
@@ -46,6 +47,7 @@ const showDrawer = () => {
 }
 const save = (val: any) => {
   if (JSON.stringify({ ...val }) === JSON.stringify({ ...Form })) {
+    animation.value = 'animate__animated animate__bounceIn'
     showWarn.value = true
     warn.value = '表单内容没有修改'
     return
@@ -58,6 +60,13 @@ const save = (val: any) => {
     showWarn.value = false
     store.toggleTheme()
   }, 1000)
+}
+/*处理警告关闭事件*/
+const handleAlertOff = () => {
+  animation.value = 'animate__animated animate__fadeOutUp'
+  setTimeout(() => {
+    showWarn.value = false
+  }, 500)
 }
 
 watchEffect(() => {

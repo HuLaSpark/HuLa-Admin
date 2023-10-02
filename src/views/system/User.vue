@@ -19,15 +19,15 @@
         <n-result v-if="!NoAccess" status="403" :title="t('403')" :description="t('403_content')"> </n-result>
         <div style="display: flex; justify-content: center">
           <div style="display: flex; align-items: center; flex-direction: column">
-            <img src="@/assets/svg/default.svg" alt="" style="width: 220px; height: 220px" />
-            <span style="color: #c0c0c0; letter-spacing: 2px">{{ t('no_data') }}</span>
+            <img src="@/assets/svg/noData.svg" alt="" style="width: 280px; height: 280px" />
+            <span style="color: #c0c0c0; letter-spacing: 4px; font-size: 12px">{{ t('no_data') }}</span>
           </div>
         </div>
       </template>
       <!--加载的时候展示-->
       <template #loading>
         <n-spin :show="loading">
-          <template #icon><n-icon :component="BrandAsana" /></template>
+          <template #icon><n-icon :component="RotateClockwise2" /></template>
           <template #description>{{ t('loading') }}</template>
         </n-spin>
       </template>
@@ -55,7 +55,7 @@ import { pageUser, Response, User } from '@/services/types'
 import { i18n } from '@/i18n'
 import type { Ref } from 'vue'
 import { RoleEnum } from '@/enums'
-import { EditCircle, LetterM, LetterR, LetterU, Power, TrashX, X, BrandAsana } from '@vicons/tabler'
+import { EditCircle, LetterM, LetterR, LetterU, Power, TrashX, X, RotateClockwise2 } from '@vicons/tabler'
 import { Report } from 'notiflix'
 import { useAuth } from '@/hooks/useAuth'
 import { UserDrawer } from '@/views/composables/drawer/index'
