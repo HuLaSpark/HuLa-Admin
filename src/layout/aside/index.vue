@@ -42,7 +42,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup lang="tsx">
 import type { MenuOption } from 'naive-ui'
 import { NIcon } from 'naive-ui'
 import { storeToRefs } from 'pinia'
@@ -85,41 +85,26 @@ const handleCollapsed = () => {
 }
 
 const renderIcon = (icon: string) => {
-  return () => h(NIcon, null, { default: () => h((vicons as any)[icon]) })
+  return () => <NIcon component={(vicons as any)[icon]} />
 }
 
 const menuOptions: MenuOption[] = menus.map((menu: Menu) => {
   const menuOption: MenuOption = {
-    label: () =>
-      h(
-        RouterLink,
-        {
-          to: {
-            name: menu.page
-          }
-        },
-        { default: () => menu.name }
-      ),
-    key: menu.path as any,
+    label: () => <RouterLink to={{ name: menu.page }}>{() => menu.name}</RouterLink>,
+    key: menu.path as string,
     icon: renderIcon(menu.icon)
   }
+
   if (menu.path) {
     return menuOption
   }
+
   menuOption.children = menu.children?.map((child) => ({
-    label: () =>
-      h(
-        RouterLink,
-        {
-          to: {
-            name: child.page
-          }
-        },
-        { default: () => child.name }
-      ),
-    key: child.path as any,
+    label: () => <RouterLink to={{ name: child.page }}>{() => child.name}</RouterLink>,
+    key: child.path as string,
     icon: renderIcon(child.icon)
   }))
+
   return menuOption
 })
 </script>

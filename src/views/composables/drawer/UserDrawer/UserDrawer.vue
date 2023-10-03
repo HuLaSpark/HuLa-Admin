@@ -82,7 +82,7 @@
       </template>
       <template #footer>
         <div style="display: flex; align-content: center; justify-content: space-between">
-          <n-button quaternary type="tertiary" @click="showModal = false">{{ t('cancel') }}</n-button>
+          <n-button quaternary type="tertiary" @click="cancel">{{ t('cancel') }}</n-button>
           <n-button secondary type="error" @click="shutDown(formRef)">{{ t('close') }}</n-button>
         </div>
       </template>
@@ -105,7 +105,7 @@ import paging from '@/hooks/usePaging'
 import UserVar from './UserVar'
 import { Role, User } from '@/services/types'
 import { userStore } from '@/stores/user'
-import { renderMessage } from '@/customize/messageIze'
+import { renderMessage } from '@/customize'
 import { useAuth } from '@/hooks/useAuth'
 import { handRelativeTime } from '@/utils/day'
 import { animation } from '@/components/modal/type'
@@ -263,10 +263,22 @@ const clone = () => {
   drawerShow.value = true
 }
 
+/*关闭弹框*/
 const shutDown = (formRef: FormInst) => {
-  showModal.value = false
-  drawerShow.value = false
-  formRef.restoreValidation()
+  animation.value = 'modal-container animate__animated animate__fadeOutLeft'
+  setTimeout(() => {
+    showModal.value = false
+    drawerShow.value = false
+    formRef.restoreValidation()
+  }, 100)
+}
+
+/*取消*/
+const cancel = () => {
+  animation.value = 'modal-container animate__animated animate__fadeOutDown'
+  setTimeout(() => {
+    showModal.value = false
+  }, 100)
 }
 </script>
 

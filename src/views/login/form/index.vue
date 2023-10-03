@@ -2,11 +2,16 @@
   <div class="login">
     <h1>{{ t('login') }} HuLa</h1>
     <!-- 登录错误提示框 -->
-    <n-alert v-if="loginErrorMsg" class="login_alert" :title="loginErrorTitle" :type="loginErrorType" closable>
-      <template #default>
-        {{ loginErrorText }}
-      </template>
-    </n-alert>
+    <div style="padding: 0 10px 10px 5px">
+      <AlertIze
+        img-url="./src/assets/svg/error.svg"
+        :text="loginErrorText"
+        :title="loginErrorTitle"
+        :show="loginErrorMsg"
+        :enter-active="'animate__animated animate__bounceIn'"
+        :leave-active="'animate__animated animate__hinge'"
+        @alertOff="loginErrorMsg = false" />
+    </div>
     <!-- 登录表单 -->
     <n-card class="form">
       <n-form ref="formRef" :show-require-mark="false" :rules="rules as any" :model="ruleForm">
@@ -23,12 +28,17 @@
               </template>
             </n-input>
           </n-form-item>
-
+          <!--忘记密码-->
           <div class="paw-title">
             <p style="font-size: 14px; color: #cccccc">{{ t('password') }}</p>
-            <p style="font-size: 12px; color: #337ecc; cursor: pointer" @click="changePawBox">
-              {{ t('forgot_password') }}
-            </p>
+            <n-popover trigger="hover">
+              <template #trigger>
+                <p style="font-size: 12px; color: #337ecc; cursor: pointer" @click="changePawBox">
+                  {{ t('forgot_password') }}
+                </p>
+              </template>
+              <img src="@/assets/svg/forgotPwd.svg" style="width: 140px; height: 140px" alt="" />
+            </n-popover>
           </div>
           <n-form-item :validation-status="ValidationStatus" path="password" :label="t('password')" :show-label="false">
             <n-input
@@ -135,6 +145,7 @@ import useModal from '@/hooks/useModal'
 import { useLogin } from '@/hooks/useLogin'
 import { animation } from '@/components/modal/type'
 import { Lock, User } from '@vicons/tabler'
+import { AlertIze } from '@/customize'
 
 const { t } = i18n.global
 const store = mainStore()
@@ -147,7 +158,6 @@ const {
   signInLoading,
   formRef,
   loginText,
-  loginErrorType,
   loginErrorTitle,
   showModal,
   ruleForm,
@@ -205,6 +215,7 @@ const handleRemember = () => {
     rememberOption.value = rememberMe
   }
 }
+
 onMounted(() => {
   handleRemember()
 })

@@ -36,8 +36,7 @@ export const useLogin = () => {
   const loginText = ref(t('login'))
   const loginErrorMsg = ref<boolean>(false)
   const loginErrorText = ref<string>()
-  const loginErrorType = ref()
-  const loginErrorTitle = ref()
+  const loginErrorTitle = ref<string>()
   const statusCode = ref()
   /**
    * 用户登录校验
@@ -87,11 +86,9 @@ export const useLogin = () => {
               loginErrorText.value = res.msg
               if (res.code === RCodeEnum.FAIL) {
                 statusCode.value = res.code
-                loginErrorType.value = 'warning'
                 loginErrorTitle.value = t('account_error')
               } else {
                 statusCode.value = res.code
-                loginErrorType.value = 'error'
                 loginErrorTitle.value = t('login_error')
               }
             })
@@ -152,7 +149,6 @@ export const useLogin = () => {
     disabled,
     loginErrorMsg,
     loginErrorText,
-    loginErrorType,
     loginErrorTitle,
     statusCode,
     showModal,
