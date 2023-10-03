@@ -18,9 +18,6 @@
 </template>
 
 <script setup lang="ts">
-import Mit from '@/utils/Bus'
-
-Mit.emit('pagination', false)
 const buttonToggled = ref(false)
 const numElements = ref(3)
 const addElement = () => {

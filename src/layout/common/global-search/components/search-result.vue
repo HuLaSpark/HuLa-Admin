@@ -25,12 +25,13 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
 import * as vicons from '@vicons/tabler'
+import { Menu } from '@/services/types'
 
 defineOptions({ name: 'SearchResult' })
 
 const { value, options } = defineProps<{
   value: string
-  options: any[]
+  options: Menu[]
 }>()
 
 interface Emits {
@@ -50,11 +51,11 @@ const active = computed({
 })
 
 /** 鼠标移入 */
-async function handleMouse(item: any) {
+const handleMouse = async (item: any) => {
   active.value = item.path
 }
 
-function handleTo() {
+const handleTo = () => {
   emit('enter')
 }
 </script>

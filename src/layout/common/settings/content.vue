@@ -1,14 +1,13 @@
 <template>
   <n-space vertical>
-    <div :class="animation" v-if="showWarn" class="alert">
-      <span style="display: flex; align-items: center; gap: 20px">
-        <img src="@/assets/svg/warning.svg" style="width: 100px; height: 100px" alt="" />
-        <span style="color: #ee9f20; font-weight: bold">{{ warn }}</span>
-      </span>
-      <div style="padding: 5px 0; cursor: pointer" @click="alertOff">
-        <n-icon :component="X" />
-      </div>
-    </div>
+    <AlertIze
+      img-url="./src/assets/svg/warning.svg"
+      :enter-active="'animate__animated animate__bounceIn'"
+      :leave-active="'animate__animated animate__fadeOutUp'"
+      title="警告"
+      :text="warn"
+      :show="showWarn"
+      @alertOff="alertOff" />
     <div class="box">
       <span>{{ t('eye_shield') }}</span>
       <n-switch :rubber-band="false" :value="olForm.themeStatus" :loading="loading" @update:value="switchTheme">
@@ -34,13 +33,13 @@
 </template>
 
 <script setup lang="ts">
-import { Moon, Sun, X } from '@vicons/tabler'
+import { Moon, Sun } from '@vicons/tabler'
 import { i18n } from '@/i18n'
 import { mainStore } from '@/stores/main'
 import { storeToRefs } from 'pinia'
 import { darkTheme } from 'naive-ui'
 import { cloneDeep } from 'lodash-es'
-import { animation } from '@/components/modal/type'
+import { AlertIze } from '@/customize'
 
 const { t } = i18n.global
 const store = mainStore()
@@ -57,6 +56,7 @@ const emit = defineEmits(['saveSettings', 'alertOff'])
 /**
  * 使用旧版解构
  * const { warn, showWarn } = toRefs(props)
+ * 如果需要使用默认值withDefaults的时候使用新版解构方式会报错
  * 新版vite.config开启解构语法可以直接解构并且具有响应式
  * 解构出来的值是reactive类型
  * */
