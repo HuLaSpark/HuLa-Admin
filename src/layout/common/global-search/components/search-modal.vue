@@ -10,6 +10,7 @@
     <n-space vertical>
       <n-input-group>
         <n-input
+          :maxlength="10"
           style="border-radius: 10px"
           ref="inputRef"
           v-model:value="keyword"
@@ -22,11 +23,59 @@
         </n-input>
       </n-input-group>
 
-      <n-empty style="margin-top: 10px" v-if="resultOptions.length === 0" description="暂无搜索结果" />
-      <search-result v-else v-model:value="activePath" :options="resultOptions" @enter="handleEnter" />
+      <!--搜索记录或者空列表-->
+      <transition
+        appear
+        :enter-active-class="'animate__animated animate__bounceIn'"
+        v-if="!resultOptions.length && !NOT_FOUND">
+        <div
+          v-if="!orderedArray.length"
+          style="margin-top: 10px; display: flex; flex-direction: column; align-items: center; gap: 5px">
+          <img src="@/assets/svg/empty.svg" style="width: 140px; height: 140px" alt="" />
+          <span style="color: #c0c0c0">暂无搜索记录</span>
+        </div>
+
+        <n-space v-else vertical justify="center" :size="2" style="margin-top: 5px">
+          <span style="font-weight: bold; color: #2c964b">搜索记录</span>
+          <search-record
+            v-model:path="activePath"
+            v-model:name="activeName"
+            :options="orderedArray"
+            @enter="handleEnter" />
+        </n-space>
+      </transition>
+
+      <!--搜索结果-->
+      <n-space v-if="resultOptions.length && !NOT_FOUND" vertical justify="center" :size="2" style="margin-top: 5px">
+        <span style="font-weight: bold; color: #2c964b">路由菜单/子菜单</span>
+        <search-result
+          v-model:path="activePath"
+          v-model:name="activeName"
+          :options="resultOptions"
+          @enter="handleEnter" />
+      </n-space>
+
+      <!--没有找到内容-->
+      <n-space v-if="NOT_FOUND" align="center">
+        <img src="@/assets/svg/no-found.svg" style="width: 120px" alt="" />
+        <n-space vertical justify="center" align="center">
+          <span style="font-size: 16px">
+            无法找到相关结果"
+            <n-text type="error" style="font-weight: bold">{{ keyword }}</n-text>
+            "
+          </span>
+          <div>
+            可以尝试搜索：
+            <span class="not-found" @click="Jump('/')">仪表板</span>
+          </div>
+        </n-space>
+      </n-space>
     </n-space>
+
     <template #footer>
-      <search-footer />
+      <transition appear :enter-active-class="'animate__animated animate__bounceIn'">
+        <search-footer />
+      </transition>
     </template>
   </n-modal>
 </template>
@@ -36,32 +85,47 @@ import { useRouter } from 'vue-router'
 import { onKeyStroke, useDebounceFn } from '@vueuse/core'
 import SearchResult from './search-result.vue'
 import SearchFooter from './search-footer.vue'
+import SearchRecord from './search-record.vue'
 import { userStore } from '@/stores/user'
 import { delay } from 'lodash-es'
 import { Search } from '@vicons/tabler'
+import { indexedDB } from '@/stores/indexedDB'
 
 defineOptions({ name: 'SearchModal' })
 
-interface Props {
+const props = defineProps<{
   /** 弹窗显隐 */
   value: boolean
-}
+}>()
 
-const props = defineProps<Props>()
-
-interface Emits {
+const emit = defineEmits<{
   (e: 'update:value', val: boolean): void
-}
-
-const emit = defineEmits<Emits>()
-
+}>()
+const searchStores = indexedDB()
 const router = useRouter()
 const menusStore = userStore().getMenus
 const keyword = ref('')
-const activePath = ref('')
+const activePath = ref<string>('')
+const activeName = ref<string>('')
+/*是否找到内容*/
+const NOT_FOUND = ref<boolean>(false)
+/*搜索结果数组*/
 const resultOptions = shallowRef<any>([])
 const inputRef = ref<HTMLInputElement>()
-
+type RouteItem = {
+  path: string
+  name: string
+}
+const orderedArray = ref<RouteItem[]>([])
+/*获取全局搜索记录*/
+searchStores.searchDB.length().then((D) => {
+  if (D) {
+    getStoreArray(D).then((r) => {
+      orderedArray.value = r as RouteItem[]
+      // activeName.value = orderedArray.value[0].name
+    })
+  }
+})
 /*使用vueUse中的防抖*/
 const handleSearch = useDebounceFn(search, 300)
 
@@ -86,8 +150,9 @@ watch(show, async (val) => {
 function search() {
   /*清空值的时候还原*/
   if (!keyword.value) {
+    NOT_FOUND.value = false
     resultOptions.value = []
-    return false
+    return
   }
   // 定义一个递归函数来搜索子菜单并将匹配项添加到 resultOptions.value
   const searchInChildren = (menu: any, keyword: string) => {
@@ -109,14 +174,19 @@ function search() {
   resultOptions.value = []
   // 使用递归函数来搜索匹配的菜单项
   menusStore.forEach((menu: string) => searchInChildren(menu, keyword.value))
+  /*处理鼠标点击事件*/
   if (resultOptions.value.length > 0) {
-    activePath.value = '/' + resultOptions.value[0].path
+    activePath.value = resultOptions.value[0].path
+    activeName.value = resultOptions.value[0].name
   } else {
+    NOT_FOUND.value = true
     activePath.value = ''
+    activeName.value = ''
   }
 }
 
 const handleClose = () => {
+  NOT_FOUND.value = false
   show.value = false
   /** 延时处理防止用户看到某些操作 */
   delay(() => {
@@ -127,43 +197,80 @@ const handleClose = () => {
 
 /** key up */
 const handleUp = () => {
-  const { length } = resultOptions.value
+  const options = Object.keys(resultOptions.value).length === 0 ? orderedArray.value : resultOptions.value
+  const { length } = options
   if (length === 0) return
-  const index = resultOptions.value.findIndex((item: any) => item.path === activePath.value)
-  if (index === 0) {
-    activePath.value = resultOptions.value[length - 1].path
-  } else {
-    activePath.value = resultOptions.value[index - 1].path
-  }
+
+  const index = options.findIndex((item: any) => item.path === activePath.value)
+  const newIndex = (index - 1 + length) % length
+
+  activePath.value = options[newIndex].path
+  activeName.value = options[newIndex].name
 }
 
 /** key down */
 const handleDown = () => {
-  const { length } = resultOptions.value
+  const options = Object.keys(resultOptions.value).length === 0 ? orderedArray.value : resultOptions.value
+  const { length } = options
   if (length === 0) return
-  const index = resultOptions.value.findIndex((item: any) => item.path === activePath.value)
-  if (index + 1 === length) {
-    activePath.value = resultOptions.value[0].path
-  } else {
-    activePath.value = resultOptions.value[index + 1].path
-  }
+
+  const index = options.findIndex((item: any) => item.path === activePath.value)
+  const newIndex = (index + 1) % length
+
+  activePath.value = options[newIndex].path
+  activeName.value = options[newIndex].name
 }
 
 /** key enter */
-const handleEnter = () => {
+const handleEnter = async () => {
   const { length } = resultOptions.value
-  if (length === 0 || activePath.value === '') return
-  const routeItem = resultOptions.value.find((item: any) => item.path === activePath.value)
-  if (routeItem?.meta?.href) {
-    window.open(activePath.value, '__blank')
+  if ((length === 0 && orderedArray.value.length === 0) || activePath.value === '') return
+  await router.push(activePath.value)
+  handleClose()
+  const index = orderedArray.value.findIndex((item) => item.path === activePath.value)
+  if (index > -1) {
+    orderedArray.value.splice(index, 1)
+    orderedArray.value.unshift({ path: activePath.value, name: activeName.value })
   } else {
-    router.push(activePath.value)
-    handleClose()
+    orderedArray.value.push({ path: activePath.value, name: activeName.value })
+  }
+  await setStoreArray(toRaw(orderedArray.value))
+}
+/*赋值到DB*/
+const setStoreArray = async (array: any) => {
+  for (let i = 0; i < array.length; i++) {
+    await searchStores.setSearchDB(i.toString(), array[i])
   }
 }
+/*获取DB的数据*/
+const getStoreArray = async (length: number) => {
+  let res = []
+  for (let i = 0; i < length; i++) {
+    res.push(await searchStores.getSearchDB(i.toString()))
+  }
+  return res
+}
 
+/*跳转到推荐页面*/
+const Jump = (path: string) => {
+  handleClose()
+  delay(() => {
+    router.push(path)
+  }, 500)
+}
 onKeyStroke('Escape', handleClose)
 onKeyStroke('Enter', handleEnter)
 onKeyStroke('ArrowUp', handleUp)
 onKeyStroke('ArrowDown', handleDown)
 </script>
+<style scoped>
+.not-found {
+  color: #79b989;
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+}
+.not-found:hover {
+  text-decoration: underline;
+}
+</style>

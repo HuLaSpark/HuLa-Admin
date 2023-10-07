@@ -56,7 +56,7 @@ import { AdjustmentsHorizontal, BrandGit, Package, Versions } from '@vicons/tabl
 import { pkgJson } from '@/views/composables/aboutUs/model'
 import { indexedDB } from '@/stores/indexedDB'
 
-const aboutUsDB = indexedDB()
+const aboutUsStores = indexedDB()
 const gitee = 'https://gitee.com/nongyehong'
 const { version } = pkgJson
 const latestBuildTime = PROJECT_BUILD_TIME
@@ -68,26 +68,28 @@ const linkOpen = (val: any) => {
 
 const handleDev = (val: boolean) => {
   dev.value.show = val
-  aboutUsDB.setAboutUsDB('dev', { title: dev.value.title, show: val })
+  aboutUsStores.setAboutUsDB('dev', { title: dev.value.title, show: val })
 }
 
 const handlePro = (val: boolean) => {
   pro.value.show = val
-  aboutUsDB.setAboutUsDB('pro', { title: pro.value.title, show: val })
+  aboutUsStores.setAboutUsDB('pro', { title: pro.value.title, show: val })
 }
 
 onMounted(() => {
-  if (Object.keys(aboutUsDB).length === 0) {
-    aboutUsDB.setAboutUsDB('dev', { title: dev.value.title, show: dev.value.show })
-    aboutUsDB.setAboutUsDB('pro', { title: pro.value.title, show: pro.value.show })
-  } else {
-    aboutUsDB.getAboutUsDB('dev').then((r: any) => {
-      dev.value.show = r.show
-    })
-    aboutUsDB.getAboutUsDB('pro').then((r: any) => {
-      pro.value.show = r.show
-    })
-  }
+  aboutUsStores.aboutUsDB.length().then((D) => {
+    if (D > 0) {
+      aboutUsStores.getAboutUsDB('dev').then((r: any) => {
+        dev.value.show = r.show
+      })
+      aboutUsStores.getAboutUsDB('pro').then((r: any) => {
+        pro.value.show = r.show
+      })
+    } else {
+      aboutUsStores.setAboutUsDB('dev', { title: dev.value.title, show: dev.value.show })
+      aboutUsStores.setAboutUsDB('pro', { title: pro.value.title, show: pro.value.show })
+    }
+  })
 })
 </script>
 

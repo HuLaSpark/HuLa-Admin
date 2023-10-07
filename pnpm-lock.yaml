@@ -5,12 +5,6 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
-  '@animxyz/core':
-    specifier: ^0.6.6
-    version: registry.npmmirror.com/@animxyz/core@0.6.6
-  '@animxyz/vue3':
-    specifier: ^0.6.7
-    version: registry.npmmirror.com/@animxyz/vue3@0.6.7(vue@3.3.4)
   '@intlify/unplugin-vue-i18n':
     specifier: ^0.11.0
     version: registry.npmmirror.com/@intlify/unplugin-vue-i18n@0.11.0(vue-i18n@9.5.0)
@@ -360,25 +354,6 @@ packages:
       '@jridgewell/gen-mapping': registry.npmmirror.com/@jridgewell/gen-mapping@0.3.3
       '@jridgewell/trace-mapping': registry.npmmirror.com/@jridgewell/trace-mapping@0.3.19
     dev: true
-
-  registry.npmmirror.com/@animxyz/core@0.6.6:
-    resolution: {integrity: sha512-NtAA/G0Gq3hzAiL6yuE/4U8IgHMPUl3MxbWUbhO443T9UCsf9rBY94P5aK79Zd+/529FeoNdDphIOcOZLsI2sA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@animxyz/core/-/core-0.6.6.tgz}
-    name: '@animxyz/core'
-    version: 0.6.6
-    dev: false
-
-  registry.npmmirror.com/@animxyz/vue3@0.6.7(vue@3.3.4):
-    resolution: {integrity: sha512-tLx4HfFcoxR5wgIMFDrmjS2mZifFRNMiwn7skPT3as9ViuCW3QdCsBIDYY2tR37GSvSUC1NhNwkkCZ1pt0C+Hg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@animxyz/vue3/-/vue3-0.6.7.tgz}
-    id: registry.npmmirror.com/@animxyz/vue3/0.6.7
-    name: '@animxyz/vue3'
-    version: 0.6.7
-    peerDependencies:
-      vue: '>= 3'
-    dependencies:
-      '@animxyz/core': registry.npmmirror.com/@animxyz/core@0.6.6
-      clsx: registry.npmmirror.com/clsx@1.2.1
-      vue: registry.npmmirror.com/vue@3.3.4
-    dev: false
 
   registry.npmmirror.com/@antfu/utils@0.7.6:
     resolution: {integrity: sha512-pvFiLP2BeOKA/ZOS6jxx4XhKzdVLHDhGlFEaZ2flWWYf2xOqVniqpk38I04DFRyz+L0ASggl7SkItTc+ZLju4w==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@antfu/utils/-/utils-0.7.6.tgz}
@@ -3284,13 +3259,6 @@ packages:
     version: 1.0.4
     engines: {node: '>=0.8'}
     dev: true
-
-  registry.npmmirror.com/clsx@1.2.1:
-    resolution: {integrity: sha512-EcR6r5a8bj6pu3ycsa/E/cKVGuTgZJZdsyUYHOksG/UHIiKfjxzRxYJpyVBwYaQeOvghal9fcc4PidlgzugAQg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/clsx/-/clsx-1.2.1.tgz}
-    name: clsx
-    version: 1.2.1
-    engines: {node: '>=6'}
-    dev: false
 
   registry.npmmirror.com/color-convert@1.9.3:
     resolution: {integrity: sha512-QfAUtd+vFdAtFQcC8CCyYt1fYWxSqAiK2cSD6zDB8N3cpsEBAvRxp9zOGg6G/SHHJYAT88/az/IuDGALsNVbGg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/color-convert/-/color-convert-1.9.3.tgz}

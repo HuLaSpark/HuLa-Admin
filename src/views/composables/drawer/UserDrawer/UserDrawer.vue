@@ -7,7 +7,7 @@
     :on-mask-click="clone"
     :on-esc="clone"
     :close-on-esc="false">
-    <n-drawer-content :title="t('edit')" closable>
+    <n-drawer-content :title="t('edit')">
       <!--警告-->
       <n-alert title="Warning 类型" type="warning" closable v-show="alertShow">{{ alert }}</n-alert>
 

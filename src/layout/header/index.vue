@@ -1,6 +1,7 @@
 <template>
   <div :class="collapsed ? 'header-unfold' : 'header-shrink'">
     <div class="operation-list">
+      <!--全局搜索-->
       <GlobalSearch />
       <n-divider vertical />
       <!--首页-->
@@ -121,7 +122,7 @@ import { DeviceDesktop, Maximize, Trash, Terminal2, Power, AlertTriangle } from 
 import { i18n } from '@/i18n'
 import Language from '@/components/Language/index.vue'
 import Terminal from '@/components/terminal/index.vue'
-import Settings from '@/layout/common/settings/index.vue'
+import Settings from '@/layout/common/global-settings/index.vue'
 import screenfull from 'screenfull'
 import { useLogin } from '@/hooks/useLogin'
 import { useAuth } from '@/hooks/useAuth'

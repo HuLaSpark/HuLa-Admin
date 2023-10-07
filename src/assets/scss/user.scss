@@ -1,0 +1,9 @@
+/*表格开关的颜色样式*/
+:deep(.n-switch .n-switch__rail) {
+  background: #ce304f;
+  border: #f4e4e8;
+}
+:deep(.n-switch.n-switch--active .n-switch__rail) {
+  background: #189f57;
+}
+/*end*/

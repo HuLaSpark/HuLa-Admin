@@ -6,6 +6,9 @@ export const indexedDB = defineStore('indexedDB', {
     aboutUsDB: localforage.createInstance({
       name: 'aboutUsDB'
     }),
+    searchDB: localforage.createInstance({
+      name: 'searchDB'
+    }),
     userInfoDB: localforage.createInstance({
       name: 'userInfoDB'
     }),
@@ -14,6 +17,12 @@ export const indexedDB = defineStore('indexedDB', {
     })
   }),
   actions: {
+    async getSearchDB(key: string) {
+      return await this.searchDB.getItem(key)
+    },
+    async setSearchDB(key: string, value: any) {
+      await this.searchDB.setItem(key, value)
+    },
     async getAboutUsDB(key: string) {
       return await this.aboutUsDB.getItem(key)
     },
