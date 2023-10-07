@@ -2,6 +2,7 @@
   <div>
     <div v-if="!$route.meta.pagination" class="content" v-show="show">
       <div class="animate__animated animate__fadeInRight">
+        <!-- id="drawer-target"挂载抽屉 -->
         <div class="routerView" id="drawer-target">
           <n-scrollbar style="max-height: calc(100vh - 152px)">
             <router-view />

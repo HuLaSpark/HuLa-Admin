@@ -82,7 +82,7 @@
     </n-card>
     <div class="BottomBar">
       <div style="display: flex; margin: 20px 10px 20px 10px; justify-content: center">
-        <n-popover placement="top" trigger="click">
+        <n-popover placement="top" trigger="hover">
           <template #trigger>
             <n-a style="font-size: 12px; margin: 0 10px">{{ t('author') }}</n-a>
           </template>
@@ -93,7 +93,7 @@
             </div>
           </template>
         </n-popover>
-        <n-popover placement="top" trigger="click">
+        <n-popover placement="top" trigger="hover">
           <template #trigger>
             <n-a style="font-size: 12px; margin: 0 10px" type="primary">{{ t('contact') }}</n-a>
           </template>
@@ -104,7 +104,7 @@
             </div>
           </template>
         </n-popover>
-        <n-popover placement="top" trigger="click">
+        <n-popover placement="top" trigger="hover">
           <template #trigger>
             <n-a style="font-size: 12px; margin: 0 10px" type="info">{{ t('technology') }}</n-a>
           </template>

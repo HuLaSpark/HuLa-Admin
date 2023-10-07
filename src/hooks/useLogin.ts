@@ -37,7 +37,8 @@ export const useLogin = () => {
   const loginErrorMsg = ref<boolean>(false)
   const loginErrorText = ref<string>()
   const loginErrorTitle = ref<string>()
-  const statusCode = ref()
+  const loginErrorType = ref<string>()
+  const statusCode = ref<string>()
   /**
    * 用户登录校验
    * @param formInstance 表单校验
@@ -150,6 +151,7 @@ export const useLogin = () => {
     loginErrorMsg,
     loginErrorText,
     loginErrorTitle,
+    loginErrorType,
     statusCode,
     showModal,
     showCode,

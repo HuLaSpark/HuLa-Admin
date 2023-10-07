@@ -20,7 +20,7 @@
         <div style="display: flex; justify-content: center">
           <div style="display: flex; align-items: center; flex-direction: column">
             <img src="@/assets/svg/noData.svg" alt="" style="width: 280px; height: 280px" />
-            <span style="color: #c0c0c0; letter-spacing: 4px; font-size: 12px">{{ t('no_data') }}</span>
+            <span style="color: #c0c0c0">{{ t('no_data') }}</span>
           </div>
         </div>
       </template>
@@ -62,9 +62,11 @@ import { UserDrawer } from '@/views/composables/drawer/index'
 import UserVar from '@/views/composables/drawer/UserDrawer/UserVar'
 
 const { t } = i18n.global
+/*异步组件示例*/
+/*const UserDrawer = defineAsyncComponent(() =>{import('@/views/composables/drawer/UserDrawer/UserDrawer.vue')})*/
 const { pageNum, pageSize } = paging
 const checkedRowKeysRef = ref<DataTableRowKey[]>([])
-const loadingBarTargetRef = ref<any>()
+const loadingBarTargetRef = ref()
 const { input, editedData, drawerShow } = UserVar()
 const { pagingLoad, tableData, total, loading, NoAccess } = useBase()
 const { judgmentRole } = useAuth()
@@ -270,5 +272,5 @@ const handleUpdateFilter = (filters: DataTableFilterState, sourceColumn: DataTab
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/User';
+@import '@/assets/scss/user';
 </style>

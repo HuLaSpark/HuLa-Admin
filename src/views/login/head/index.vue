@@ -3,6 +3,12 @@
     <n-text depth="3">{{ version }}</n-text>
     <n-icon color="#ccc"><ArrowUpRight /></n-icon>
     <n-divider vertical />
+    <div style="display: flex">
+      <!--切换语言组件-->
+      <Language />
+    </div>
+    <n-divider vertical />
+    <!--切换主题色-->
     <n-switch :rubber-band="false" :value="THEME" :loading="loading" @update:value="switchTheme">
       <template #checked-icon>
         <n-icon><Moon /></n-icon>
@@ -13,11 +19,6 @@
       <template #checked>{{ t('dark_color') }}</template>
       <template #unchecked>{{ t('light_color') }}</template>
     </n-switch>
-    <n-divider vertical />
-    <div style="display: flex">
-      <!--切换语言组件-->
-      <Language />
-    </div>
     <n-divider vertical />
     <n-tooltip trigger="hover" style="padding: 5px 8px 5px 8px">
       <template #trigger>

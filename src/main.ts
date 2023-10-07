@@ -1,8 +1,6 @@
 import { createApp } from 'vue'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import 'animate.css'
-import VueAnimXyz from '@animxyz/vue3'
-import '@animxyz/core'
 import App from '@/App.vue'
 import router from '@/router'
 import pinia from '@/stores/index'
@@ -13,7 +11,6 @@ const app = createApp(App)
 app.use(router)
 app.use(pinia)
 app.use(i18n)
-app.use(VueAnimXyz)
 pinia.use(piniaPluginPersistedstate)
 app.mount('#app')
 const { version } = pkgJson

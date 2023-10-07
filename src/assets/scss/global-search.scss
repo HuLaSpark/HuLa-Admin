@@ -1,0 +1,13 @@
+.box {
+  height: fit-content;
+  padding: 10px;
+  margin-bottom: 5px;
+  margin-top: 10px;
+  border-radius: 6px;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+:deep(.n-icon) {
+  display: flex;
+  align-items: center;
+}
