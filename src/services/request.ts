@@ -50,7 +50,6 @@ export const createAxios = (config?: AxiosRequestConfig): AxiosInstance => {
 
       //判断是否有token 根据自己的需求判断
       const token = userStore().getBearerToken
-      console.log('判断是否有token', token)
       if (token != undefined) {
         //如果要求携带在参数中
         // config.params = Object.assign({}, config.params, token)

@@ -21,7 +21,7 @@
                 </span>
               </n-space>
             </n-space>
-            <n-icon :size="20" :component="X" />
+            <n-icon class="del" :size="20" :component="X" @click.stop="handleDel(item)" />
           </n-space>
         </div>
       </div>
@@ -31,9 +31,10 @@
 
 <script lang="ts" setup>
 import { Clock, X } from '@vicons/tabler'
+import { indexedDB } from '@/stores/indexedDB'
 
 defineOptions({ name: 'SearchRecord' })
-
+const searchStores = indexedDB()
 const { path, name, options } = defineProps<{
   path: string
   name: string
@@ -69,6 +70,20 @@ const handleMouse = async (item: any) => {
 
 const handleTo = () => {
   emit('enter')
+}
+/*删除历史记录*/
+const handleDel = async (item: any) => {
+  const indexToDelete = options.findIndex((option) => option.path === item.path)
+  if (indexToDelete !== -1) {
+    ;(options as any).splice(indexToDelete, 1)
+    if (indexToDelete < options.length - 1) {
+      ;[options[indexToDelete], options[indexToDelete + 1]] = [options[indexToDelete + 1], options[indexToDelete]]
+    }
+  }
+  /*先清空DB中的数据然后再重新赋值*/
+  await searchStores.removeSearchDBAll().then(() => {
+    searchStores.setSearchDB(toRaw(options))
+  })
 }
 </script>
 <style lang="scss" scoped>

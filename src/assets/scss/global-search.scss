@@ -6,6 +6,13 @@
   border-radius: 6px;
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
   cursor: pointer;
+  .del {
+    border-radius: 50px;
+    transition: .5s;
+  }
+  .del:hover {
+    background: rgba(60,60,60, 0.4);
+  }
 }
 :deep(.n-icon) {
   display: flex;

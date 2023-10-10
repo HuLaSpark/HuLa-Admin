@@ -62,6 +62,9 @@ export default defineConfig(({ mode }) => {
           /*生产环境移除console.log和debugger*/
           drop_console: true,
           drop_debugger: true
+        },
+        output: {
+          comments: false // 移除注释
         }
       }
     },

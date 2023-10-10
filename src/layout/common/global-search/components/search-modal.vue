@@ -118,11 +118,11 @@ type RouteItem = {
 }
 const orderedArray = ref<RouteItem[]>([])
 /*获取全局搜索记录*/
-searchStores.searchDB.length().then((D) => {
-  if (D) {
-    getStoreArray(D).then((r) => {
+searchStores.searchDB.length().then((val) => {
+  if (val) {
+    /*获取DB的数据*/
+    searchStores.getSearchDB(val).then((r) => {
       orderedArray.value = r as RouteItem[]
-      // activeName.value = orderedArray.value[0].name
     })
   }
 })
@@ -229,26 +229,14 @@ const handleEnter = async () => {
   handleClose()
   const index = orderedArray.value.findIndex((item) => item.path === activePath.value)
   if (index > -1) {
+    /*如果数据存在就先删除原本的数据*/
     orderedArray.value.splice(index, 1)
+    /*然后把数据在数组开头中添加*/
     orderedArray.value.unshift({ path: activePath.value, name: activeName.value })
   } else {
     orderedArray.value.push({ path: activePath.value, name: activeName.value })
   }
-  await setStoreArray(toRaw(orderedArray.value))
-}
-/*赋值到DB*/
-const setStoreArray = async (array: any) => {
-  for (let i = 0; i < array.length; i++) {
-    await searchStores.setSearchDB(i.toString(), array[i])
-  }
-}
-/*获取DB的数据*/
-const getStoreArray = async (length: number) => {
-  let res = []
-  for (let i = 0; i < length; i++) {
-    res.push(await searchStores.getSearchDB(i.toString()))
-  }
-  return res
+  await searchStores.setSearchDB(toRaw(orderedArray.value))
 }
 
 /*跳转到推荐页面*/
