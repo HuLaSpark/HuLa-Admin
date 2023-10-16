@@ -26,6 +26,9 @@ dependencies:
   echarts:
     specifier: 5.4.1
     version: registry.npmmirror.com/echarts@5.4.1
+  hotkeys-js:
+    specifier: ^3.12.0
+    version: registry.npmmirror.com/hotkeys-js@3.12.0
   localforage:
     specifier: ^1.10.0
     version: registry.npmmirror.com/localforage@1.10.0
@@ -5339,6 +5342,12 @@ packages:
     dependencies:
       lru-cache: registry.npmmirror.com/lru-cache@6.0.0
     dev: true
+
+  registry.npmmirror.com/hotkeys-js@3.12.0:
+    resolution: {integrity: sha512-Z+N573ycUKIGwFYS3ID1RzMJiGmtWMGKMiaNLyJS8B1ei+MllF4ZYmKS2T0kMWBktOz+WZLVNikftEgnukOrXg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/hotkeys-js/-/hotkeys-js-3.12.0.tgz}
+    name: hotkeys-js
+    version: 3.12.0
+    dev: false
 
   registry.npmmirror.com/html-tags@3.3.1:
     resolution: {integrity: sha512-ztqyC3kLto0e9WbNp0aeP+M3kTt+nbaIveGmUxAtZa+8iFgKLUOD4YKM5j+f3QD89bra7UeumolZHKuOXnTmeQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/html-tags/-/html-tags-3.3.1.tgz}

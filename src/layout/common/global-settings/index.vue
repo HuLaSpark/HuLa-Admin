@@ -8,11 +8,12 @@
     </n-tooltip>
   </div>
 
-  <n-drawer v-model:show="active" :width="drawerWidth">
-    <n-drawer-content :title="t('settings')" closable>
+  <n-drawer style="border-radius: 10px 0 0 10px" v-model:show="active" :width="350">
+    <n-drawer-content :title="t('settings')" closable :native-scrollbar="false">
       <Content
         @saveSettings="(args) => (Form = args)"
         @alertOff="showWarn = false"
+        @showKeyDown="handleKeyDown"
         :show-warn="showWarn"
         :warn="warn" />
       <template #footer>
@@ -30,44 +31,70 @@ import { i18n } from '@/i18n'
 import Content from './content.vue'
 import { storeToRefs } from 'pinia'
 import { mainStore } from '@/stores/main'
+import { globalSettings } from '@/stores/global-settings'
+import Mit from '@/utils/Bus'
 
-const { t, locale } = i18n.global
+const { t } = i18n.global
 const active = ref(false)
 const store = mainStore()
 const { THEME } = storeToRefs(store)
-const Form = reactive({
-  themeStatus: false
+const settingsStore = globalSettings()
+const { data } = storeToRefs(settingsStore)
+const Form = reactive<{
+  themeStatus: boolean
+  tags: {
+    [key: string]: {
+      item: string[]
+      double: boolean
+    }
+  }
+}>({
+  themeStatus: false,
+  tags: { search: { item: ['Shift'], double: false } }
 })
 const loading = ref(false)
-const drawerWidth = ref()
 const warn = ref()
 const showWarn = ref(false)
-
+/*处理设置中不规范的问题*/
+const handleKeyDown = (content: string) => {
+  showWarn.value = true
+  warn.value = content
+}
 const showDrawer = () => {
   active.value = true
   showWarn.value = false
   Form.themeStatus = THEME.value
+  if (Object.keys(data.value).length === 0) {
+    settingsStore.setSettings({ ...(Form as any) })
+  }
+  Form.tags['search'].item = [...data.value.tags['search'].item]
+  Form.tags['search'].double = data.value.tags['search'].double
 }
 const save = (val: any) => {
+  console.log(val)
+  console.log(Form)
   if (JSON.stringify({ ...val }) === JSON.stringify({ ...Form })) {
     showWarn.value = true
-    warn.value = '表单内容没有修改'
+    warn.value = t('alert_warning_description')
     return
   }
   loading.value = true
   setTimeout(() => {
     loading.value = false
-    THEME.value = val.themeStatus
-    Form.themeStatus = val.themeStatus
+    /*需要判断是否修改的是主题*/
+    if (val.themeStatus !== THEME.value) {
+      THEME.value = val.themeStatus
+      Form.themeStatus = val.themeStatus
+      store.toggleTheme()
+    }
+    Form.tags['search'].item = [...val.tags['search'].item]
+    Form.tags['search'].double = val.tags['search'].double
+    settingsStore.setSettings({ ...val })
     showWarn.value = false
-    store.toggleTheme()
+    /*使用mitt给兄弟组件更新*/
+    Mit.emit('search', Form.tags['search'])
   }, 1000)
 }
-
-watchEffect(() => {
-  /*监听drawer的宽度跟随语言切换而改变*/
-  drawerWidth.value = locale.value === 'zh-CN' ? 350 : 420
-})
 </script>
 
 <style scoped>

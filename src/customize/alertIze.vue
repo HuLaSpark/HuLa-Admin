@@ -8,11 +8,11 @@
           <span style="display: flex; align-items: center; gap: 5px; color: #ee9f20">
             <n-icon :size="20" :component="AlertTriangle" />{{ title }}
           </span>
-          <span>{{ text }}</span>
+          <span style="color: #606060">{{ text }}</span>
         </div>
       </div>
       <div style="padding: 5px 0; cursor: pointer" @click="alertOff">
-        <n-icon :component="X" />
+        <n-icon :component="X" color="#606060" />
       </div>
     </div>
   </transition>

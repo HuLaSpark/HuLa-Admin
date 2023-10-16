@@ -236,6 +236,4 @@ onBeforeUnmount(() => {
 })
 </script>
 
-<style scoped>
-@import '@/assets/css/drawer.css';
-</style>
+<style scoped></style>
