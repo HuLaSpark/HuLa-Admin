@@ -79,7 +79,7 @@
   "warm_reminder": "温馨提示",
   "warm_reminder_description": "网络不是法外之地，请认真对待，可以皮但不要浪",
   "alert_warning_title": "请认真填写完整表单",
-  "alert_warning_description": "当前表单内容没有被修改",
+  "alert_warning_description": "内容没有被修改",
   "check_email": "邮箱格式不正确",
   "complexity_s": "简单",
   "complexity_m": "中等",
@@ -157,7 +157,7 @@
   "terminal": "终端",
   "delete_cache": "删除缓存",
   "network_state": "当前设备网络连接断开",
-  "eye_shield": "护眼模式",
+  "eye_shield": "护眼主题",
   "example": "示例",
   "out_confirm": "确定要退出吗?",
   "UN_EX_limit": "用户名不可能那么长吧😅",
@@ -168,5 +168,6 @@
   "403": "403 禁止访问",
   "403_content": "总有些门是对你关闭的",
   "input": "输入",
-  "global_search": "全局搜索"
+  "global_search": "全局搜索",
+  "warn": "警告"
 }

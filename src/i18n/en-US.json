@@ -79,7 +79,7 @@
   "warm_reminder": "Warm Reminder",
   "warm_reminder_description": "The Internet is not outside the law, please treat seriously, can skin but do not wave",
   "alert_warning_title": "Please complete the form carefully",
-  "alert_warning_description": "The current form content is not modified",
+  "alert_warning_description": "Content is not modified",
   "check_email": "The Email is incorrect",
   "complexity_s": "simple",
   "complexity_m": "medium",
@@ -167,5 +167,6 @@
   "no_data": "No Data",
   "403": "403 Access is prohibited",
   "403_content": "There are always doors that are closed to you",
-  "global_search": "global search"
+  "global_search": "global search",
+  "warn": "Caution"
 }

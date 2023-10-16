@@ -1,15 +1,21 @@
 <template>
   <n-space vertical>
+    <!--自定义警告-->
     <AlertIze
       img-url="./src/assets/svg/warning.svg"
       :enter-active="'animate__animated animate__bounceIn'"
       :leave-active="'animate__animated animate__fadeOutUp'"
-      title="警告"
+      :title="t('warn')"
       :text="warn"
       :show="showWarn"
       @alertOff="alertOff" />
-    <div class="box">
-      <span>{{ t('eye_shield') }}</span>
+
+    <n-divider title-placement="center">
+      <span>主题模式</span>
+    </n-divider>
+    <!--护眼模式-->
+    <n-space justify="space-between" align="center">
+      <p>{{ t('eye_shield') }}</p>
       <n-switch :rubber-band="false" :value="olForm.themeStatus" :loading="loading" @update:value="switchTheme">
         <template #checked-icon>
           <n-icon><Moon /></n-icon>
@@ -20,15 +26,30 @@
         <template #checked>{{ t('dark_color') }}</template>
         <template #unchecked>{{ t('light_color') }}</template>
       </n-switch>
-      <n-config-provider :theme="theme">
-        <n-card class="eyeshadow">
-          <n-space hidden>
-            <n-tag type="success">{{ t('example') }}</n-tag>
-            <n-tag type="error" disabled>{{ t('example') }}</n-tag>
-          </n-space>
-        </n-card>
-      </n-config-provider>
-    </div>
+    </n-space>
+    <n-config-provider :theme="theme">
+      <n-card class="example-box">
+        <n-space hidden>
+          <n-tag type="success">{{ t('example') }}</n-tag>
+          <n-tag type="error" disabled>{{ t('example') }}</n-tag>
+        </n-space>
+      </n-card>
+    </n-config-provider>
+
+    <n-divider title-placement="center">
+      <span>快捷键绑定</span>
+    </n-divider>
+    <!--快捷键绑定-->
+    <n-space justify="space-between" align="center">
+      <p>全局搜索</p>
+      <n-checkbox v-model:checked="olForm.tags['search'].double" @update:checked="handleChecked">启用连按</n-checkbox>
+    </n-space>
+    <n-dynamic-tags
+      @keydown="handleKeyDown"
+      @create="keyDownCreate"
+      v-model:value="olForm.tags['search'].item"
+      :render-tag="renderTag"
+      :max="3" />
   </n-space>
 </template>
 
@@ -37,21 +58,34 @@ import { Moon, Sun } from '@vicons/tabler'
 import { i18n } from '@/i18n'
 import { mainStore } from '@/stores/main'
 import { storeToRefs } from 'pinia'
-import { darkTheme } from 'naive-ui'
+import { darkTheme, NTag } from 'naive-ui'
 import { cloneDeep } from 'lodash-es'
 import { AlertIze } from '@/customize'
+import { globalSettings } from '@/stores/global-settings'
 
 const { t } = i18n.global
 const store = mainStore()
 const loading = ref(false)
 const { THEME } = storeToRefs(store)
-const olForm = reactive({
-  themeStatus: false
+const settingsStore = globalSettings()
+const { data } = storeToRefs(settingsStore)
+const olForm = reactive<{
+  themeStatus: boolean
+  tags: {
+    [key: string]: {
+      item: string[]
+      double: boolean
+    }
+  }
+}>({
+  themeStatus: false,
+  tags: { search: { item: [], double: false } }
 })
-// 定义跟踪变化的副本对象
+/*定义跟踪变化的副本对象*/
 let form = shallowReactive(cloneDeep(olForm))
+/*示例数据变量*/
 const theme = ref()
-const emit = defineEmits(['saveSettings', 'alertOff'])
+const emit = defineEmits(['saveSettings', 'alertOff', 'showKeyDown'])
 // TODO 新版本3.3的defineProps解构例子 (nyh-2023-09-29 23:38:16)
 /**
  * 使用旧版解构
@@ -133,33 +167,77 @@ watchEffect(() => {
 })
 onMounted(() => {
   olForm.themeStatus = THEME.value
+  olForm.tags['search'].item = [...data.value.tags['search'].item]
+  olForm.tags['search'].double = data.value.tags['search'].double
 })
+/*当选中了连按后需要把后面绑定的值都去掉*/
+const handleChecked = (value: boolean) => {
+  if (value && olForm.tags['search'].item.length > 0) {
+    /*直接截掉两个元素*/
+    olForm.tags['search'].item.splice(1, 2)
+  }
+}
+const keyDownCreate = () => {
+  // 输入框聚焦时，监听键盘事件
+  window.addEventListener('keydown', handleKeyDown)
+}
+
+const handleKeyDown = (event: KeyboardEvent) => {
+  // 取消输入框的聚焦效果
+  const inputElement = document.activeElement as HTMLInputElement
+  if (olForm.tags['search'].double && olForm.tags['search'].item.length > 0) {
+    emit('showKeyDown', '启动连按后只能绑定一个键')
+    if (inputElement) {
+      inputElement.blur()
+    }
+    return
+  }
+  /*判断如果是中文输入就提示错误*/
+  if (event.key === 'Process') {
+    emit('showKeyDown', '请切换为英文输入')
+    if (inputElement) {
+      inputElement.blur()
+    }
+    return
+  }
+  if (event.key === 'Tab') {
+    emit('showKeyDown', '不可以使用Tab键')
+    return
+  }
+  olForm.tags['search'].item.push(event.key)
+}
+/*渲染快捷键绑定的tag*/
+const renderTag = (tag: string, index: number) => {
+  return h(
+    NTag,
+    {
+      style: {
+        borderRadius: '8px'
+      },
+      type: index < 1 ? 'success' : index < 2 ? 'info' : 'error',
+      disabled: index > 3,
+      closable: true,
+      onClose: () => {
+        olForm.tags['search'].item.splice(index, 1)
+      }
+    },
+    {
+      default: () => tag
+    }
+  )
+}
 </script>
 
 <style scoped>
-.eyeshadow {
+.example-box {
   height: 50px;
   border-radius: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
 }
-.box {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.box span {
+
+span {
   font-weight: bold;
-}
-.alert {
-  width: 100%;
-  height: fit-content;
-  background: #fcf5eb;
-  box-sizing: border-box;
-  padding: 0 10px;
-  border-radius: 10px;
-  display: flex;
-  justify-content: space-between;
 }
 </style>

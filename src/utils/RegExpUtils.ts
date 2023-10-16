@@ -1,4 +1,4 @@
-export class StringUtils {
+export class RegExpUtils {
   /**
    * 使用正则来校验邮箱是否正确
    * @param email 邮箱
@@ -21,10 +21,10 @@ export class StringUtils {
   }
 
   /**
-   * 使用正则来校验输入框中的值是否符合规范
+   * 检验是否只包含英文或者数字
    * @param val 输入框的值
    */
-  public static isStandard(val: string): boolean {
+  public static isEngORNub(val: string): boolean {
     // 判断是否只包含英文和数字
     const standardRegex = /^[a-zA-Z0-9]+$/
     return standardRegex.test(val)

@@ -319,8 +319,6 @@ load()
 </script>
 
 <style scoped>
-@import '@/assets/css/drawer.css';
-
 /*更改单选框样式*/
 :deep(.el-radio-button__original-radio:checked + .el-radio-button__inner) {
   color: var(--el-radio-button-checked-text-color, var(--el-color-white));
