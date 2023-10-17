@@ -70,9 +70,24 @@ const showDrawer = () => {
   Form.tags['search'].item = [...data.value.tags['search'].item]
   Form.tags['search'].double = data.value.tags['search'].double
 }
+/*判断是否只包含修饰键*/
+const containsOnlyModifiers = (keys: string[]): boolean => {
+  const modifierKeys = new Set(['Control', 'Shift', 'Alt', 'Meta', 'CapsLock'])
+  for (const key of keys) {
+    if (!modifierKeys.has(key)) {
+      return false // 包含了非修饰键
+    }
+  }
+  return true // 只包含修饰键
+}
+
 const save = (val: any) => {
-  console.log(val)
-  console.log(Form)
+  const isOnlyModifiers = containsOnlyModifiers([...val.tags['search'].item])
+  if (isOnlyModifiers && val.tags['search'].double === false) {
+    showWarn.value = true
+    warn.value = '不能只包含修饰键'
+    return
+  }
   if (JSON.stringify({ ...val }) === JSON.stringify({ ...Form })) {
     showWarn.value = true
     warn.value = t('alert_warning_description')

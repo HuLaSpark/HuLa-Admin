@@ -170,6 +170,7 @@ onMounted(() => {
   olForm.tags['search'].item = [...data.value.tags['search'].item]
   olForm.tags['search'].double = data.value.tags['search'].double
 })
+
 /*当选中了连按后需要把后面绑定的值都去掉*/
 const handleChecked = (value: boolean) => {
   if (value && olForm.tags['search'].item.length > 0) {
@@ -177,34 +178,47 @@ const handleChecked = (value: boolean) => {
     olForm.tags['search'].item.splice(1, 2)
   }
 }
+
+/*当按下键盘的时候监听*/
 const keyDownCreate = () => {
+  if (Object.keys(olForm.tags['search'].item).length === 0) return
   // 输入框聚焦时，监听键盘事件
   window.addEventListener('keydown', handleKeyDown)
 }
 
+/*处理输入快捷键值*/
 const handleKeyDown = (event: KeyboardEvent) => {
-  // 取消输入框的聚焦效果
   const inputElement = document.activeElement as HTMLInputElement
-  if (olForm.tags['search'].double && olForm.tags['search'].item.length > 0) {
-    emit('showKeyDown', '启动连按后只能绑定一个键')
+  const { double, item } = olForm.tags['search']
+
+  switch (true) {
+    case double && item.length > 0:
+      showErrorAndBlur('启动连按后只能绑定一个键')
+      break
+    case event.key === 'Process':
+      showErrorAndBlur('请切换为英文输入')
+      break
+    case event.key === 'Tab':
+      showError('不可以使用Tab键')
+      break
+    case item.includes(event.key):
+      showErrorAndBlur('该键已存在')
+      break
+    default:
+      item.push(event.key)
+      break
+  }
+  /*返回错误信息并且取消聚焦*/
+  function showErrorAndBlur(message: string) {
+    emit('showKeyDown', message)
     if (inputElement) {
       inputElement.blur()
     }
-    return
   }
-  /*判断如果是中文输入就提示错误*/
-  if (event.key === 'Process') {
-    emit('showKeyDown', '请切换为英文输入')
-    if (inputElement) {
-      inputElement.blur()
-    }
-    return
+  /*只返回错误信息*/
+  function showError(message: string) {
+    emit('showKeyDown', message)
   }
-  if (event.key === 'Tab') {
-    emit('showKeyDown', '不可以使用Tab键')
-    return
-  }
-  olForm.tags['search'].item.push(event.key)
 }
 /*渲染快捷键绑定的tag*/
 const renderTag = (tag: string, index: number) => {

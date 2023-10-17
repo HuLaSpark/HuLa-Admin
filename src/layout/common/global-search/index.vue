@@ -86,6 +86,7 @@ window.addEventListener('keydown', (event) => {
         }
       }
     } else {
+      // TODO 如果绑定的全都是修饰键的话就不会触发的问题 (nyh-2023-10-17 07:44:04)
       const combinedKeys = key.value.item.join('+')
       hotkeys(combinedKeys, () => {
         delay(() => {
