@@ -14,7 +14,7 @@
         <n-space align="center" :size="8">
           <n-icon :size="20"><Click /></n-icon>
           <span>或者</span>
-          <span style="color: #000; font-weight: bold; font-size: 12px">ESC</span>
+          <n-text style="font-weight: bold; font-size: 12px">ESC</n-text>
         </n-space>
         <span>关闭</span>
       </n-space>

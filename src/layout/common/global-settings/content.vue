@@ -28,10 +28,20 @@
       </n-switch>
     </n-space>
     <n-config-provider :theme="theme">
-      <n-card class="example-box">
-        <n-space hidden>
-          <n-tag type="success">{{ t('example') }}</n-tag>
-          <n-tag type="error" disabled>{{ t('example') }}</n-tag>
+      <!--小型预览主题布局-->
+      <n-card class="example-box" :hoverable="true">
+        <n-space justify="space-between" :size="5">
+          <!--侧边栏-->
+          <div class="preview-aside">
+            <div class="aside-box">
+              <img src="/logo.png" alt="" style="width: 15px; height: 12px" />
+              <span style="font-size: 8px; transform: scale(1)">HuLa</span>
+            </div>
+          </div>
+          <n-space vertical :size="5">
+            <div class="preview-header"></div>
+            <div class="preview-content"></div>
+          </n-space>
         </n-space>
       </n-card>
     </n-config-provider>
@@ -62,22 +72,15 @@ import { darkTheme, NTag } from 'naive-ui'
 import { cloneDeep } from 'lodash-es'
 import { AlertIze } from '@/customize'
 import { globalSettings } from '@/stores/global-settings'
+import { globalSetting } from '@/services/types'
 
 const { t } = i18n.global
 const store = mainStore()
 const loading = ref(false)
-const { THEME } = storeToRefs(store)
+const { THEME, BGC, BGC_OTHER } = storeToRefs(store)
 const settingsStore = globalSettings()
 const { data } = storeToRefs(settingsStore)
-const olForm = reactive<{
-  themeStatus: boolean
-  tags: {
-    [key: string]: {
-      item: string[]
-      double: boolean
-    }
-  }
-}>({
+const olForm = reactive<globalSetting>({
   themeStatus: false,
   tags: { search: { item: [], double: false } }
 })
@@ -85,6 +88,9 @@ const olForm = reactive<{
 let form = shallowReactive(cloneDeep(olForm))
 /*示例数据变量*/
 const theme = ref()
+const bgc = ref()
+const bgc_other = ref()
+
 const emit = defineEmits(['saveSettings', 'alertOff', 'showKeyDown'])
 // TODO 新版本3.3的defineProps解构例子 (nyh-2023-09-29 23:38:16)
 /**
@@ -107,6 +113,8 @@ const switchTheme = () => {
     loading.value = false
     olForm.themeStatus = !olForm.themeStatus
     theme.value = olForm.themeStatus ? darkTheme : null
+    bgc.value = theme.value ? '#18181c' : '#FFF'
+    bgc_other.value = theme.value ? 'rgba(29,29,29,0.9)' : '#f4f4f4'
   }, 1000)
 }
 /*获取localStorage已使用和剩余的容量*/
@@ -167,6 +175,8 @@ watchEffect(() => {
 })
 onMounted(() => {
   olForm.themeStatus = THEME.value
+  bgc.value = BGC.value
+  bgc_other.value = BGC_OTHER.value
   olForm.tags['search'].item = [...data.value.tags['search'].item]
   olForm.tags['search'].double = data.value.tags['search'].double
 })
@@ -183,7 +193,7 @@ const handleChecked = (value: boolean) => {
 const keyDownCreate = () => {
   if (Object.keys(olForm.tags['search'].item).length === 0) return
   // 输入框聚焦时，监听键盘事件
-  window.addEventListener('keydown', handleKeyDown)
+  document.addEventListener('keydown', handleKeyDown)
 }
 
 /*处理输入快捷键值*/
@@ -242,13 +252,41 @@ const renderTag = (tag: string, index: number) => {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .example-box {
-  height: 50px;
+  height: 160px;
   border-radius: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
+  background: v-bind(bgc_other);
+  .preview-aside {
+    width: 50px;
+    height: 140px;
+    border-radius: 10px;
+    background: v-bind(bgc);
+    .aside-box {
+      padding: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+  }
+
+  .preview-header {
+    width: 180px;
+    height: 25px;
+    border-radius: 8px;
+    background: v-bind(bgc);
+  }
+
+  .preview-content {
+    width: 180px;
+    height: 110px;
+    border-radius: 12px;
+    background: v-bind(bgc);
+  }
 }
 
 span {
