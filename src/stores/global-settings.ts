@@ -1,14 +1,7 @@
 import { defineStore } from 'pinia'
-interface Settings {
-  data: {
-    themeStatus: boolean
-    tags: {
-      [key: string]: {
-        item: string[]
-        double: boolean
-      }
-    }
-  }
+import { globalSetting } from '@/services/types'
+type Settings = {
+  data: globalSetting
 }
 export const globalSettings = defineStore('global-Settings', {
   state: (): Settings =>
@@ -16,15 +9,15 @@ export const globalSettings = defineStore('global-Settings', {
       data: {}
     },
   getters: {
-    getSettings(): Settings | object {
+    getSettings(): globalSetting | object {
       return this.data || {}
     },
-    getSettingsTags(): Settings | object {
+    getSettingsTags(): globalSetting | object {
       return this.data.tags || {}
     }
   },
   actions: {
-    setSettings(val: Settings) {
+    setSettings(val: globalSetting) {
       this.data = JSON.parse(JSON.stringify(val))
     }
   },

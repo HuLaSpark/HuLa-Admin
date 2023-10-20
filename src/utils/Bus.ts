@@ -1,3 +1,3 @@
 import mitt from 'mitt'
-const Mit = mitt()
-export default Mit
+const Mitt = mitt()
+export default Mitt

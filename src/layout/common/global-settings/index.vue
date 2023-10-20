@@ -17,38 +17,39 @@
         :show-warn="showWarn"
         :warn="warn" />
       <template #footer>
-        <n-button style="width: 100%" :loading="loading" secondary type="primary" @click="save(Form)">{{
-          t('save')
-        }}</n-button>
+        <n-button style="width: 100%" :loading="loading" secondary :type="butType" @click="save(Form)">
+          <template #icon>
+            <n-icon v-if="iconShow" :component="butIcon" />
+          </template>
+          {{ butText }}
+        </n-button>
       </template>
     </n-drawer-content>
   </n-drawer>
 </template>
 
 <script setup lang="ts">
-import { Settings } from '@vicons/tabler'
+import { Settings, CircleCheck, AlertCircle } from '@vicons/tabler'
 import { i18n } from '@/i18n'
 import Content from './content.vue'
 import { storeToRefs } from 'pinia'
 import { mainStore } from '@/stores/main'
 import { globalSettings } from '@/stores/global-settings'
-import Mit from '@/utils/Bus'
+import Mitt from '@/utils/Bus'
+import { delay } from 'lodash-es'
+import { globalSetting } from '@/services/types'
 
 const { t } = i18n.global
 const active = ref(false)
+const butText = ref(t('save'))
+const butType = ref('primary')
+const butIcon = shallowRef<object>(CircleCheck)
+const iconShow = ref(false)
 const store = mainStore()
 const { THEME } = storeToRefs(store)
 const settingsStore = globalSettings()
 const { data } = storeToRefs(settingsStore)
-const Form = reactive<{
-  themeStatus: boolean
-  tags: {
-    [key: string]: {
-      item: string[]
-      double: boolean
-    }
-  }
-}>({
+const Form = reactive<globalSetting>({
   themeStatus: false,
   tags: { search: { item: ['Shift'], double: false } }
 })
@@ -60,6 +61,7 @@ const handleKeyDown = (content: string) => {
   showWarn.value = true
   warn.value = content
 }
+/*显示设置抽屉*/
 const showDrawer = () => {
   active.value = true
   showWarn.value = false
@@ -80,21 +82,24 @@ const containsOnlyModifiers = (keys: string[]): boolean => {
   }
   return true // 只包含修饰键
 }
-
-const save = (val: any) => {
+/*保存设置*/
+const save = (val: globalSetting) => {
   const isOnlyModifiers = containsOnlyModifiers([...val.tags['search'].item])
-  if (isOnlyModifiers && val.tags['search'].double === false) {
+  if (isOnlyModifiers && !val.tags['search'].double) {
     showWarn.value = true
     warn.value = '不能只包含修饰键'
+    textChange(t('save_warning'), AlertCircle, 'warning')
     return
   }
   if (JSON.stringify({ ...val }) === JSON.stringify({ ...Form })) {
+    const text = t('alert_warning_description')
     showWarn.value = true
-    warn.value = t('alert_warning_description')
+    warn.value = text
+    textChange(t('save_warning'), AlertCircle, 'warning')
     return
   }
   loading.value = true
-  setTimeout(() => {
+  delay(() => {
     loading.value = false
     /*需要判断是否修改的是主题*/
     if (val.themeStatus !== THEME.value) {
@@ -107,8 +112,21 @@ const save = (val: any) => {
     settingsStore.setSettings({ ...val })
     showWarn.value = false
     /*使用mitt给兄弟组件更新*/
-    Mit.emit('search', Form.tags['search'])
+    Mitt.emit('search', Form.tags['search'])
+    textChange(t('save_success'), CircleCheck)
   }, 1000)
+}
+/*处理保存按钮的提示*/
+const textChange = (text: string, icon?: object, type?: string) => {
+  butText.value = text
+  iconShow.value = true
+  icon ? (butIcon.value = icon) : {}
+  type ? (butType.value = type) : ''
+  delay(() => {
+    butText.value = t('save')
+    butType.value = 'primary'
+    iconShow.value = false
+  }, 2000)
 }
 </script>
 

@@ -18,52 +18,47 @@ import { i18n } from '@/i18n'
 import { globalSettings } from '@/stores/global-settings'
 import { storeToRefs } from 'pinia'
 import hotkeys from 'hotkeys-js'
-import Mit from '@/utils/Bus'
+import Mitt from '@/utils/Bus'
 import { delay } from 'lodash-es'
+import { globalSetting } from '@/services/types'
 
 defineOptions({ name: 'GlobalSearch' })
 
 const { t } = i18n.global
 const show = ref(false)
 const shiftCount = ref(0)
-let shiftTimeout: NodeJS.Timeout | null = null
+const shiftTimeout = ref<NodeJS.Timeout | null>(null)
 const settingsStore = globalSettings()
 const { data } = storeToRefs(settingsStore)
-const Form = reactive<{
-  themeStatus: boolean
-  tags: {
-    [key: string]: {
-      item: string[]
-      double: boolean
-    }
-  }
-}>({
+const Form = reactive<globalSetting>({
   themeStatus: false,
   tags: { search: { item: ['Shift'], double: false } }
 })
 /*如果没有创建配置文件缓存需要先创建*/
 if (Object.keys(data.value).length === 0) {
-  settingsStore.setSettings({ ...(Form as any) })
+  settingsStore.setSettings({ ...Form })
 }
 /*获取缓存中的tags对象中的search*/
 const key = ref(data.value.tags['search'])
 /*监听兄弟组件配置是否更新*/
-Mit.on('search', (event: any) => {
+Mitt.on('search', (event: any) => {
   key.value = event
-  console.log(key.value)
 })
-const showSearch = () => {
-  show.value = true
-  // 重置计数器和延时器
+/*重置计数器和延时器*/
+const resetTimer = () => {
   shiftCount.value = 0
-  if (shiftTimeout !== null) {
-    clearTimeout(shiftTimeout)
-    shiftTimeout = null
+  if (shiftTimeout.value !== null) {
+    clearTimeout(shiftTimeout.value)
+    shiftTimeout.value = null
   }
 }
-
+/*打开弹框*/
+const showSearch = () => {
+  show.value = true
+  resetTimer()
+}
 // 监听键盘事件
-window.addEventListener('keydown', (event) => {
+document.addEventListener('keydown', (event) => {
   delay(() => {
     if (key.value.item.length === 1 && !data.value.tags['search'].double && key.value.item.includes(event.key)) {
       showSearch()
@@ -72,21 +67,16 @@ window.addEventListener('keydown', (event) => {
       shiftCount.value++
       if (shiftCount.value === 1) {
         // 如果按下了第一次 Shift 键，则设置延时器
-        shiftTimeout = setTimeout(() => {
+        shiftTimeout.value = setTimeout(() => {
           shiftCount.value = 0
-          shiftTimeout = null
+          shiftTimeout.value = null
         }, 1000) // 1秒内没有第二次 Shift 键按下，重置计数器
       } else if (shiftCount.value === 2) {
         // 如果按下了第二次按键，则触发 showSearch
         showSearch()
-        shiftCount.value = 0
-        if (shiftTimeout !== null) {
-          clearTimeout(shiftTimeout)
-          shiftTimeout = null
-        }
+        resetTimer()
       }
     } else {
-      // TODO 如果绑定的全都是修饰键的话就不会触发的问题 (nyh-2023-10-17 07:44:04)
       const combinedKeys = key.value.item.join('+')
       hotkeys(combinedKeys, () => {
         delay(() => {

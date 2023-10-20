@@ -83,3 +83,13 @@ export type RoleType = {
   HL_SYS: 'hl_sys_manage'
   HL_ORD: 'hl_ord_user' | 'hl_ord_cs'
 }
+/*全局设置类型*/
+export type globalSetting = {
+  themeStatus: boolean
+  tags: {
+    [key: string]: {
+      item: string[]
+      double: boolean
+    }
+  }
+}
