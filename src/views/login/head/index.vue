@@ -44,7 +44,7 @@ const gitee = 'https://gitee.com/nongyehong'
 const { locale, t } = i18n.global
 const store = mainStore()
 const loading = ref<boolean>(false)
-const { TEXT_COLOR, THEME } = storeToRefs(store)
+const { THEME } = storeToRefs(store)
 const { loginText, loginErrorType, loginErrorTitle, statusCode, emailMsg, codeMsg } = useLogin()
 
 /*切换主题*/

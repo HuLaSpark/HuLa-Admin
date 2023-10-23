@@ -46,6 +46,7 @@
   "account": "账号",
   "uid": "唯一ID",
   "user_name": "用户名",
+  "nick_name": "昵称",
   "role_name": "角色名称",
   "role_flag": "角色标签",
   "create_time": "创建时间",

@@ -46,6 +46,7 @@
   "account": "AUT",
   "uid": "UID",
   "user_name": "UserName",
+  "nick_name": "NickName",
   "role_name": "RoleName",
   "role_flag": "RoleFlag",
   "create_time": "CreateTime",

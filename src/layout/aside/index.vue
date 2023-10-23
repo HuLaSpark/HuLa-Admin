@@ -171,6 +171,7 @@ const menuOptions: MenuOption[] = menus.map((menu: Menu) => {
     animation: logo-spin infinite 2s linear;
   }
 }*/
+/*修改menu选择的样式*/
 :deep(.n-menu .n-menu-item-content) {
   font-weight: bold;
 }
@@ -193,4 +194,9 @@ const menuOptions: MenuOption[] = menus.map((menu: Menu) => {
 :deep(.n-layout-sider.n-layout-sider--bordered .n-layout-sider__border) {
   background-color: v-bind(BGC);
 }
+/*去除菜单menu中的边框*/
+:deep(.n-layout-sider .n-layout-sider__border) {
+  width: 0;
+}
+/*end*/
 </style>

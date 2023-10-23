@@ -1,3 +1,9 @@
+.barchart {
+  padding: 15px;
+  border-radius: 10px;
+  margin-top: 10px;
+}
+
 @media screen and (max-width: 1920px) {
   .barchart {
     padding: 15px;

@@ -7,7 +7,7 @@
       :loading="loading"
       striped
       :bordered="false"
-      :single-line="false"
+      single-line
       single-column
       :row-key="rowKey"
       :columns="columns"
@@ -17,7 +17,7 @@
       <!--为空时表格状态-->
       <template #empty>
         <n-result v-if="!NoAccess" status="403" :title="t('403')" :description="t('403_content')"> </n-result>
-        <div style="display: flex; justify-content: center">
+        <div v-else style="display: flex; justify-content: center">
           <div style="display: flex; align-items: center; flex-direction: column">
             <img src="@/assets/svg/noData.svg" alt="" style="width: 280px; height: 280px" />
             <span style="color: #c0c0c0">{{ t('no_data') }}</span>
@@ -48,18 +48,30 @@
 <script setup lang="tsx">
 import { useBase } from '@/hooks/useBase'
 import type { DataTableBaseColumn, DataTableColumns, DataTableFilterState, DataTableRowKey } from 'naive-ui'
-import { NIcon, NIconWrapper, NSpace, NSwitch, NTag, NTooltip } from 'naive-ui'
+import {
+  NIcon,
+  NIconWrapper,
+  NSpace,
+  NSwitch,
+  NTag,
+  NTooltip,
+  NProgress,
+  NAvatar,
+  NPopconfirm,
+  NButton
+} from 'naive-ui'
 import apis from '@/services/apis'
 import paging from '@/hooks/usePaging'
-import { pageUser, Response, User } from '@/services/types'
+import { pageUser, Response } from '@/services/types'
 import { i18n } from '@/i18n'
 import type { Ref } from 'vue'
 import { RoleEnum } from '@/enums'
-import { EditCircle, LetterM, LetterR, LetterU, Power, TrashX, X, RotateClockwise2 } from '@vicons/tabler'
+import { EditCircle, LetterM, LetterR, LetterU, Power, TrashX, X, RotateClockwise2, Minus } from '@vicons/tabler'
 import { Report } from 'notiflix'
 import { useAuth } from '@/hooks/useAuth'
 import { UserDrawer } from '@/views/composables/drawer/index'
 import UserVar from '@/views/composables/drawer/UserDrawer/UserVar'
+import { handRelativeTime } from '@/utils/day'
 
 const { t } = i18n.global
 /*异步组件示例*/
@@ -70,6 +82,7 @@ const loadingBarTargetRef = ref()
 const { input, editedData, drawerShow } = UserVar()
 const { pagingLoad, tableData, total, loading, NoAccess } = useBase()
 const { judgmentRole } = useAuth()
+
 /**使用defineComponent重新构建组件*/
 const LoadingBarTrigger = defineComponent({
   setup() {
@@ -115,6 +128,7 @@ const statusColumn = reactive<DataTableBaseColumn<pageUser>>({
     active.value = row.status === 1
     return (
       <NSwitch
+        size={'small'}
         value={active.value}
         onUpdateValue={(value: boolean) => {
           if (row.role === RoleEnum.HL_ROOT) {
@@ -146,8 +160,69 @@ const columns: Ref<DataTableColumns<pageUser>> = ref([
     }
   },
   {
-    title: '用户名',
-    key: 'userName'
+    title: '用户',
+    key: 'userName',
+    render: (row) => {
+      return (
+        <NSpace justify={'start'} align={'center'}>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <NAvatar size={'large'}></NAvatar>
+          </div>
+          <NSpace vertical size={5}>
+            <p style={{ fontWeight: 'bold', padding: 0, margin: 0 }}>{row.nickName ? row.nickName : row.email}</p>
+            <p style={{ color: '#ccc', fontSize: '12px', transform: 'scale(1)', padding: 0, margin: 0 }}>
+              {row.userName}
+            </p>
+          </NSpace>
+        </NSpace>
+      )
+    }
+  },
+  {
+    title: '邮箱',
+    key: 'email'
+  },
+  {
+    title: '手机号',
+    key: 'mobile',
+    render: (row) => {
+      return row.mobile ? row.mobile : <NIcon component={Minus} />
+    }
+  },
+  {
+    title: '头像',
+    key: 'avatar',
+    render: (row) => {
+      return row.avatar ? row.avatar : <NIcon component={Minus} />
+    }
+  },
+  {
+    title: '创建时间',
+    key: 'createTime',
+    render: (row) => {
+      return (
+        <NTooltip>
+          {{
+            default: () => row.createTime,
+            trigger: () => <p style={{ fontWeight: 'bold' }}>{handRelativeTime(row.createTime)}</p>
+          }}
+        </NTooltip>
+      )
+    }
+  },
+  {
+    title: '更新时间',
+    key: 'updateTime',
+    render: (row) => {
+      return (
+        <NTooltip>
+          {{
+            default: () => row.updateTime,
+            trigger: () => <p style={{ fontWeight: 'bold' }}>{handRelativeTime(row.updateTime)}</p>
+          }}
+        </NTooltip>
+      )
+    }
   },
   {
     title: '角色',
@@ -170,30 +245,50 @@ const columns: Ref<DataTableColumns<pageUser>> = ref([
       )
     }
   },
+  {
+    title: '资料完整度',
+    key: 'integrity',
+    minWidth: 140,
+    render: (row) => {
+      // 统计null值的数量
+      const nullCount = Object.values(row).filter((value) => value === null).length
+      // 计算资料完整度的占比
+      const totalDataCount = Object.keys(row).length
+      const integrity = (1 - nullCount / totalDataCount) * 100
+
+      const color = integrity > 80 ? 'rgb(33,163,93)' : integrity > 40 ? 'rgb(238,159,32)' : 'rgb(212,75,103)'
+      const railColor =
+        integrity > 80 ? 'rgba(33,163,93,0.2)' : integrity > 40 ? 'rgba(238,159,32,0.2)' : 'rgba(212,75,103,0.2)'
+      const show = integrity <= 80 ? 'hover' : ''
+      return (
+        <NPopconfirm trigger={show as any} negative-text={null} positive-text={null}>
+          {{
+            default: () => '请补全资料信息',
+            trigger: () => (
+              <NProgress
+                style={{ cursor: integrity <= 80 ? 'pointer' : '' }}
+                height={8}
+                color={color}
+                status={(integrity === 100 ? 'success' : integrity <= 80 ? 'warning' : '') as any}
+                rail-color={railColor}
+                percentage={integrity}
+                processing={integrity !== 100}></NProgress>
+            ),
+            action: () => (
+              <NButton quaternary type={'warning'} size={'tiny'} onClick={() => handleEditTable(row.id)}>
+                去修改
+              </NButton>
+            )
+          }}
+        </NPopconfirm>
+      )
+    }
+  },
   statusColumn,
-  {
-    title: '邮箱',
-    key: 'email'
-  },
-  {
-    title: '手机号',
-    key: 'mobile'
-  },
-  {
-    title: '头像',
-    key: 'avatar'
-  },
-  {
-    title: '创建时间',
-    key: 'createTime'
-  },
-  {
-    title: '更新时间',
-    key: 'updateTime'
-  },
   {
     title: '操作',
     key: 'actions',
+    minWidth: 80,
     render: (row) => {
       return (
         <NSpace justify={'space-around'}>
@@ -227,9 +322,9 @@ const columns: Ref<DataTableColumns<pageUser>> = ref([
 ])
 const handleEditTable = (rowId: number) => {
   drawerShow.value = true
-  const findItem = tableData.value.find((item: User) => item.id === rowId)
+  const findItem = tableData.value.find((item: pageUser) => item.id === rowId)
   if (findItem) {
-    editedData.value = { ...(findItem as User) }
+    editedData.value = { ...(findItem as pageUser) }
   }
 }
 const rowKey = (row: pageUser) => row.id

@@ -27,6 +27,20 @@
         <template #unchecked>{{ t('light_color') }}</template>
       </n-switch>
     </n-space>
+    <!--侧边栏深色-->
+    <n-space justify="space-between" align="center">
+      <p>侧边栏深色</p>
+      <n-switch :rubber-band="false" :value="olForm.themeStatus" :loading="loading" @update:value="switchTheme">
+        <template #checked-icon>
+          <n-icon><Check /></n-icon>
+        </template>
+        <template #unchecked-icon>
+          <n-icon><X /></n-icon>
+        </template>
+        <template #checked>开启</template>
+        <template #unchecked>关闭</template>
+      </n-switch>
+    </n-space>
     <n-config-provider :theme="theme">
       <!--小型预览主题布局-->
       <n-card class="example-box" :hoverable="true">
@@ -64,7 +78,7 @@
 </template>
 
 <script setup lang="ts">
-import { Moon, Sun } from '@vicons/tabler'
+import { Moon, Sun, Check, X } from '@vicons/tabler'
 import { i18n } from '@/i18n'
 import { mainStore } from '@/stores/main'
 import { storeToRefs } from 'pinia'
@@ -115,7 +129,7 @@ const switchTheme = () => {
     theme.value = olForm.themeStatus ? darkTheme : null
     bgc.value = theme.value ? '#18181c' : '#FFF'
     bgc_other.value = theme.value ? 'rgba(29,29,29,0.9)' : '#f4f4f4'
-  }, 1000)
+  }, 500)
 }
 /*获取localStorage已使用和剩余的容量*/
 function getLocalStorageUsage() {
