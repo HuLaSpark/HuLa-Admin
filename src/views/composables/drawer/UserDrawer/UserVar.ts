@@ -1,6 +1,6 @@
 import { i18n } from '@/i18n'
 import { FormInst, SelectGroupOption, SelectOption } from 'naive-ui'
-import { User } from '@/services/types'
+import { pageUser } from '@/services/types'
 
 const { t } = i18n.global
 const input = ref()
@@ -11,7 +11,7 @@ const showSelect = ref<boolean>(false)
 const loadingSelect = ref<boolean>(false)
 const selectData = ref<Array<SelectOption | SelectGroupOption>>([])
 /*编辑框中的数据*/
-const editedData = ref(<User>{})
+const editedData = ref(<pageUser>{})
 // /*表格的数据*/
 // const state = reactive({
 //   form: {} as User

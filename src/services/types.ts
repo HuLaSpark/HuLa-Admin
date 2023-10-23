@@ -50,11 +50,14 @@ export type User = {
 export type pageUser = {
   id: number
   userName: string
+  nickName: string
   role: string
   status: number
   email: string
   mobile: string
   avatar: string
+  /*!资料完整度不需要后端传递*/
+  integrity?: number[]
   createTime: string
   updateTime: string
 }

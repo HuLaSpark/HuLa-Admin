@@ -18,7 +18,7 @@
       <div class="operation-list-box">
         <n-tooltip trigger="hover" style="padding: 5px 8px 5px 8px">
           <template #trigger>
-            <n-icon :size="24" @click="handleMaximize"><Maximize /></n-icon>
+            <n-icon :size="24" @click="handleMaximize"><ArrowsMaximize /></n-icon>
           </template>
           {{ t('full_screen') }}
         </n-tooltip>
@@ -118,7 +118,7 @@
 import { mainStore } from '@/stores/main'
 import { storeToRefs } from 'pinia'
 import { userStore } from '@/stores/user'
-import { DeviceDesktop, Maximize, Trash, Terminal2, Power, AlertTriangle } from '@vicons/tabler'
+import { DeviceDesktop, ArrowsMaximize, Trash, Terminal2, Power, AlertTriangle } from '@vicons/tabler'
 import { i18n } from '@/i18n'
 import Language from '@/components/Language/index.vue'
 import Terminal from '@/components/terminal/index.vue'

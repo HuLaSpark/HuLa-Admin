@@ -116,7 +116,10 @@ onMounted(() => {
 
 <style scoped>
 @import '@/assets/css/barchar.css';
-
+.barchart {
+  background: v-bind(BGC);
+  margin-left: 30px;
+}
 @media screen and (max-width: 1920px) {
   .barchart {
     background: v-bind(BGC);

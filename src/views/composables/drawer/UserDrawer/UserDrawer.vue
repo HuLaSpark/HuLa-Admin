@@ -20,6 +20,9 @@
         <n-form-item :label="t('user_name')" path="userName">
           <n-input v-model:value="editedData.userName" :placeholder="t('placeholder')" />
         </n-form-item>
+        <n-form-item :label="t('nick_name')">
+          <n-input v-model:value="editedData.nickName" :placeholder="t('placeholder')" />
+        </n-form-item>
         <n-form-item :label="t('role_flag')" path="role">
           <n-select
             style="border-radius: 8px"

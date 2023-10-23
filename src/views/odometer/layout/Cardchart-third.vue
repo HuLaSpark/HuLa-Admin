@@ -149,6 +149,49 @@ onMounted(() => {
 .weekData {
   background: v-bind(BGC);
 }
+.count_third {
+  font-weight: bold;
+  font-size: 25px;
+  color: v-bind(TEXT_COLOR);
+}
+span {
+  color: v-bind(TEXT_COLOR);
+}
+.weekData p {
+  color: v-bind(TEXT_COLOR);
+}
+#weekData-third {
+  margin-left: 30px;
+}
+.count-div {
+  display: flex;
+  height: 70px;
+  align-items: center;
+}
+#Cardchart-third {
+  margin-left: 40px;
+}
+.footer {
+  display: flex;
+  margin-top: 40px;
+  font-size: 14px;
+}
+.footer-left {
+  color: #cccccc;
+}
+.footer-top {
+  color: #bc3f4a;
+  font-weight: bold;
+  margin-left: 5px;
+}
+.footer-bottom {
+  color: #2c964b;
+  font-weight: bold;
+  margin-left: 5px;
+}
+.tag {
+  flex: 1;
+}
 @media screen and (max-width: 1920px) {
   .count_third {
     font-weight: bold;
