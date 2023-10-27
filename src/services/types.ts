@@ -88,7 +88,11 @@ export type RoleType = {
 }
 /*全局设置类型*/
 export type globalSetting = {
-  themeStatus: boolean
+  theme: {
+    [key: string]: {
+      status: boolean
+    }
+  }
   tags: {
     [key: string]: {
       item: string[]

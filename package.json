@@ -47,6 +47,7 @@
     "pinia": "^2.1.4",
     "pinia-plugin-persistedstate": "^3.1.0",
     "screenfull": "^6.0.2",
+    "vite-plugin-inspect": "^0.7.40",
     "vue": "^3.3.4",
     "vue-i18n": "^9.2.2",
     "vue-router": "^4.2.2",

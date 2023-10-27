@@ -4,7 +4,7 @@
       <template #trigger>
         <n-popover trigger="click">
           <template #trigger>
-            <n-icon class="language" v-if="THEME" :size="24" :color="TEXT_COLOR"><Language /></n-icon>
+            <n-icon class="language" v-if="EYE_THEME" :size="24" :color="TEXT_COLOR"><Language /></n-icon>
             <n-icon class="language" v-else :size="24"><Language /></n-icon>
           </template>
           <n-space vertical class="n-button-hover">
@@ -47,7 +47,7 @@ const NLanguage = ref(inject('NLanguage'))
 const NDataLanguage = ref(inject('NDataLanguage'))
 const i18nStore = language()
 const store = mainStore()
-const { TEXT_COLOR, THEME } = storeToRefs(store)
+const { TEXT_COLOR, EYE_THEME } = storeToRefs(store)
 const { t, locale } = i18n.global
 const loading = ref(false)
 

@@ -9,7 +9,7 @@
     </div>
     <n-divider vertical />
     <!--切换主题色-->
-    <n-switch :rubber-band="false" :value="THEME" :loading="loading" @update:value="switchTheme">
+    <n-switch :rubber-band="false" :value="EYE_THEME" :loading="loading" @update:value="switchTheme">
       <template #checked-icon>
         <n-icon><Moon /></n-icon>
       </template>
@@ -44,7 +44,7 @@ const gitee = 'https://gitee.com/nongyehong'
 const { locale, t } = i18n.global
 const store = mainStore()
 const loading = ref<boolean>(false)
-const { THEME } = storeToRefs(store)
+const { EYE_THEME, ASIDE_COLOR } = storeToRefs(store)
 const { loginText, loginErrorType, loginErrorTitle, statusCode, emailMsg, codeMsg } = useLogin()
 
 /*切换主题*/
@@ -52,7 +52,9 @@ const switchTheme = (value: boolean) => {
   loading.value = true
   delay(() => {
     loading.value = false
-    THEME.value = value
+    EYE_THEME.value = value
+    /*在登录页面设置了护眼模式就需要把其他的颜色给关闭*/
+    ASIDE_COLOR.value = false
     store.toggleTheme()
   }, 500)
 }

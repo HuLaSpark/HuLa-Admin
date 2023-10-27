@@ -32,8 +32,8 @@ export const userStore = defineStore('localUserInfo', {
     getRole(): any {
       return this.loginInfo.sysUser.role || ''
     },
-    getRoleName(): any {
-      return this.loginInfo.roleName || ''
+    getTag(): any {
+      return this.loginInfo.tag || ''
     }
   },
   actions: {

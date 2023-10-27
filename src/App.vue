@@ -23,11 +23,11 @@ const NLanguage = ref(zhCN)
 const NDataLanguage = ref(dateZhCN)
 provide('NLanguage', NLanguage)
 provide('NDataLanguage', NDataLanguage)
-const { THEME, LOGIN_BGC } = storeToRefs(store)
-const theme = ref<any>(THEME.value)
+const { EYE_THEME, LOGIN_BGC } = storeToRefs(store)
+const theme = ref<any>(EYE_THEME.value)
 /*监听深色主题颜色变化*/
 watchEffect(() => {
-  theme.value = THEME.value ? darkTheme : null
+  theme.value = EYE_THEME.value ? darkTheme : null
 })
 </script>
 

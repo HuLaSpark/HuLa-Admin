@@ -48,10 +48,10 @@ for (let i = 0; i < 100; i++) {
   data2.push((Math.cos(i / 5) * (i / 5 - 10) + i / 6) * 5)
 }
 const store = mainStore()
-const { TEXT_COLOR, THEME, BGC } = storeToRefs(store)
+const { TEXT_COLOR, EYE_THEME, BGC } = storeToRefs(store)
 let myChart: echarts.ECharts
 
-watch(THEME, () => {
+watch(EYE_THEME, () => {
   /*监听主题是否切换，如果切换就重新绘制图表*/
   myChart.setOption({
     backgroundColor: BGC.value,

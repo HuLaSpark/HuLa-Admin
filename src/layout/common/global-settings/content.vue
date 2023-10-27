@@ -16,7 +16,11 @@
     <!--护眼模式-->
     <n-space justify="space-between" align="center">
       <p>{{ t('eye_shield') }}</p>
-      <n-switch :rubber-band="false" :value="olForm.themeStatus" :loading="loading" @update:value="switchTheme">
+      <n-switch
+        :rubber-band="false"
+        :value="olForm.theme['eye'].status"
+        :loading="EyeLoading"
+        @update:value="switchEyeTheme">
         <template #checked-icon>
           <n-icon><Moon /></n-icon>
         </template>
@@ -30,7 +34,12 @@
     <!--侧边栏深色-->
     <n-space justify="space-between" align="center">
       <p>侧边栏深色</p>
-      <n-switch :rubber-band="false" :value="olForm.themeStatus" :loading="loading" @update:value="switchTheme">
+      <n-switch
+        :disabled="themeDisabled"
+        :rubber-band="false"
+        :value="olForm.theme['aside'].status"
+        :loading="AsideLoading"
+        @update:value="switchAsideTheme">
         <template #checked-icon>
           <n-icon><Check /></n-icon>
         </template>
@@ -42,7 +51,7 @@
       </n-switch>
     </n-space>
     <n-config-provider :theme="theme">
-      <!--小型预览主题布局-->
+      <!--!小型预览主题布局-->
       <n-card class="example-box" :hoverable="true">
         <n-space justify="space-between" :size="5">
           <!--侧边栏-->
@@ -90,18 +99,27 @@ import { globalSetting } from '@/services/types'
 
 const { t } = i18n.global
 const store = mainStore()
-const loading = ref(false)
-const { THEME, BGC, BGC_OTHER } = storeToRefs(store)
+/*切换开关加载状态组*/
+const EyeLoading = ref(false)
+const AsideLoading = ref(false)
+const themeDisabled = ref(false) // 是否禁用
+
+const { EYE_THEME, BGC, BGC_OTHER, ASIDE_BGC, ASIDE_COLOR, DISABLED, ASIDE_TEXT_COLOR } = storeToRefs(store)
 const settingsStore = globalSettings()
 const { data } = storeToRefs(settingsStore)
 const olForm = reactive<globalSetting>({
-  themeStatus: false,
+  theme: {
+    eye: { status: false },
+    aside: { status: false }
+  },
   tags: { search: { item: [], double: false } }
 })
 /*定义跟踪变化的副本对象*/
 let form = shallowReactive(cloneDeep(olForm))
 /*示例数据变量*/
 const theme = ref()
+const asideBgc = ref()
+const asideTextColor = ref()
 const bgc = ref()
 const bgc_other = ref()
 
@@ -120,15 +138,32 @@ const { warn, showWarn } = defineProps<{
   showWarn: boolean
 }>()
 
-/*切换主题*/
-const switchTheme = () => {
-  loading.value = true
+/*切换护眼主题*/
+const switchEyeTheme = () => {
+  EyeLoading.value = true
   setTimeout(() => {
-    loading.value = false
-    olForm.themeStatus = !olForm.themeStatus
-    theme.value = olForm.themeStatus ? darkTheme : null
+    EyeLoading.value = false
+    olForm.theme['aside'].status = false
+    olForm.theme['eye'].status = !olForm.theme['eye'].status
+    theme.value = olForm.theme['eye'].status ? darkTheme : null
+    themeDisabled.value = !!olForm.theme['eye'].status
+    /*修改小型预览布局中的变量*/
     bgc.value = theme.value ? '#18181c' : '#FFF'
+    asideBgc.value = bgc.value
+    asideTextColor.value = theme.value ? '#cdd1da' : '#000'
     bgc_other.value = theme.value ? 'rgba(29,29,29,0.9)' : '#f4f4f4'
+  }, 500)
+}
+/*切换侧边栏深色*/
+const switchAsideTheme = () => {
+  AsideLoading.value = true
+  setTimeout(() => {
+    AsideLoading.value = false
+    olForm.theme['aside'].status = !olForm.theme['aside'].status
+    /*修改小型预览布局中的变量*/
+    theme.value = olForm.theme['aside'].status ? darkTheme : null
+    asideBgc.value = theme.value ? '#001428' : '#FFF'
+    asideTextColor.value = theme.value ? '#cdd1da' : '#000'
   }, 500)
 }
 /*获取localStorage已使用和剩余的容量*/
@@ -188,8 +223,12 @@ watchEffect(() => {
   emit('alertOff')
 })
 onMounted(() => {
-  olForm.themeStatus = THEME.value
+  themeDisabled.value = DISABLED.value
+  olForm.theme['eye'].status = EYE_THEME.value
+  olForm.theme['aside'].status = ASIDE_COLOR.value
   bgc.value = BGC.value
+  asideBgc.value = ASIDE_BGC.value
+  asideTextColor.value = ASIDE_TEXT_COLOR.value
   bgc_other.value = BGC_OTHER.value
   olForm.tags['search'].item = [...data.value.tags['search'].item]
   olForm.tags['search'].double = data.value.tags['search'].double
@@ -279,12 +318,13 @@ const renderTag = (tag: string, index: number) => {
     width: 50px;
     height: 140px;
     border-radius: 10px;
-    background: v-bind(bgc);
+    background: v-bind(asideBgc);
     .aside-box {
       padding: 5px;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      color: v-bind(asideTextColor);
     }
   }
 

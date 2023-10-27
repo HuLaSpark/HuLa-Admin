@@ -5,7 +5,7 @@ interface IState {
       uid: any
       role: string
     }
-    roleName: string
+    tag: string
     token: string
     menus: []
     auths: [{ auth: string }]

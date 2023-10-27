@@ -153,7 +153,7 @@ const rememberStore = remember()
 /*验证码输入框内容*/
 const code = ref('')
 const { loadingPaw, ValidationStatus } = typeState
-const { TEXT_COLOR, THEME, BGC } = storeToRefs(store)
+const { TEXT_COLOR, EYE_THEME, BGC } = storeToRefs(store)
 const {
   signInLoading,
   formRef,

@@ -32,9 +32,9 @@ import { TrendingUp } from '@vicons/tabler'
 
 type EChartsOption = echarts.EChartsOption
 const store = mainStore()
-const { TEXT_COLOR, THEME, BGC } = storeToRefs(store)
+const { TEXT_COLOR, EYE_THEME, BGC } = storeToRefs(store)
 let myChart: echarts.ECharts
-watch(THEME, () => {
+watch(EYE_THEME, () => {
   /*监听主题是否切换，如果切换就重新绘制图表*/
   myChart.setOption({
     backgroundColor: BGC.value,

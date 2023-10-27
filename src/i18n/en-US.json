@@ -158,6 +158,7 @@
   "unfold": "unfold",
   "home": "Home",
   "full_screen": "Full Screen",
+  "small_screen": "Small Screen",
   "terminal": "Terminal",
   "delete_cache": "Delete Cache",
   "network_state": "Network disconnection",

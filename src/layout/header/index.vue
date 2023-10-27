@@ -16,9 +16,16 @@
       <n-divider vertical />
       <!--全屏-->
       <div class="operation-list-box">
-        <n-tooltip trigger="hover" style="padding: 5px 8px 5px 8px">
+        <n-tooltip v-if="fullIcon" trigger="hover" style="padding: 5px 8px 5px 8px">
           <template #trigger>
-            <n-icon :size="24" @click="handleMaximize"><ArrowsMaximize /></n-icon>
+            <n-icon :size="24" @click="handleMaximize" :component="ArrowsMinimize" />
+          </template>
+          {{ t('small_screen') }}
+        </n-tooltip>
+
+        <n-tooltip v-else trigger="hover" style="padding: 5px 8px 5px 8px">
+          <template #trigger>
+            <n-icon :size="24" @click="handleMaximize" :component="ArrowsMaximize" />
           </template>
           {{ t('full_screen') }}
         </n-tooltip>
@@ -58,9 +65,9 @@
           <template #header>
             <n-text depth="1">
               <n-space vertical>
-                <n-tag class="info-tag" size="small" round :bordered="false" :type="judgmentAuth(role)">{{
-                  roleName
-                }}</n-tag>
+                <n-tag class="info-tag" size="small" round :bordered="false" :type="judgmentAuth(role)">
+                  {{ tag }}
+                </n-tag>
                 <div class="info-content">
                   <n-avatar :size="64" :src="url" style="border-radius: 8px" />
                   <div>
@@ -118,7 +125,7 @@
 import { mainStore } from '@/stores/main'
 import { storeToRefs } from 'pinia'
 import { userStore } from '@/stores/user'
-import { DeviceDesktop, ArrowsMaximize, Trash, Terminal2, Power, AlertTriangle } from '@vicons/tabler'
+import { DeviceDesktop, ArrowsMaximize, ArrowsMinimize, Trash, Terminal2, Power, AlertTriangle } from '@vicons/tabler'
 import { i18n } from '@/i18n'
 import Language from '@/components/Language/index.vue'
 import Terminal from '@/components/terminal/index.vue'
@@ -135,10 +142,11 @@ const message = useMessage()
 const store = mainStore()
 const userInfoStore = userStore()
 const user = userInfoStore.getUser
-const roleName = userInfoStore.getRoleName
+const tag = userInfoStore.getTag
 const { uid, userName, email, role, url } = user
 const { BGC, TEXT_COLOR } = storeToRefs(store)
 const showModal = ref(false)
+const fullIcon = ref(false)
 
 const { navigator } = window
 const networkIcon = ref()
@@ -157,6 +165,7 @@ window.addEventListener('offline', () => {
   message.error(t('network_state'))
   networkIcon.value = 'error'
 })
+
 watchEffect(() => {
   networkIcon.value = navigator.onLine ? 'success' : 'error'
 })
@@ -167,6 +176,10 @@ const handleMaximize = () => {
     message.error('当前浏览器不支持全屏')
     return false
   }
+  /*监听当前页面是否进入全屏状态*/
+  document.addEventListener('fullscreenchange', () => {
+    fullIcon.value = !!document.fullscreenElement
+  })
   screenfull.toggle()
 }
 /*打开终端*/

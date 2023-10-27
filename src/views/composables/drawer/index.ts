@@ -1,3 +1,3 @@
-import UserDrawer from './UserDrawer/UserDrawer.vue'
+import userDrawer from './userDrawer/index.vue'
 
-export { UserDrawer }
+export { userDrawer }
