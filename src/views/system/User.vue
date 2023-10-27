@@ -42,46 +42,30 @@
     <loading-bar-trigger />
   </n-loading-bar-provider>
   <!--抽屉-->
-  <UserDrawer />
+  <userDrawer />
 </template>
 
-<script setup lang="tsx">
+<script setup lang="ts">
 import { useBase } from '@/hooks/useBase'
-import type { DataTableBaseColumn, DataTableColumns, DataTableFilterState, DataTableRowKey } from 'naive-ui'
-import {
-  NIcon,
-  NIconWrapper,
-  NSpace,
-  NSwitch,
-  NTag,
-  NTooltip,
-  NProgress,
-  NAvatar,
-  NPopconfirm,
-  NButton
-} from 'naive-ui'
+import type { DataTableBaseColumn, DataTableFilterState, DataTableRowKey } from 'naive-ui'
 import apis from '@/services/apis'
 import paging from '@/hooks/usePaging'
 import { pageUser, Response } from '@/services/types'
 import { i18n } from '@/i18n'
-import type { Ref } from 'vue'
-import { RoleEnum } from '@/enums'
-import { EditCircle, LetterM, LetterR, LetterU, Power, TrashX, X, RotateClockwise2, Minus } from '@vicons/tabler'
-import { Report } from 'notiflix'
-import { useAuth } from '@/hooks/useAuth'
-import { UserDrawer } from '@/views/composables/drawer/index'
-import UserVar from '@/views/composables/drawer/UserDrawer/UserVar'
-import { handRelativeTime } from '@/utils/day'
+import { RotateClockwise2 } from '@vicons/tabler'
+import { userDrawer } from '@/views/composables/drawer/index'
+import userVar from '@/views/composables/drawer/userDrawer/userVar'
+import { userTable } from '@/views/composables/table/userTable'
 
 const { t } = i18n.global
 /*异步组件示例*/
-/*const UserDrawer = defineAsyncComponent(() =>{import('@/views/composables/drawer/UserDrawer/UserDrawer.vue')})*/
+/*const userDrawer = defineAsyncComponent(() =>{import('@/views/composables/drawer/userDrawer/index.vue')})*/
 const { pageNum, pageSize } = paging
 const checkedRowKeysRef = ref<DataTableRowKey[]>([])
 const loadingBarTargetRef = ref()
-const { input, editedData, drawerShow } = UserVar()
-const { pagingLoad, tableData, total, loading, NoAccess } = useBase()
-const { judgmentRole } = useAuth()
+const { input } = userVar()
+const { pagingLoad, total, tableData, loading, NoAccess } = useBase()
+const { columns, statusColumn } = userTable(tableData)
 
 /**使用defineComponent重新构建组件*/
 const LoadingBarTrigger = defineComponent({
@@ -106,227 +90,7 @@ const LoadingBarTrigger = defineComponent({
     return null
   }
 })
-/*受控过滤器*/
-const statusColumn = reactive<DataTableBaseColumn<pageUser>>({
-  title: '状态',
-  key: 'status',
-  filterMultiple: false,
-  filterOptionValue: null,
-  sorter: 'default',
-  filterOptions: [
-    {
-      label: '开启',
-      value: 1
-    },
-    {
-      label: '禁用',
-      value: 0
-    }
-  ],
-  render: (row) => {
-    const active = ref<boolean>(true)
-    active.value = row.status === 1
-    return (
-      <NSwitch
-        size={'small'}
-        value={active.value}
-        onUpdateValue={(value: boolean) => {
-          if (row.role === RoleEnum.HL_ROOT) {
-            Report.warning('不允许修改' + RoleEnum.HL_ROOT + '角色用户', '', '好吧，算你狠')
-            return false
-          }
-          active.value = !value
-          row.status = value ? 1 : 0
-        }}>
-        {{
-          'checked-icon': () => <NIcon component={Power} />,
-          'unchecked-icon': () => <NIcon component={X} />,
-          checked: () => t('enable'),
-          unchecked: () => t('forbidden')
-        }}
-      </NSwitch>
-    )
-  },
-  filter(value, row) {
-    return row.status === value
-  }
-})
-/*tsx渲染表格数据*/
-const columns: Ref<DataTableColumns<pageUser>> = ref([
-  {
-    type: 'selection',
-    disabled(row: pageUser) {
-      return row.role === RoleEnum.HL_ROOT
-    }
-  },
-  {
-    title: '用户',
-    key: 'userName',
-    render: (row) => {
-      return (
-        <NSpace justify={'start'} align={'center'}>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <NAvatar size={'large'}></NAvatar>
-          </div>
-          <NSpace vertical size={5}>
-            <p style={{ fontWeight: 'bold', padding: 0, margin: 0 }}>{row.nickName ? row.nickName : row.email}</p>
-            <p style={{ color: '#ccc', fontSize: '12px', transform: 'scale(1)', padding: 0, margin: 0 }}>
-              {row.userName}
-            </p>
-          </NSpace>
-        </NSpace>
-      )
-    }
-  },
-  {
-    title: '邮箱',
-    key: 'email'
-  },
-  {
-    title: '手机号',
-    key: 'mobile',
-    render: (row) => {
-      return row.mobile ? row.mobile : <NIcon component={Minus} />
-    }
-  },
-  {
-    title: '头像',
-    key: 'avatar',
-    render: (row) => {
-      return row.avatar ? row.avatar : <NIcon component={Minus} />
-    }
-  },
-  {
-    title: '创建时间',
-    key: 'createTime',
-    render: (row) => {
-      return (
-        <NTooltip>
-          {{
-            default: () => row.createTime,
-            trigger: () => <p style={{ fontWeight: 'bold' }}>{handRelativeTime(row.createTime)}</p>
-          }}
-        </NTooltip>
-      )
-    }
-  },
-  {
-    title: '更新时间',
-    key: 'updateTime',
-    render: (row) => {
-      return (
-        <NTooltip>
-          {{
-            default: () => row.updateTime,
-            trigger: () => <p style={{ fontWeight: 'bold' }}>{handRelativeTime(row.updateTime)}</p>
-          }}
-        </NTooltip>
-      )
-    }
-  },
-  {
-    title: '角色',
-    key: 'role',
-    render: (row) => {
-      const roleText = judgmentRole(row.role as RoleEnum)
-      return (
-        <NTag
-          style={{ borderRadius: '6px' }}
-          bordered={false}
-          type={row.role === RoleEnum.HL_ROOT ? 'error' : row.role === RoleEnum.HL_SYS_MANAGE ? 'info' : 'success'}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-            <NIcon
-              component={
-                row.role === RoleEnum.HL_ROOT ? LetterR : row.role === RoleEnum.HL_SYS_MANAGE ? LetterM : LetterU
-              }></NIcon>
-            {roleText}
-          </div>
-        </NTag>
-      )
-    }
-  },
-  {
-    title: '资料完整度',
-    key: 'integrity',
-    minWidth: 140,
-    render: (row) => {
-      // 统计null值的数量
-      const nullCount = Object.values(row).filter((value) => value === null).length
-      // 计算资料完整度的占比
-      const totalDataCount = Object.keys(row).length
-      const integrity = (1 - nullCount / totalDataCount) * 100
-
-      const color = integrity > 80 ? 'rgb(33,163,93)' : integrity > 40 ? 'rgb(238,159,32)' : 'rgb(212,75,103)'
-      const railColor =
-        integrity > 80 ? 'rgba(33,163,93,0.2)' : integrity > 40 ? 'rgba(238,159,32,0.2)' : 'rgba(212,75,103,0.2)'
-      const show = integrity <= 80 ? 'hover' : ''
-      return (
-        <NPopconfirm trigger={show as any} negative-text={null} positive-text={null}>
-          {{
-            default: () => '请补全资料信息',
-            trigger: () => (
-              <NProgress
-                style={{ cursor: integrity <= 80 ? 'pointer' : '' }}
-                height={8}
-                color={color}
-                status={(integrity === 100 ? 'success' : integrity <= 80 ? 'warning' : '') as any}
-                rail-color={railColor}
-                percentage={integrity}
-                processing={integrity !== 100}></NProgress>
-            ),
-            action: () => (
-              <NButton quaternary type={'warning'} size={'tiny'} onClick={() => handleEditTable(row.id)}>
-                去修改
-              </NButton>
-            )
-          }}
-        </NPopconfirm>
-      )
-    }
-  },
-  statusColumn,
-  {
-    title: '操作',
-    key: 'actions',
-    minWidth: 80,
-    render: (row) => {
-      return (
-        <NSpace justify={'space-around'}>
-          <NTooltip>
-            {{
-              default: () => t('edit'),
-              trigger: () => (
-                <div onClick={() => handleEditTable(row.id)}>
-                  <NIconWrapper size={26} borderRadius={6} color={'#d8eee2'} iconColor={'#189f57'}>
-                    <NIcon size={22} style={{ cursor: 'pointer' }} component={EditCircle}></NIcon>
-                  </NIconWrapper>
-                </div>
-              )
-            }}
-          </NTooltip>
-
-          <NTooltip>
-            {{
-              default: () => t('delete'),
-              trigger: () => (
-                <NIconWrapper size={26} borderRadius={6} color={'#f5dce1'} iconColor={'#ce304f'}>
-                  <NIcon size={22} style={{ cursor: 'pointer' }} component={TrashX}></NIcon>
-                </NIconWrapper>
-              )
-            }}
-          </NTooltip>
-        </NSpace>
-      )
-    }
-  }
-])
-const handleEditTable = (rowId: number) => {
-  drawerShow.value = true
-  const findItem = tableData.value.find((item: pageUser) => item.id === rowId)
-  if (findItem) {
-    editedData.value = { ...(findItem as pageUser) }
-  }
-}
+/*表格中每个key值*/
 const rowKey = (row: pageUser) => row.id
 /*多选选中的方法*/
 const handleCheck = (rowKeys: DataTableRowKey[]) => {

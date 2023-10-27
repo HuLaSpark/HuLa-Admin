@@ -49,13 +49,6 @@ const emit = defineEmits<{
   (e: 'enter'): void
 }>()
 
-// const active = ref({ name, path })
-//
-// watchEffect(() => {
-//   emit('update:path', active.value.path)
-//   emit('update:name', active.value.name)
-// })
-
 const active = computed({
   get() {
     return {

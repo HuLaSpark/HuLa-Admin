@@ -46,12 +46,15 @@ const butType = ref('primary')
 const butIcon = shallowRef<object>(CircleCheck)
 const iconShow = ref(false)
 const store = mainStore()
-const { THEME } = storeToRefs(store)
+const { EYE_THEME, ASIDE_COLOR, DISABLED } = storeToRefs(store)
 const settingsStore = globalSettings()
 const { data } = storeToRefs(settingsStore)
 const Form = reactive<globalSetting>({
-  themeStatus: false,
-  tags: { search: { item: ['Shift'], double: false } }
+  theme: {
+    eye: { status: false },
+    aside: { status: false }
+  },
+  tags: { search: { item: ['Shift'], double: true } }
 })
 const loading = ref(false)
 const warn = ref()
@@ -65,7 +68,7 @@ const handleKeyDown = (content: string) => {
 const showDrawer = () => {
   active.value = true
   showWarn.value = false
-  Form.themeStatus = THEME.value
+  Form.theme['eye'].status = EYE_THEME.value
   if (Object.keys(data.value).length === 0) {
     settingsStore.setSettings({ ...(Form as any) })
   }
@@ -102,10 +105,16 @@ const save = (val: globalSetting) => {
   delay(() => {
     loading.value = false
     /*需要判断是否修改的是主题*/
-    if (val.themeStatus !== THEME.value) {
-      THEME.value = val.themeStatus
-      Form.themeStatus = val.themeStatus
+    if (val.theme['eye'].status !== EYE_THEME.value) {
+      EYE_THEME.value = val.theme['eye'].status
+      DISABLED.value = val.theme['eye'].status
+      Form.theme['eye'].status = val.theme['eye'].status
       store.toggleTheme()
+    }
+    if (val.theme['aside'].status !== ASIDE_COLOR.value) {
+      ASIDE_COLOR.value = val.theme['aside'].status
+      Form.theme['aside'].status = val.theme['aside'].status
+      store.toggleAside()
     }
     Form.tags['search'].item = [...val.tags['search'].item]
     Form.tags['search'].double = val.tags['search'].double

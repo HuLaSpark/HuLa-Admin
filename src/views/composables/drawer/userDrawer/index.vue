@@ -21,7 +21,10 @@
           <n-input v-model:value="editedData.userName" :placeholder="t('placeholder')" />
         </n-form-item>
         <n-form-item :label="t('nick_name')">
-          <n-input v-model:value="editedData.nickName" :placeholder="t('placeholder')" />
+          <n-input
+            :status="editedData.nickName ? '' : 'warning'"
+            v-model:value="editedData.nickName"
+            :placeholder="t('placeholder')" />
         </n-form-item>
         <n-form-item :label="t('role_flag')" path="role">
           <n-select
@@ -47,8 +50,11 @@
         <n-form-item :label="t('email')" path="email">
           <n-input disabled v-model:value="editedData.email" :placeholder="t('placeholder')" />
         </n-form-item>
-        <n-form-item :label="t('phone_number')" path="mobile">
-          <n-input disabled v-model:value="editedData.mobile" :placeholder="t('placeholder')" />
+        <n-form-item :label="t('phone_number')">
+          <n-input
+            :status="handleStatus(editedData.mobile)"
+            v-model:value="editedData.mobile"
+            :placeholder="t('placeholder')" />
         </n-form-item>
 
         <n-space vertical :size="20">
@@ -105,8 +111,8 @@ import { delay } from 'lodash-es'
 import { useBase } from '@/hooks/useBase'
 import apis from '@/services/apis'
 import paging from '@/hooks/usePaging'
-import UserVar from './UserVar'
-import { Role, User } from '@/services/types'
+import UserVar from './userVar'
+import { pageUser, Role } from '@/services/types'
 import { userStore } from '@/stores/user'
 import { renderMessage } from '@/customize'
 import { useAuth } from '@/hooks/useAuth'
@@ -120,6 +126,12 @@ const alert = ref()
 const { input, showModal, showSelect, formRef, loadingSelect, selectData, rules, drawerShow, editedData } = UserVar()
 const { performAction, loading } = useBase()
 const { judgmentRole } = useAuth()
+function handleStatus(status: any) {
+  return status === null ? 'warning' : ''
+}
+// const inputValidationStatus = computed(() => {
+//   return createStatus(editedData.value)
+// })
 
 /*点击选中框后进行异步查询选项框内容*/
 const handleShowSelect = () => {
@@ -232,7 +244,7 @@ const saveData = () => {
   // 这里可以进行保存操作，然后更新表格数据
   // ...
   // 清空临时对象
-  editedData.value = {} as User
+  editedData.value = {} as pageUser
 }
 const AddInfo = async (formEl: any) => {
   const addRoleSuccessMessage = '添加成功'

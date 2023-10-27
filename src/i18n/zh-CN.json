@@ -158,6 +158,7 @@
   "unfold": "展开",
   "home": "首页",
   "full_screen": "全屏",
+  "small_screen": "小屏",
   "terminal": "终端",
   "delete_cache": "删除缓存",
   "network_state": "当前设备网络连接断开",

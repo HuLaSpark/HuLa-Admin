@@ -1,50 +1,53 @@
 <template>
-  <div class="aside">
+  <div :class="ASIDE_COLOR ? 'aside' : 'aside-eye'">
     <div class="aside-head">
       <img id="unfold-img" v-if="collapsed" src="/logo.png" alt="" />
       <img id="collapsed-img" v-else src="/logo.png" alt="" />
       <p v-show="!collapsed" class="aside-title">HuLa</p>
     </div>
-    <n-layout has-sider>
-      <n-layout-sider
-        bordered
-        collapse-mode="width"
-        :collapsed-width="64"
-        :width="200"
-        :collapsed="collapsed"
-        @collapse="collapsed = true"
-        @expand="collapsed = false">
-        <n-scrollbar style="max-height: 700px">
-          <n-menu
-            ref="menuInstRef"
-            :root-indent="32"
-            :indent="22"
-            :style="collapsed ? '' : 'padding: 0 5px 0 0'"
-            :accordion="true"
-            v-model:value="activeKey"
-            :collapsed="collapsed"
-            :collapsed-width="64"
-            :collapsed-icon-size="22"
-            :options="menuOptions" />
-        </n-scrollbar>
-      </n-layout-sider>
-    </n-layout>
-    <div class="aside-footer" @click="handleCollapsed">
-      <n-tooltip trigger="hover">
-        <template #trigger>
-          <n-icon v-if="collapsed" :size="28" :depth="3"><ArrowBigRightLines /></n-icon>
-          <n-icon v-else :size="28" :depth="3"><ArrowBigLeftLines /></n-icon>
-        </template>
-        <span v-if="collapsed">{{ t('unfold') }}</span>
-        <span v-else>{{ t('fold') }}</span>
-      </n-tooltip>
-    </div>
+    <n-config-provider :theme="ASIDE_COLOR ? darkTheme : undefined">
+      <n-layout has-sider>
+        <n-layout-sider
+          bordered
+          collapse-mode="width"
+          :collapsed-width="64"
+          :width="200"
+          :collapsed="collapsed"
+          @collapse="collapsed = true"
+          @expand="collapsed = false">
+          <n-scrollbar style="max-height: 700px">
+            <n-menu
+              :class="ASIDE_COLOR ? 'aside-menu' : ''"
+              ref="menuInstRef"
+              :root-indent="32"
+              :indent="22"
+              :style="collapsed ? '' : 'padding: 0 5px 0 0'"
+              :accordion="true"
+              v-model:value="activeKey"
+              :collapsed="collapsed"
+              :collapsed-width="64"
+              :collapsed-icon-size="22"
+              :options="menuOptions" />
+          </n-scrollbar>
+        </n-layout-sider>
+      </n-layout>
+      <div class="aside-footer" @click="handleCollapsed">
+        <n-tooltip trigger="hover">
+          <template #trigger>
+            <n-icon v-if="collapsed" :size="28" :depth="3"><ArrowBigRightLines /></n-icon>
+            <n-icon v-else :size="28" :depth="3"><ArrowBigLeftLines /></n-icon>
+          </template>
+          <span v-if="collapsed">{{ t('unfold') }}</span>
+          <span v-else>{{ t('fold') }}</span>
+        </n-tooltip>
+      </div>
+    </n-config-provider>
   </div>
 </template>
 
 <script setup lang="tsx">
 import type { MenuOption } from 'naive-ui'
-import { NIcon } from 'naive-ui'
+import { NIcon, darkTheme } from 'naive-ui'
 import { storeToRefs } from 'pinia'
 import { mainStore } from '@/stores/main'
 import { userStore } from '@/stores/user'
@@ -62,7 +65,7 @@ const menuInstRef = ref()
 const store = mainStore()
 const menuStore = userStore()
 const menus = menuStore.getMenus
-const { BGC, TEXT_COLOR } = storeToRefs(store)
+const { BGC, ASIDE_TEXT_COLOR, ASIDE_BGC, ASIDE_COLOR } = storeToRefs(store)
 
 /*使用全局搜索的时候传入值后自动展开目录菜单项*/
 watchEffect(() => {
@@ -111,6 +114,13 @@ const menuOptions: MenuOption[] = menus.map((menu: Menu) => {
 <style scoped>
 .aside {
   position: relative;
+  background: v-bind(ASIDE_BGC);
+  margin: 10px 10px 15px 10px;
+  border-radius: 10px;
+}
+/*!护眼主题*/
+.aside-eye {
+  position: relative;
   background: v-bind(BGC);
   margin: 10px 10px 15px 10px;
   border-radius: 10px;
@@ -119,6 +129,9 @@ const menuOptions: MenuOption[] = menus.map((menu: Menu) => {
   display: flex;
   justify-content: center;
   padding: 10px 10px 0 10px;
+}
+.aside-menu {
+  background: v-bind(ASIDE_BGC);
 }
 .aside-footer {
   height: 50px;
@@ -134,7 +147,7 @@ const menuOptions: MenuOption[] = menus.map((menu: Menu) => {
 .aside-title {
   font-weight: bold;
   font-size: 18px;
-  color: v-bind(TEXT_COLOR);
+  color: v-bind(ASIDE_TEXT_COLOR);
 }
 .aside-head #collapsed-img {
   width: 32px;

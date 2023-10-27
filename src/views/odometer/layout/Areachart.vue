@@ -10,13 +10,13 @@ import { i18n } from '@/i18n'
 
 type EChartsOption = echarts.EChartsOption
 const store = mainStore()
-const { TEXT_COLOR, THEME, BGC } = storeToRefs(store)
+const { TEXT_COLOR, EYE_THEME, BGC } = storeToRefs(store)
 const { locale, t } = i18n.global
 const titleText = ref(t('current_monthly_situation'))
 const audit = ref(t('audit'))
 const violation = ref(t('violation'))
 let myChart: echarts.ECharts
-watch(THEME, () => {
+watch(EYE_THEME, () => {
   /*监听主题是否切换，如果切换就重新绘制图表*/
   myChart.setOption({
     backgroundColor: BGC.value,

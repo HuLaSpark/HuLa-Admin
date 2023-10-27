@@ -31,8 +31,11 @@ const shiftTimeout = ref<NodeJS.Timeout | null>(null)
 const settingsStore = globalSettings()
 const { data } = storeToRefs(settingsStore)
 const Form = reactive<globalSetting>({
-  themeStatus: false,
-  tags: { search: { item: ['Shift'], double: false } }
+  theme: {
+    eye: { status: false },
+    aside: { status: false }
+  },
+  tags: { search: { item: ['Shift'], double: true } }
 })
 /*如果没有创建配置文件缓存需要先创建*/
 if (Object.keys(data.value).length === 0) {
