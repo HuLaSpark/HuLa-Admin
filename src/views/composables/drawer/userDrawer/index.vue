@@ -28,7 +28,6 @@
         </n-form-item>
         <n-form-item :label="t('role_flag')" path="role">
           <n-select
-            style="border-radius: 8px"
             :render-tag="renderTag"
             v-model:value="editedData.role"
             v-model:show="showSelect"
@@ -166,7 +165,7 @@ const handleShowSelect = () => {
         }
         // 找到对应的组，将数据添加到 children 中
         const existingGroup = groupMap.get(label) as any
-        const disabled = userRole !== 'hl_sys_manage' && role.flag === RoleEnum.HL_SYS_MANAGE
+        const disabled = userRole !== 'hl_root' && role.flag === RoleEnum.HL_ROOT
         existingGroup.children.push({
           label: role.name,
           value: role.flag,

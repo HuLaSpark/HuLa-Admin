@@ -87,8 +87,8 @@ export const createAxios = (config?: AxiosRequestConfig): AxiosInstance => {
       if (res.code === RCodeEnum.UNAUTHORIZED) {
         window.$message.error(res.msg)
       }
-      /*判断响应体中的错误码，如果是TIMEOUT则是登录时间内长时间不操作需要验证登录，如果是RENEW_PAW_ERROR是续签时候密码错误*/
-      if (res.code === RCodeEnum.TIMEOUT) {
+      /*判断响应体中的错误码，如果是FREEZE则是登录时间内长时间不操作需要验证登录，如果是RENEW_PAW_ERROR是续签时候密码错误*/
+      if (res.code === RCodeEnum.FREEZE) {
         /*传入错误信息*/
         /*window.$message.error(res.msg)*/
         Report.warning(res.msg, res.code, '怎么办?', () => {

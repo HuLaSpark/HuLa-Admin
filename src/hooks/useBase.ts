@@ -74,7 +74,7 @@ export const useBase = () => {
     } else {
       loadingBar.error()
       loading.value = false
-      if (res.code === RCodeEnum.TIMEOUT) {
+      if (res.code === RCodeEnum.FREEZE) {
         return false
       }
       if (res.code === RCodeEnum.UNAUTHORIZED) {
