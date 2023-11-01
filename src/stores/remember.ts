@@ -12,7 +12,7 @@ export const remember = defineStore('remember', {
     }
   },
   actions: {
-    setRememberUser(user: any, rememberMe: boolean) {
+    setRememberUser(user: IRemember, rememberMe: boolean) {
       this.remember = JSON.parse(JSON.stringify(user))
       this.remember.rememberMe = rememberMe
     },

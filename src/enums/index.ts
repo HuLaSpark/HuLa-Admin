@@ -20,8 +20,8 @@ export enum RCodeEnum {
   UNAUTHORIZED = 'U00004',
   /**服务器出现问题*/
   EXCEPTION = 'U00005',
-  /**超时未操作*/
-  TIMEOUT = 'U00006'
+  /**冻结*/
+  FREEZE = 'U00006'
 }
 /**URL*/
 export enum URLEnum {
@@ -30,7 +30,9 @@ export enum URLEnum {
   /**系统用户*/
   USER = '/SysUser',
   /**角色*/
-  ROLE = '/SysRole'
+  ROLE = '/SysRole',
+  /**租户*/
+  TENANT = '/SysTenant'
 }
 /**权限类型*/
 export enum FlagEnum {

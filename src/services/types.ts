@@ -32,6 +32,12 @@ export type parameter = {
   pageSize: number
   name: string
 }
+/*登录类型*/
+export type login = {
+  userName: string
+  password: string
+  tenantId: string
+}
 /*用户*/
 export type User = {
   id: number

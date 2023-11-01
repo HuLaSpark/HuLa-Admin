@@ -11,11 +11,13 @@ import { RCodeEnum } from '@/enums'
 import type { Response } from '@/services/types'
 import { Loading } from 'notiflix'
 import { delay } from 'lodash-es'
+import { tenant } from '@/stores/tenant'
 
 export const useLogin = () => {
   //定义初始化数据
   const userInfoStore = userStore()
   const rememberStore = remember()
+  const tenantStore = tenant()
   const { t } = i18n.global
   const { disabled, showModal, showCode } = useState
   disabled.value = false
@@ -23,7 +25,10 @@ export const useLogin = () => {
   const formRef = ref<FormInst | null>(null)
   const ruleForm = reactive({
     userName: '',
-    password: ''
+    password: '',
+    tenantName: '',
+    tenantId: '',
+    tenantUrl: ''
   })
   const rememberOption = ref(false)
   const ruleEmail = reactive<any>({
@@ -54,13 +59,16 @@ export const useLogin = () => {
         loginText.value = t('in_check')
         signInLoading.value = true
         Loading.pulse()
-        apis.login(formInstance.model).then((res: Response) => {
+        const { password, userName } = formInstance.model
+        const remember = { password, userName } as any
+        const { value } = tenantStore.getTenant
+        apis.login({ tenantId: value, password, userName }).then((res: Response) => {
           if (res.code === RCodeEnum.OK) {
             //将res中的数据传给pinia做持久化
             userInfoStore.setLoginInfo(res.data)
             // 用户是否选择记住我
             if (rememberOption.value) {
-              rememberStore.setRememberUser(formInstance.model, rememberOption.value)
+              rememberStore.setRememberUser(remember, rememberOption.value)
             } else {
               rememberStore.deleteRemember()
             }
@@ -85,13 +93,8 @@ export const useLogin = () => {
             nextTick(() => {
               loginErrorMsg.value = true
               loginErrorText.value = res.msg
-              if (res.code === RCodeEnum.FAIL) {
-                statusCode.value = res.code
-                loginErrorTitle.value = t('account_error')
-              } else {
-                statusCode.value = res.code
-                loginErrorTitle.value = t('login_error')
-              }
+              statusCode.value = res.code
+              loginErrorTitle.value = res.code === RCodeEnum.FAIL ? t('account_error') : t('login_error')
             })
           }
         })

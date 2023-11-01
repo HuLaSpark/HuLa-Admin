@@ -1,6 +1,6 @@
 import { createAxios } from '@/services/request'
 import urls from '@/services/urls'
-import type { Response, UpdateUser, User, parameter, Renew } from '@/services/types'
+import type { Response, UpdateUser, User, parameter, Renew, login } from '@/services/types'
 
 const request = createAxios()
 
@@ -11,7 +11,7 @@ const DELETE = <T>(url: string, params?: any) => request.delete<T, Response>(url
 
 export default {
   /*登录 请求*/
-  login: (user: User): Promise<Response> => POST(urls.login, user),
+  login: (form: login): Promise<Response> => POST(urls.login, form),
   /*退出 请求*/
   logout: (uid: string): Promise<Response> => GET(urls.logout + '/' + uid),
   /*系统用户分页 请求*/
@@ -26,5 +26,7 @@ export default {
   /*续签 请求*/
   renew: (user: Renew): Promise<Response> => POST(urls.renew, user),
   /*获取角色列表*/
-  getRoleList: (): Promise<Response> => GET(urls.roleList)
+  getRoleList: (): Promise<Response> => GET(urls.roleList),
+  /*获取租户列表*/
+  getTenantList: (): Promise<Response> => GET(urls.tenantList)
 }

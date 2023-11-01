@@ -8,5 +8,6 @@ export default {
   renew: `${prefix + URLEnum.PASS}/renew`,
   userPage: `${prefix + URLEnum.USER}/page`,
   userCRUD: `${prefix + URLEnum.USER}`,
-  roleList: `${prefix + URLEnum.ROLE}`
+  roleList: `${prefix + URLEnum.ROLE}`,
+  tenantList: `${prefix + URLEnum.TENANT}/tenantList`
 }
