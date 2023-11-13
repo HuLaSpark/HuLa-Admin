@@ -8,7 +8,7 @@ export const useOnline = () => {
   /*解构分页参数*/
   const { pageNum, pageSize, total } = paging
   /*解构状态类型参数*/
-  const { disabled, showIcon, verify, loading, drawer, showModal } = typeState
+  const { disabled, showIcon, verify, loading, showModal } = typeState
 
   //定义初始化数据
   const tableData = ref<any[]>([])
@@ -168,7 +168,6 @@ export const useOnline = () => {
     showIcon,
     verify,
     loading,
-    drawer,
     showModal,
     tableData,
     imageList,

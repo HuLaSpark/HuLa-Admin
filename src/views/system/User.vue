@@ -1,48 +1,58 @@
 <template>
-  <!--表格-->
-  <n-loading-bar-provider :to="loadingBarTargetRef" container-style="position: absolute;">
-    <div ref="loadingBarTargetRef" style="position: absolute; inset: 0; overflow: hidden; pointer-events: none" />
-    <!--   表格     -->
-    <n-data-table
-      :loading="loading"
-      striped
-      :bordered="false"
-      single-line
-      single-column
-      :row-key="rowKey"
-      :columns="columns"
-      :data="tableData"
-      @update:filters="handleUpdateFilter"
-      @update:checked-row-keys="handleCheck">
-      <!--为空时表格状态-->
-      <template #empty>
-        <n-result v-if="!NoAccess" status="403" :title="t('403')" :description="t('403_content')"> </n-result>
-        <div v-else style="display: flex; justify-content: center">
-          <div style="display: flex; align-items: center; flex-direction: column">
-            <img src="@/assets/svg/noData.svg" alt="" style="width: 280px; height: 280px" />
-            <span style="color: #c0c0c0">{{ t('no_data') }}</span>
+  <n-space vertical>
+    <n-button round secondary type="success" @click="userModalRef.showModal = true">
+      <template #icon><n-icon :component="Plus" /></template>
+      {{ t('add') }}
+    </n-button>
+    <!--表格-->
+    <n-loading-bar-provider :to="loadingBarTargetRef" container-style="position: relative">
+      <div ref="loadingBarTargetRef" style="height: 2px; overflow: hidden; pointer-events: none" />
+      <!--   表格     -->
+      <n-data-table
+        :loading="loading"
+        striped
+        :bordered="false"
+        single-line
+        single-column
+        :row-key="rowKey"
+        :columns="columns"
+        :data="tableData"
+        @update:filters="handleUpdateFilter"
+        @update:checked-row-keys="handleCheck">
+        <!--为空时表格状态-->
+        <template #empty>
+          <n-result v-if="!NoAccess" status="403" :title="t('403')" :description="t('403_content')"> </n-result>
+          <div v-else style="display: flex; justify-content: center">
+            <div style="display: flex; align-items: center; flex-direction: column">
+              <img src="@/assets/svg/noData.svg" alt="" style="width: 280px; height: 280px" />
+              <span style="color: #c0c0c0">{{ t('no_data') }}</span>
+            </div>
           </div>
-        </div>
-      </template>
-      <!--加载的时候展示-->
-      <template #loading>
-        <n-spin :show="loading">
-          <template #icon><n-icon :component="RotateClockwise2" /></template>
-          <template #description>{{ t('loading') }}</template>
-        </n-spin>
-      </template>
-    </n-data-table>
-    <n-tag
-      v-show="checkedRowKeysRef.length > 0"
-      :bordered="false"
-      type="success"
-      style="margin: 20px 0; padding: 0 20px; border-radius: 6px">
-      选中了 {{ checkedRowKeysRef.length }} 条数据
-    </n-tag>
-    <loading-bar-trigger />
-  </n-loading-bar-provider>
+        </template>
+        <!--加载的时候展示-->
+        <template #loading>
+          <n-spin :show="loading">
+            <template #icon><n-icon :component="RotateClockwise2" /></template>
+            <template #description>{{ t('loading') }}</template>
+          </n-spin>
+        </template>
+      </n-data-table>
+      <n-tag
+        v-show="checkedRowKeysRef.length > 0"
+        :bordered="false"
+        type="success"
+        style="margin: 20px 0; padding: 0 20px; border-radius: 6px">
+        选中了 {{ checkedRowKeysRef.length }} 条数据
+      </n-tag>
+      <loading-bar-trigger />
+    </n-loading-bar-provider>
+  </n-space>
+
   <!--抽屉-->
   <userDrawer />
+
+  <!--添加弹出框-->
+  <userModal ref="userModalRef" />
 </template>
 
 <script setup lang="ts">
@@ -52,17 +62,17 @@ import apis from '@/services/apis'
 import paging from '@/hooks/usePaging'
 import { pageUser, Response } from '@/services/types'
 import { i18n } from '@/i18n'
-import { RotateClockwise2 } from '@vicons/tabler'
+import { RotateClockwise2, Plus } from '@vicons/tabler'
 import { userDrawer } from '@/views/composables/drawer/index'
 import userVar from '@/views/composables/drawer/userDrawer/userVar'
 import { userTable } from '@/views/composables/table/userTable'
+import { userModal } from '@/views/composables/modal/index'
 
 const { t } = i18n.global
-/*异步组件示例*/
-/*const userDrawer = defineAsyncComponent(() =>{import('@/views/composables/drawer/userDrawer/index.vue')})*/
 const { pageNum, pageSize } = paging
 const checkedRowKeysRef = ref<DataTableRowKey[]>([])
 const loadingBarTargetRef = ref()
+const userModalRef = ref()
 const { input } = userVar()
 const { pagingLoad, total, tableData, loading, NoAccess } = useBase()
 const { columns, statusColumn } = userTable(tableData)
@@ -73,7 +83,6 @@ const LoadingBarTrigger = defineComponent({
     /**useLoadingBar必须要在n-loading-bar-provider包裹里*/
     const loadingBar = useLoadingBar()
     pagingLoad(async () => {
-      loadingBar.start()
       try {
         return await apis.userPage({
           pageSize: pageSize.value,

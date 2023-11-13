@@ -36,7 +36,7 @@
   "backend": "后端",
   "switch": "切换语言",
   "mis": "管理系统",
-  "add": "创建",
+  "create": "创建",
   "save": "保存",
   "save_success": "保存成功",
   "save_error": "保存失败",
@@ -176,5 +176,9 @@
   "403_content": "总有些门是对你关闭的",
   "input": "输入",
   "global_search": "全局搜索",
-  "warn": "警告"
+  "warn": "警告",
+  "add": "添加",
+  "super_per": "超级权限",
+  "advanced_per": "高级权限",
+  "common_per": "普通权限"
 }

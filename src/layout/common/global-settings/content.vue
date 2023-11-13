@@ -82,12 +82,25 @@
       @create="keyDownCreate"
       v-model:value="olForm.tags['search'].item"
       :render-tag="renderTag"
-      :max="3" />
+      :max="3">
+      <template #trigger="{ activate, disabled }">
+        <n-button
+          style="border-radius: 8px"
+          size="small"
+          type="primary"
+          dashed
+          :disabled="disabled"
+          @click="activate()">
+          <template #icon><n-icon :component="KeyboardHide" /></template>
+          {{ t('add') }}
+        </n-button>
+      </template>
+    </n-dynamic-tags>
   </n-space>
 </template>
 
 <script setup lang="ts">
-import { Moon, Sun, Check, X } from '@vicons/tabler'
+import { Moon, Sun, Check, X, KeyboardHide } from '@vicons/tabler'
 import { i18n } from '@/i18n'
 import { mainStore } from '@/stores/main'
 import { storeToRefs } from 'pinia'
@@ -243,10 +256,11 @@ const handleChecked = (value: boolean) => {
 }
 
 /*当按下键盘的时候监听*/
-const keyDownCreate = () => {
+const keyDownCreate = (label: any) => {
   if (Object.keys(olForm.tags['search'].item).length === 0) return
   // 输入框聚焦时，监听键盘事件
   document.addEventListener('keydown', handleKeyDown)
+  return label
 }
 
 /*处理输入快捷键值*/

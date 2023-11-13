@@ -10,7 +10,7 @@
       <!--折线图组件-->
       <Areachart v-if="defer(8)" />
       <!--柱状图组件-->
-      <div v-if="defer(12)" style="display: flex">
+      <div v-if="defer(12)" style="display: flex; justify-content: space-between">
         <Barchart />
         <Barchart2 />
         <Barchart3 />

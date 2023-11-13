@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="!$route.meta.pagination" class="content" v-show="show">
-      <div class="animate__animated animate__fadeInRight">
+      <div class="animate__animated animate__fadeInRight" style="display: flex">
         <!-- id="drawer-target"挂载抽屉 -->
         <div class="routerView" id="drawer-target">
           <n-scrollbar style="max-height: calc(100vh - 152px)">
@@ -42,11 +42,16 @@ onMounted(() => {
 </script>
 
 <style scoped>
+.content {
+  padding: 10px;
+  background: v-bind(BGC_OTHER);
+}
 .routerView {
+  flex: 1;
   background: v-bind(BGC);
   padding: 10px 10px 15px 10px;
   border-radius: 10px;
-  min-height: calc(100vh - 152px);
+  min-height: calc(100vh - 150px);
 }
 
 .odometer {
@@ -61,70 +66,6 @@ onMounted(() => {
   border-radius: 10px;
   min-height: calc(100vh - 152px);
   background: v-bind(BGC_OTHER);
-}
-
-/*兼容不同分辨率的电脑*/
-@media screen and (max-width: 2560px) {
-  .content {
-    flex: 1;
-    min-width: 2310px;
-    padding: 10px;
-    background: v-bind(BGC_OTHER);
-  }
-}
-
-@media screen and (max-width: 1920px) {
-  .content {
-    flex: 1;
-    min-width: 1670px;
-    padding: 10px;
-    background: v-bind(BGC_OTHER);
-  }
-}
-
-@media screen and (max-width: 1680px) {
-  .content {
-    flex: 1;
-    min-width: 1430px;
-    padding: 10px;
-    background: v-bind(BGC_OTHER);
-  }
-}
-
-@media screen and (max-width: 1600px) {
-  .content {
-    flex: 1;
-    min-width: 1350px;
-    padding: 10px;
-    background: v-bind(BGC_OTHER);
-  }
-}
-
-@media screen and (max-width: 1366px) {
-  .content {
-    flex: 1;
-    min-width: 1116px;
-    padding: 10px;
-    background: v-bind(BGC_OTHER);
-  }
-}
-
-@media screen and (max-width: 1360px) {
-  .content {
-    flex: 1;
-    min-width: 1110px;
-    padding: 10px;
-    background: v-bind(BGC_OTHER);
-  }
-}
-
-@media screen and (max-width: 1280px) {
-  .content {
-    flex: 1;
-    min-width: 1030px;
-    padding: 10px;
-    background: v-bind(BGC_OTHER);
-  }
 }
 /*抽屉遮罩样式*/
 :deep(.n-drawer-mask),

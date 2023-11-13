@@ -7,9 +7,17 @@
     :on-mask-click="clone"
     :on-esc="clone"
     :close-on-esc="false">
-    <n-drawer-content :title="t('edit')">
-      <!--警告-->
-      <n-alert title="Warning 类型" type="warning" closable v-show="alertShow">{{ alert }}</n-alert>
+    <n-drawer-content :title="t('edit')" :native-scrollbar="false">
+      <!--自定义警告-->
+      <AlertIze
+        style="margin-bottom: 10px"
+        img-url="./src/assets/svg/warning.svg"
+        :enter-active="'animate__animated animate__bounceIn'"
+        :leave-active="'animate__animated animate__fadeOutUp'"
+        :title="t('warn')"
+        :text="warn"
+        :show="showWarn"
+        @alertOff="showWarn = false" />
 
       <!--上传头像-->
       <n-space vertical align="center">
@@ -51,6 +59,7 @@
         </n-form-item>
         <n-form-item :label="t('phone_number')">
           <n-input
+            disabled
             :status="handleStatus(editedData.mobile)"
             v-model:value="editedData.mobile"
             :placeholder="t('placeholder')" />
@@ -58,7 +67,7 @@
 
         <n-space vertical :size="20">
           <n-space align="center">
-            <span>诞生于：</span>
+            <span>创建于：</span>
             <n-tag :bordered="false" style="border-radius: 10px" type="primary">
               {{ handRelativeTime(editedData.createTime) }}
             </n-tag>
@@ -73,7 +82,12 @@
         </n-space>
       </n-form>
       <template #footer>
-        <n-button style="width: 100%" :loading="loading" secondary type="primary">{{ t('save') }}</n-button>
+        <n-button style="width: 100%" :type="butType" :loading="loadingBut" secondary @click="saveData(formRef)">
+          <template #icon>
+            <n-icon v-if="iconShow" :component="butIcon" />
+          </template>
+          {{ butText }}
+        </n-button>
       </template>
     </n-drawer-content>
   </n-drawer>
@@ -100,31 +114,56 @@
 
 <script setup lang="tsx">
 import type { FormInst, SelectRenderTag, SelectOption } from 'naive-ui'
-import { NTag, NIcon, NAlert } from 'naive-ui'
+import { NTag, NIcon } from 'naive-ui'
 import { i18n } from '@/i18n'
 import Modal from '@/components/modal/index.vue'
 import type { VNodeChild } from 'vue'
-import { RoleEnum, RoleFixEnum } from '@/enums'
-import { LetterM, LetterR, LetterU, UserCheck, UserSearch } from '@vicons/tabler'
-import { delay } from 'lodash-es'
+import { RCodeEnum, RoleEnum, RoleFixEnum } from '@/enums'
+import { AlertCircle, LetterM, LetterR, LetterU, User, UserCheck, UserSearch } from '@vicons/tabler'
+import { delay, isEqual } from 'lodash-es'
 import { useBase } from '@/hooks/useBase'
 import apis from '@/services/apis'
 import paging from '@/hooks/usePaging'
 import UserVar from './userVar'
-import { pageUser, Role } from '@/services/types'
+import { ButtonType, pageUser, Response, Role, UpdateUser } from '@/services/types'
 import { userStore } from '@/stores/user'
-import { renderMessage } from '@/customize'
+import { AlertIze, renderMessage } from '@/customize'
 import { useAuth } from '@/hooks/useAuth'
 import { handRelativeTime } from '@/utils/day'
 import { animation } from '@/components/modal/type'
 
 const { t } = i18n.global
 const { pageNum, pageSize } = paging
-const alertShow = ref(false)
-const alert = ref()
-const { input, showModal, showSelect, formRef, loadingSelect, selectData, rules, drawerShow, editedData } = UserVar()
-const { performAction, loading } = useBase()
+const warn = ref()
+const showWarn = ref(false)
+const {
+  input,
+  showModal,
+  showSelect,
+  formRef,
+  loadingSelect,
+  loadingBut,
+  butText,
+  butType,
+  butIcon,
+  iconShow,
+  selectData,
+  rules,
+  drawerShow,
+  editedData,
+  rawData
+} = UserVar()
+const { performAction } = useBase()
 const { judgmentRole } = useAuth()
+/*监听国际化切换时实时切换语言*/
+watchEffect(() => {
+  butText.value = t('save')
+  warn.value = t('alert_warning_description')
+  /*监听表单是否被修改*/
+  if (!isEqual(rawData.value, editedData.value)) {
+    showWarn.value = false
+  }
+})
 function handleStatus(status: any) {
   return status === null ? 'warning' : ''
 }
@@ -183,11 +222,11 @@ const handleShowSelect = () => {
 const getLabelForRole = (flag: string) => {
   // 根据 flag 的前缀来判断权限等级
   if (flag.startsWith(RoleFixEnum.HL_ROOT)) {
-    return '超级权限'
+    return t('super_per')
   } else if (flag.startsWith(RoleFixEnum.HL_SYS)) {
-    return '高级权限'
+    return t('advanced_per')
   } else if (flag.startsWith(RoleFixEnum.HL_ORD)) {
-    return '普通权限'
+    return t('common_per')
   } else {
     return 'Unknown'
   }
@@ -238,27 +277,50 @@ const renderTag: SelectRenderTag = ({ option }) => {
     </NTag>
   )
 }
-//保存按钮点击
-const saveData = () => {
-  // 这里可以进行保存操作，然后更新表格数据
-  // ...
-  // 清空临时对象
-  editedData.value = {} as pageUser
-}
-const AddInfo = async (formEl: any) => {
-  const addRoleSuccessMessage = '添加成功'
-  const addRoleErrorMessage = '添加失败'
+/*保存事件*/
+const saveData = async (form: any) => {
+  // 判断是否修改了数据
+  if (isEqual(rawData.value, editedData.value)) {
+    showWarn.value = true
+    warn.value = t('alert_warning_description')
+    textChange(t('save_warning'), AlertCircle, 'warning')
+    return
+  }
+  loadingBut.value = true
   await performAction(
-    formEl,
-    () => apis.addUser(editedData as any),
-    addRoleSuccessMessage,
-    addRoleErrorMessage,
+    form,
+    () => apis.editUser(editedData.value),
     () =>
       apis.userPage({
         pageSize: pageSize.value,
         pageNum: pageNum.value,
         name: input.value
       })
+  )
+  delay(() => {
+    loadingBut.value = false
+    showWarn.value = false
+  }, 1000)
+  // 这里可以进行保存操作，然后更新表格数据
+  // ...
+  // 清空临时对象
+  // editedData.value = {} as pageUser
+}
+/*新增事件*/
+const AddInfo = async (formEl: any) => {
+  const addRoleSuccessMessage = '添加成功'
+  const addRoleErrorMessage = '添加失败'
+  await performAction(
+    formEl,
+    () => apis.addUser(editedData as any),
+    () =>
+      apis.userPage({
+        pageSize: pageSize.value,
+        pageNum: pageNum.value,
+        name: input.value
+      }),
+    addRoleSuccessMessage,
+    addRoleErrorMessage
   )
 }
 
@@ -283,6 +345,7 @@ const shutDown = (formRef: FormInst) => {
   setTimeout(() => {
     showModal.value = false
     drawerShow.value = false
+    showWarn.value = false
     formRef.restoreValidation()
   }, 100)
 }
@@ -293,6 +356,19 @@ const cancel = () => {
   setTimeout(() => {
     showModal.value = false
   }, 100)
+}
+
+/*处理保存按钮的提示*/
+const textChange = (text: string, icon?: object, type?: ButtonType) => {
+  butText.value = text
+  iconShow.value = true
+  icon ? (butIcon.value = icon) : {}
+  type ? (butType.value = type) : ''
+  delay(() => {
+    butText.value = t('save')
+    butType.value = 'primary'
+    iconShow.value = false
+  }, 2000)
 }
 </script>
 
