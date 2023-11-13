@@ -6,6 +6,7 @@ import router from '@/router'
 import pinia from '@/stores/index'
 import { i18n } from '@/i18n'
 import { pkgJson } from '@/views/composables/aboutUs/model'
+import '@/utils/flexble.js'
 
 const app = createApp(App)
 app.use(router)
@@ -18,15 +19,13 @@ console.log(
   `%c🎉 HuLa ${version}`,
   'font-size:20px; background:#FFF; color:#581845;padding:10px; border: 3px solid #581845;border-radius:10px;'
 )
-const scaleWidth = window.screen.width / 1920
-const scaleHeight = window.screen.height / 1080
-const scale = Math.min(scaleWidth, scaleHeight)
-const metaEl = document.querySelector('meta[name="viewport"]')
-if (metaEl) {
-  metaEl.setAttribute(
-    'content',
-    `width=device-width, initial-scale=${scale}, maximum-scale=${scale}, minimum-scale=${scale}, user-scalable=no, viewport-fit=cover`
-  )
-} else {
-  console.error('Viewport meta tag not found')
-}
+// const scale = window.screen.width / 1920
+// const metaEl = document.querySelector('meta[name="viewport"]')
+// if (metaEl) {
+//   metaEl.setAttribute(
+//     'content',
+//     `width=device-width, initial-scale=${scale}, maximum-scale=${scale}, minimum-scale=${scale}, user-scalable=no, viewport-fit=cover`
+//   )
+// } else {
+//   console.error('Viewport meta tag not found')
+// }
