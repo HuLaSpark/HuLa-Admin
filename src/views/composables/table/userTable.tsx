@@ -22,7 +22,7 @@ import userVar from '@/views/composables/drawer/userDrawer/userVar'
 import { handRelativeTime } from '@/utils/day'
 
 const { t } = i18n.global
-const { editedData, drawerShow } = userVar()
+const { editedData, drawerShow, rawData } = userVar()
 const { judgmentRole } = useAuth()
 
 /**
@@ -230,7 +230,9 @@ export const userTable = (data: Ref<any[]>) => {
     drawerShow.value = true
     const findItem = data.value.find((item: pageUser) => item.id === rowId)
     if (findItem) {
-      editedData.value = { ...(findItem as pageUser) }
+      /*同时赋值给原始数据，用来判断表单是否被修改，编辑时是操作editedData数据的内容*/
+      Object.assign(rawData.value, findItem)
+      Object.assign(editedData.value, findItem)
     }
   }
 

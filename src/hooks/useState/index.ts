@@ -8,8 +8,6 @@ const showIcon = ref<boolean>(true)
 const verify = ref<boolean>(false)
 //是否显示加载状态
 const loading = ref<boolean>(false)
-//是否开启抽屉
-const drawer = ref<boolean>(false)
 //是否打开模态框
 const showModal = ref<boolean>(false)
 //是新增还是编辑
@@ -104,7 +102,6 @@ export default {
   showIcon,
   verify,
   loading,
-  drawer,
   showModal,
   AddOrEdit,
   ruleFormRef,

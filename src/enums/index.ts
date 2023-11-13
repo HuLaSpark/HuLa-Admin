@@ -21,7 +21,11 @@ export enum RCodeEnum {
   /**服务器出现问题*/
   EXCEPTION = 'U00005',
   /**冻结*/
-  FREEZE = 'U00006'
+  FREEZE = 'U00006',
+  /**数据重复*/
+  REPEAT = 'U00007',
+  /**参数校验失败*/
+  PARAM_ERROR = 'U00008'
 }
 /**URL*/
 export enum URLEnum {

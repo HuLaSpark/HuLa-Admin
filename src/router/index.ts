@@ -80,7 +80,7 @@ setRoutes()
 
 // 路由守卫
 router.beforeEach(async (to: any, from: any, next: any) => {
-  const store = userStore() // 拿到用户对象信息
+  const store = userStore() // 拿到用户对象id信息判断是否登录
   const user = store.loginInfo.sysUser
   const hasUser = user && user.id
   const noPermissionPaths = ['/login', '/404'] // 定义无需登录的路由

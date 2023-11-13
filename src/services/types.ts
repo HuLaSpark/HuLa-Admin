@@ -106,3 +106,5 @@ export type globalSetting = {
     }
   }
 }
+/*全局按钮类型*/
+export type ButtonType = 'default' | 'tertiary' | 'primary' | 'success' | 'info' | 'warning' | 'error'

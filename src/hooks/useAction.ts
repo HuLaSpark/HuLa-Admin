@@ -11,7 +11,6 @@ export const useAction = () => {
     AddOrEdit,
     ruleFormRef,
     state,
-    drawer,
     originalForm,
     alertType,
     alert,
@@ -32,7 +31,6 @@ export const useAction = () => {
     const { permissionTreeRef } = useRole()
     const { originalAvatarUrl, originalUserName } = useUser()
     AddOrEdit.value = actions
-    drawer.value = drawerVal
     state.form = row ? JSON.parse(JSON.stringify(row)) : {}
     if (actions === 'Edit') {
       // 判断车辆违章是否已经处理

@@ -14,7 +14,7 @@
     </div>
     <!-- 登录表单 -->
     <n-card class="form">
-      <n-form ref="formRef" :show-require-mark="false" :rules="rules" :model="ruleForm">
+      <n-form ref="formRef" :show-require-mark="false" :rules="rules as any" :model="ruleForm">
         <div style="margin: 10px 0">
           <!--租户选中框-->
           <n-form-item path="tenantName" :label="t('tenant')" label-style="font-size: 14px;color: #cccccc">

@@ -62,7 +62,7 @@ export const useLogin = () => {
         const { password, userName } = formInstance.model
         const remember = { password, userName } as any
         const { value } = tenantStore.getTenant
-        apis.login({ tenantId: value, password, userName }).then((res: Response) => {
+        apis.login({ tenantId: value, password, userName }).then((res) => {
           if (res.code === RCodeEnum.OK) {
             //将res中的数据传给pinia做持久化
             userInfoStore.setLoginInfo(res.data)

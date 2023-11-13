@@ -42,10 +42,12 @@ export default defineConfig(({ mode }) => {
       vueDevTools(), // 开发工具
       vueJsx(), // 开启jsx功能
       AutoImport({
-        imports: ['vue', { 'naive-ui': ['useDialog', 'useMessage', 'useNotification', 'useLoadingBar'] }]
+        imports: ['vue', { 'naive-ui': ['useDialog', 'useMessage', 'useNotification', 'useLoadingBar'] }],
+        dts: 'src/typings/auto-imports.d.ts'
       }),
       Components({
-        resolvers: [NaiveUiResolver()]
+        resolvers: [NaiveUiResolver()],
+        dts: 'src/typings/components.d.ts'
       }),
       /*开启gzip模式*/
       viteCompression({

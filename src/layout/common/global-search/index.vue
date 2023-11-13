@@ -62,32 +62,37 @@ const showSearch = () => {
 }
 // 监听键盘事件
 document.addEventListener('keydown', (event) => {
-  delay(() => {
-    if (key.value.item.length === 1 && !data.value.tags['search'].double && key.value.item.includes(event.key)) {
+  // TODO 没有绑定特点修饰键的时候不会触发 (nyh-2023-11-10 22:09:41)
+  if (key.value.item.length === 1 && !data.value.tags['search'].double && key.value.item.includes(event.key)) {
+    delay(() => {
       showSearch()
-    }
-    if (key.value.item.length === 1 && data.value.tags['search'].double && key.value.item.includes(event.key)) {
-      shiftCount.value++
-      if (shiftCount.value === 1) {
-        // 如果按下了第一次 Shift 键，则设置延时器
-        shiftTimeout.value = setTimeout(() => {
-          shiftCount.value = 0
-          shiftTimeout.value = null
-        }, 1000) // 1秒内没有第二次 Shift 键按下，重置计数器
-      } else if (shiftCount.value === 2) {
-        // 如果按下了第二次按键，则触发 showSearch
+    }, 300)
+  }
+  if (key.value.item.length === 1 && data.value.tags['search'].double && key.value.item.includes(event.key)) {
+    shiftCount.value++
+    if (shiftCount.value === 1) {
+      // 如果按下了第一次 Shift 键，则设置延时器
+      shiftTimeout.value = setTimeout(() => {
+        shiftCount.value = 0
+        shiftTimeout.value = null
+      }, 1000) // 1秒内没有第二次 Shift 键按下，重置计数器
+    } else if (shiftCount.value === 2) {
+      // 如果按下了第二次按键，则触发 showSearch
+      delay(() => {
         showSearch()
         resetTimer()
-      }
-    } else {
-      const combinedKeys = key.value.item.join('+')
-      hotkeys(combinedKeys, () => {
-        delay(() => {
-          showSearch()
-        }, 300)
-      })
+      }, 300)
     }
-  }, 300)
+  }
+  if (key.value.item.length > 1 && !data.value.tags['search'].double && key.value.item.includes(event.key)) {
+    const combinedKeys = key.value.item.join('+')
+    hotkeys(combinedKeys, () => {
+      delay(() => {
+        console.log(combinedKeys)
+        showSearch()
+      }, 300)
+    })
+  }
 })
 </script>
 

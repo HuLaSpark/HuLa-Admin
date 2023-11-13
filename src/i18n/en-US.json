@@ -36,7 +36,7 @@
   "backend": "BackEnd",
   "switch": "LangSwitcher",
   "mis": "Mis",
-  "add": "Create",
+  "create": "Create",
   "save": "Save",
   "save_success": "Save Success",
   "save_error": "Save Error",
@@ -175,5 +175,9 @@
   "403": "403 Access is prohibited",
   "403_content": "There are always doors that are closed to you",
   "global_search": "global search",
-  "warn": "Caution"
+  "warn": "Caution",
+  "add": "Add",
+  "super_per": "Super PER",
+  "advanced_per": "Advanced PER",
+  "common_per": "Common PER"
 }
