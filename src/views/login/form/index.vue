@@ -369,8 +369,8 @@ onMounted(() => {
 })
 </script>
 
-<style scoped>
-@import '@/assets/css/login.css';
+<style lang="scss" scoped>
+@import '@/assets/scss/login';
 
 .login h1 {
   color: v-bind(TEXT_COLOR);

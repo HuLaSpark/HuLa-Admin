@@ -1,10 +1,12 @@
 import paging from '@/hooks/usePaging'
 import typeState from '@/hooks/useState'
-import { pageUser, parameter, Response, User } from '@/services/types'
+import { ButtonType, parameter, Response, User } from '@/services/types'
 import { RCodeEnum } from '@/enums'
-import { delay } from 'lodash-es'
-import UserVar from '@/views/composables/drawer/userDrawer/userVar'
+import { delay, isEqual } from 'lodash-es'
+import { CircleCheck, CircleX } from '@vicons/tabler'
+import { i18n } from '@/i18n'
 
+const { t } = i18n.global
 /*表格数据*/
 const tableData = ref([])
 /*判断是否有权限*/
@@ -14,11 +16,34 @@ const input = ref<string>('')
 /*解构分页参数*/
 const { pageNum, pageSize, total } = paging
 /*解构状态类型参数*/
-const { verify, loading } = typeState
-/*通用变量*/
-const { editedData, rawData } = UserVar()
+const { loading } = typeState
+/*编辑框中的数据*/
+const editedData = ref(<any>{})
+/*新增的数据*/
+const addData = ref(<any>{})
+/*没有进行编辑时的数据*/
+const rawData = ref(<any>{})
+/*抽屉*/
+const drawerShow = ref<boolean>(false)
 
 export const useBase = () => {
+  /*全局通用按钮异常提示*/
+  const butText = ref(t('save'))
+  const butType = ref<ButtonType>('success')
+  const butIcon = shallowRef<object>(CircleCheck)
+  const iconShow = ref(false)
+  const warn = ref()
+  const showWarn = ref(false)
+  const loadingBut = ref<boolean>(false)
+
+  /*监听国际化切换时实时切换语言*/
+  watchEffect(() => {
+    warn.value = t('alert_warning_description')
+    /*监听表单是否被修改*/
+    if (!isEqual(rawData.value, editedData.value)) {
+      showWarn.value = false
+    }
+  })
   const tableRowClassName: ({ row, rowIndex }: { row: User; rowIndex: number }) => void = ({
     row
   }: {
@@ -78,7 +103,7 @@ export const useBase = () => {
       tableData.value = res.data.records
       /*如果是编辑操作传过来的id需要进行判断*/
       if (editId) {
-        const data = tableData.value.find((item: pageUser) => item.id === editId)
+        const data = tableData.value.find((item: any) => item.id === editId)
         Object.assign(rawData.value, data)
         Object.assign(editedData.value, data)
       }
@@ -105,27 +130,69 @@ export const useBase = () => {
     successMsg?: string,
     errorMsg?: string
   ) => {
-    verify.value = true
+    loadingBut.value = true
 
     if (!formEl) return
-    await formEl?.validate().then(async () => {
-      const res = await requestFn()
-      if (res.code !== RCodeEnum.OK) {
-        if (res.code === RCodeEnum.PARAM_ERROR) {
-          return window.$message.error(res.data[0])
+    await formEl
+      ?.validate()
+      .then(async () => {
+        const res = await requestFn()
+        if (res.code !== RCodeEnum.OK) {
+          const errorText = res.code === RCodeEnum.PARAM_ERROR ? res.data[0] : errorMsg ? errorMsg : res.msg
+          return throwError(errorText)
         }
-        // 显示错误消息
-        errorMsg ? window.$message.error(errorMsg) : window.$message.error(res.msg)
-        return (verify.value = false)
-      }
-      successMsg ? window.$message.success(successMsg) : window.$message.success(res.msg)
-      await pagingLoad(fnPage, window.$loadingBar, formEl.model.id)
-    })
+        successMsg ? window.$message.success(successMsg) : window.$message.success(res.msg)
+        await pagingLoad(fnPage, window.$loadingBar, formEl.model.id)
+        textChange(t('save_success'), CircleCheck)
+        showWarn.value = false
+      })
+      .catch(() => {
+        textChange(t('save_error'), CircleX, 'error')
+      })
+      .finally(() => {
+        loadingBut.value = false
+      })
   }
+  /*封装通用错误消息*/
+  const throwError = (message: string) => {
+    window.$message.error(message)
+    textChange(t('save_error'), CircleX, 'error')
+  }
+
+  /**
+   * 全局处理保存按钮的提示
+   * @param text 按钮文字
+   * @param icon 按钮图标
+   * @param type 按钮类型
+   */
+  const textChange = (text: string, icon?: object, type?: ButtonType) => {
+    butText.value = text
+    iconShow.value = true
+    icon ? (butIcon.value = icon) : {}
+    type ? (butType.value = type) : 'success'
+    delay(() => {
+      butText.value = t('save')
+      butType.value = 'success'
+      iconShow.value = false
+    }, 2000)
+  }
+
   return {
     performAction,
     tableRowClassName,
     pagingLoad,
+    textChange,
+    editedData,
+    addData,
+    rawData,
+    butText,
+    butType,
+    butIcon,
+    iconShow,
+    showWarn,
+    warn,
+    drawerShow,
+    loadingBut,
     tableData,
     total,
     loading,

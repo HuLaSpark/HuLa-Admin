@@ -175,9 +175,14 @@
   "403": "403 Access is prohibited",
   "403_content": "There are always doors that are closed to you",
   "global_search": "global search",
+  "search": "Search",
   "warn": "Caution",
   "add": "Add",
   "super_per": "Super PER",
   "advanced_per": "Advanced PER",
-  "common_per": "Common PER"
+  "common_per": "Common PER",
+  "logout_error": "Logout Error",
+  "drag": "Drag",
+  "keys_binding": "Keys Binding",
+  "theme": "Theme Modal"
 }

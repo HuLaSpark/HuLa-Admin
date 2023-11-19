@@ -27,6 +27,8 @@ import { handleVerify } from '@/components/modal/timeout'
 //     if (requestNum === 0) loadingInstance?.close();
 // }
 
+/*用户状态图标*/
+export const networkIcon = ref()
 //请求配置
 export const createAxios = (config?: AxiosRequestConfig): AxiosInstance => {
   const instance = axios.create({
@@ -168,6 +170,7 @@ export const createAxios = (config?: AxiosRequestConfig): AxiosInstance => {
           error.message = '连接服务器失败'
         }
       }
+      networkIcon.value = 'error'
       //提示
       window.$message.error(error.message)
       /***** 处理结束 *****/

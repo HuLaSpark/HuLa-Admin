@@ -4,7 +4,7 @@
       <n-text depth="3">{{ pro.title }}</n-text>
       <n-popover trigger="hover">
         <template #trigger>
-          <n-icon style="cursor: pointer"><Help /></n-icon>
+          <n-icon style="cursor: pointer" :component="Help" />
         </template>
         <n-text depth="3">
           <n-space vertical>

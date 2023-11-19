@@ -30,7 +30,7 @@
         </n-form-item>
         <n-form-item :label="t('nick_name')">
           <n-input
-            :status="editedData.nickName ? '' : 'warning'"
+            :status="handleStatus(editedData.nickName)"
             v-model:value="editedData.nickName"
             :placeholder="t('placeholder')" />
         </n-form-item>
@@ -58,11 +58,7 @@
           <n-input disabled v-model:value="editedData.email" :placeholder="t('placeholder')" />
         </n-form-item>
         <n-form-item :label="t('phone_number')">
-          <n-input
-            disabled
-            :status="handleStatus(editedData.mobile)"
-            v-model:value="editedData.mobile"
-            :placeholder="t('placeholder')" />
+          <n-input disabled v-model:value="editedData.mobile" :placeholder="t('placeholder')" />
         </n-form-item>
 
         <n-space vertical :size="20">
@@ -118,14 +114,14 @@ import { NTag, NIcon } from 'naive-ui'
 import { i18n } from '@/i18n'
 import Modal from '@/components/modal/index.vue'
 import type { VNodeChild } from 'vue'
-import { RCodeEnum, RoleEnum, RoleFixEnum } from '@/enums'
-import { AlertCircle, LetterM, LetterR, LetterU, User, UserCheck, UserSearch } from '@vicons/tabler'
+import { RoleEnum, RoleFixEnum } from '@/enums'
+import { AlertCircle, LetterM, LetterR, LetterU, UserCheck, UserSearch } from '@vicons/tabler'
 import { delay, isEqual } from 'lodash-es'
 import { useBase } from '@/hooks/useBase'
 import apis from '@/services/apis'
 import paging from '@/hooks/usePaging'
 import UserVar from './userVar'
-import { ButtonType, pageUser, Response, Role, UpdateUser } from '@/services/types'
+import { Role } from '@/services/types'
 import { userStore } from '@/stores/user'
 import { AlertIze, renderMessage } from '@/customize'
 import { useAuth } from '@/hooks/useAuth'
@@ -134,42 +130,26 @@ import { animation } from '@/components/modal/type'
 
 const { t } = i18n.global
 const { pageNum, pageSize } = paging
-const warn = ref()
-const showWarn = ref(false)
+const { input, showModal, showSelect, formRef, loadingSelect, selectData, rules } = UserVar()
 const {
-  input,
-  showModal,
-  showSelect,
-  formRef,
-  loadingSelect,
-  loadingBut,
+  performAction,
+  textChange,
+  editedData,
+  rawData,
   butText,
   butType,
   butIcon,
   iconShow,
-  selectData,
-  rules,
+  warn,
   drawerShow,
-  editedData,
-  rawData
-} = UserVar()
-const { performAction } = useBase()
+  showWarn,
+  loadingBut
+} = useBase()
 const { judgmentRole } = useAuth()
-/*监听国际化切换时实时切换语言*/
-watchEffect(() => {
-  butText.value = t('save')
-  warn.value = t('alert_warning_description')
-  /*监听表单是否被修改*/
-  if (!isEqual(rawData.value, editedData.value)) {
-    showWarn.value = false
-  }
-})
-function handleStatus(status: any) {
-  return status === null ? 'warning' : ''
+
+const handleStatus = (status: any) => {
+  return status ? 'success' : 'warning'
 }
-// const inputValidationStatus = computed(() => {
-//   return createStatus(editedData.value)
-// })
 
 /*点击选中框后进行异步查询选项框内容*/
 const handleShowSelect = () => {
@@ -218,7 +198,7 @@ const handleShowSelect = () => {
     })
   }, 500)
 }
-/*判断用户的等级*/
+/*判断用户的等级分组*/
 const getLabelForRole = (flag: string) => {
   // 根据 flag 的前缀来判断权限等级
   if (flag.startsWith(RoleFixEnum.HL_ROOT)) {
@@ -286,7 +266,6 @@ const saveData = async (form: any) => {
     textChange(t('save_warning'), AlertCircle, 'warning')
     return
   }
-  loadingBut.value = true
   await performAction(
     form,
     () => apis.editUser(editedData.value),
@@ -297,12 +276,6 @@ const saveData = async (form: any) => {
         name: input.value
       })
   )
-  delay(() => {
-    loadingBut.value = false
-    showWarn.value = false
-  }, 1000)
-  // 这里可以进行保存操作，然后更新表格数据
-  // ...
   // 清空临时对象
   // editedData.value = {} as pageUser
 }
@@ -356,19 +329,6 @@ const cancel = () => {
   setTimeout(() => {
     showModal.value = false
   }, 100)
-}
-
-/*处理保存按钮的提示*/
-const textChange = (text: string, icon?: object, type?: ButtonType) => {
-  butText.value = text
-  iconShow.value = true
-  icon ? (butIcon.value = icon) : {}
-  type ? (butType.value = type) : ''
-  delay(() => {
-    butText.value = t('save')
-    butType.value = 'primary'
-    iconShow.value = false
-  }, 2000)
 }
 </script>
 

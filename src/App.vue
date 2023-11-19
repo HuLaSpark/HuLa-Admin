@@ -31,17 +31,9 @@ watchEffect(() => {
 })
 </script>
 
-<style scoped>
+<style lang="scss">
+@import '@/assets/scss/global-app';
 #app {
-  min-height: 100vh;
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
-  position: fixed;
-  height: 100%;
-  width: 100%;
-  top: 0;
-  left: 0;
-  transition: all 0.9s ease;
   background-color: v-bind(LOGIN_BGC);
 }
 </style>

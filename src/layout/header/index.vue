@@ -1,8 +1,13 @@
 <template>
   <div :class="collapsed ? 'header-unfold' : 'header-shrink'">
+    <!--标签页-->
+    <tab />
+
     <div class="operation-list">
       <!--全局搜索-->
-      <GlobalSearch />
+      <div class="search">
+        <GlobalSearch />
+      </div>
       <n-divider vertical />
       <!--首页-->
       <div class="operation-list-box">
@@ -136,6 +141,8 @@ import { useAuth } from '@/hooks/useAuth'
 import { Loading } from 'notiflix'
 import { delay } from 'lodash-es'
 import GlobalSearch from '@/layout/common/global-search/index.vue'
+import { networkIcon } from '@/services/request'
+import tab from '@/components/tab/index.vue'
 
 const { t } = i18n.global
 const message = useMessage()
@@ -144,12 +151,10 @@ const userInfoStore = userStore()
 const user = userInfoStore.getUser
 const tag = userInfoStore.getTag
 const { uid, userName, email, role, url } = user
-const { BGC, TEXT_COLOR } = storeToRefs(store)
+const { BGC, TEXT_COLOR, BGC_OTHER } = storeToRefs(store)
 const showModal = ref(false)
 const fullIcon = ref(false)
-
 const { navigator } = window
-const networkIcon = ref()
 const { judgmentAuth } = useAuth()
 
 /*获取父组件传来的值*/
@@ -192,7 +197,6 @@ const userExit = () => {
   Loading.hourglass()
   delay(() => {
     Loading.remove()
-    userInfoStore.logout()
     useLogin().exit(uid)
   }, 500)
 }
@@ -200,14 +204,9 @@ const userExit = () => {
 
 <style scoped>
 @import '@/assets/css/layout-header.css';
-.header-unfold {
-  background-color: v-bind(BGC);
-}
-.header-shrink {
-  background-color: v-bind(BGC);
-}
 .operation-list {
   color: v-bind(TEXT_COLOR);
+  background-color: v-bind(BGC);
 }
 .info-content {
   display: flex;
@@ -220,5 +219,8 @@ const userExit = () => {
 .info-tag {
   display: flex;
   justify-content: center;
+}
+.search {
+  background: v-bind(BGC_OTHER);
 }
 </style>

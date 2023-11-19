@@ -10,6 +10,7 @@
 
   <n-drawer style="border-radius: 10px 0 0 10px" v-model:show="active" :width="350">
     <n-drawer-content :title="t('settings')" closable :native-scrollbar="false">
+      <!--全局设置内容-->
       <Content
         @saveSettings="(args) => (Form = args)"
         @alertOff="showWarn = false"
@@ -17,7 +18,7 @@
         :show-warn="showWarn"
         :warn="warn" />
       <template #footer>
-        <n-button style="width: 100%" :loading="loading" secondary :type="butType as any" @click="save(Form)">
+        <n-button style="width: 100%" :loading="loadingBut" secondary :type="butType" @click="save(Form, $event)">
           <template #icon>
             <n-icon v-if="iconShow" :component="butIcon" />
           </template>
@@ -38,13 +39,11 @@ import { globalSettings } from '@/stores/global-settings'
 import Mitt from '@/utils/Bus'
 import { delay, isEqual } from 'lodash-es'
 import { globalSetting } from '@/services/types'
+import { useBase } from '@/hooks/useBase'
 
 const { t } = i18n.global
 const active = ref(false)
-const butText = ref()
-const butType = ref('primary')
-const butIcon = shallowRef<object>(CircleCheck)
-const iconShow = ref(false)
+const { textChange, butText, butType, butIcon, iconShow, showWarn, warn, loadingBut } = useBase()
 const store = mainStore()
 const { EYE_THEME, ASIDE_COLOR, DISABLED } = storeToRefs(store)
 const settingsStore = globalSettings()
@@ -56,9 +55,6 @@ const Form = reactive<globalSetting>({
   },
   tags: { search: { item: ['Shift'], double: true } }
 })
-const loading = ref(false)
-const warn = ref()
-const showWarn = ref(false)
 
 /*监听国际化切换时实时切换语言*/
 watchEffect(() => {
@@ -75,6 +71,7 @@ const showDrawer = () => {
   active.value = true
   showWarn.value = false
   Form.theme['eye'].status = EYE_THEME.value
+  Form.theme['aside'].status = ASIDE_COLOR.value
   if (Object.keys(data.value).length === 0) {
     settingsStore.setSettings({ ...(Form as any) })
   }
@@ -95,7 +92,7 @@ const containsOnlyModifiers = (keys: string[]): boolean => {
   return true // 只包含修饰键
 }
 /*保存设置*/
-const save = (val: globalSetting) => {
+const save = (val: globalSetting, event: MouseEvent) => {
   const isOnlyModifiers = containsOnlyModifiers([...val.tags['search'].item])
   if (isOnlyModifiers && !val.tags['search'].double) {
     showWarn.value = true
@@ -109,9 +106,9 @@ const save = (val: globalSetting) => {
     textChange(t('save_warning'), AlertCircle, 'warning')
     return
   }
-  loading.value = true
+  loadingBut.value = true
   delay(() => {
-    loading.value = false
+    loadingBut.value = false
     /*防止保存后二次保存的错误*/
     if (!val.theme['aside'].status && val.theme['eye'].status) {
       ASIDE_COLOR.value = val.theme['aside'].status
@@ -119,10 +116,38 @@ const save = (val: globalSetting) => {
     }
     /*需要判断是否修改的是主题*/
     if (val.theme['eye'].status !== EYE_THEME.value) {
-      EYE_THEME.value = val.theme['eye'].status
-      DISABLED.value = val.theme['eye'].status
-      Form.theme['eye'].status = val.theme['eye'].status
-      store.toggleTheme()
+      active.value = false
+      const x = event.clientX
+      const y = event.clientY
+      const endRadius = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y))
+      let isDark: boolean
+      /*判断当前浏览器是否支持startViewTransition API*/
+      if (document.startViewTransition) {
+        const transition = document.startViewTransition(() => {
+          const root = document.documentElement
+          isDark = root.classList.contains('dark')
+          root.classList.remove(isDark ? 'dark' : 'light')
+          root.classList.add(isDark ? 'light' : 'dark')
+        })
+        transition.ready.then(() => {
+          const clipPath = [`circle(0px at ${x}px ${y}px)`, `circle(${endRadius}px at ${x}px ${y}px)`]
+          document.documentElement.animate(
+            {
+              clipPath: isDark ? [...clipPath].reverse() : clipPath
+            },
+            {
+              duration: 500,
+              easing: 'ease-in',
+              pseudoElement: isDark ? '::view-transition-old(root)' : '::view-transition-new(root)'
+            }
+          )
+          /*跟随动画结束后更新主题*/
+          EYE_THEME.value = val.theme['eye'].status
+          DISABLED.value = val.theme['eye'].status
+          Form.theme['eye'].status = val.theme['eye'].status
+          store.toggleTheme()
+        })
+      }
     }
     if (val.theme['aside'].status !== ASIDE_COLOR.value) {
       ASIDE_COLOR.value = val.theme['aside'].status
@@ -136,22 +161,11 @@ const save = (val: globalSetting) => {
     /*使用mitt给兄弟组件更新*/
     Mitt.emit('search', Form.tags['search'])
     textChange(t('save_success'), CircleCheck)
-  }, 1000)
-}
-/*处理保存按钮的提示*/
-const textChange = (text: string, icon?: object, type?: string) => {
-  butText.value = text
-  iconShow.value = true
-  icon ? (butIcon.value = icon) : {}
-  type ? (butType.value = type) : ''
-  delay(() => {
-    butText.value = t('save')
-    butType.value = 'primary'
-    iconShow.value = false
-  }, 2000)
+  }, 800)
 }
 </script>
 
-<style scoped>
+<style lang="scss">
 @import '@/assets/css/layout-header.css';
+@import '@/assets/scss/toggle-theme.scss';
 </style>

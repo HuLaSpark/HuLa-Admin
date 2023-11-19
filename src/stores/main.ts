@@ -11,6 +11,8 @@ export const mainStore = defineStore('main', {
       BGC: '#FFF',
       /*背景剩余部分的颜色*/
       BGC_OTHER: '#f4f4f4',
+      /*遮罩层的颜色*/
+      MASK_BGC: 'rgba(231, 229, 228, 0.75)',
       /*菜单栏的按钮颜色*/
       BTN: 'rgb(229, 243, 237)',
       /*文本的颜色*/
@@ -34,6 +36,7 @@ export const mainStore = defineStore('main', {
       this.ASIDE_BGC = this.BGC
       this.LOGIN_BGC = this.LOGIN_BGC === '#FFF' ? '#141414' : '#FFF'
       this.BTN = this.BTN === 'rgb(229, 243, 237)' ? 'rgba(229, 243, 237, .1)' : 'rgb(229, 243, 237)'
+      this.MASK_BGC = this.EYE_THEME ? 'rgba(41, 37, 36, 0.75)' : 'rgba(231, 229, 228, 0.75)'
       this.BGC_OTHER = this.BGC_OTHER === '#f4f4f4' ? '#1d1d1d' : '#f4f4f4'
       this.TEXT_COLOR = this.TEXT_COLOR === '#000' ? '#cdd1da' : '#000'
       this.ASIDE_TEXT_COLOR = this.TEXT_COLOR
