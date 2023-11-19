@@ -6,7 +6,7 @@
       <Content />
     </div>
   </div>
-  <Footer></Footer>
+  <Footer />
 </template>
 
 <script setup lang="ts">

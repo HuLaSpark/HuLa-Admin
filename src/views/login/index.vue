@@ -108,6 +108,6 @@ const codeInputClose = async () => {
 }
 </script>
 
-<style scoped>
-@import '@/assets/css/login.css';
+<style lang="scss" scoped>
+@import '@/assets/scss/login';
 </style>

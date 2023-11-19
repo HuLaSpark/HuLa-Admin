@@ -41,7 +41,8 @@ const { show, width } = defineProps<{
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(4px);
   display: flex;
   transition: opacity 0.3s ease;
 }

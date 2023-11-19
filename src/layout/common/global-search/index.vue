@@ -2,7 +2,13 @@
   <div class="operation-list-box">
     <n-tooltip trigger="hover" style="padding: 5px 8px 5px 8px">
       <template #trigger>
-        <n-icon :size="24" @click="showSearch"><Search /></n-icon>
+        <div @click="showSearch" class="search-input">
+          <n-icon :size="24" :component="Search" />
+          <span>{{ t('search') }}</span>
+          <n-tag style="border-radius: 6px" :bordered="false" size="small">
+            {{ data.tags['search'].item.map((tag) => tag.charAt(0).toUpperCase() + tag.slice(1)).join('+') }}
+          </n-tag>
+        </div>
       </template>
       {{ t('global_search') }}
     </n-tooltip>
@@ -96,6 +102,15 @@ document.addEventListener('keydown', (event) => {
 })
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 @import '@/assets/css/layout-header.css';
+.search-input {
+  display: flex;
+  align-items: center;
+  height: 25px;
+  gap: 10px;
+  span {
+    font-size: 12px;
+  }
+}
 </style>

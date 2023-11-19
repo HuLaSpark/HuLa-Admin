@@ -18,17 +18,17 @@ import { RoleEnum } from '@/enums'
 import { EditCircle, LetterM, LetterR, LetterU, Power, TrashX, X, Minus } from '@vicons/tabler'
 import { Report } from 'notiflix'
 import { useAuth } from '@/hooks/useAuth'
-import userVar from '@/views/composables/drawer/userDrawer/userVar'
 import { handRelativeTime } from '@/utils/day'
-
-const { t } = i18n.global
-const { editedData, drawerShow, rawData } = userVar()
-const { judgmentRole } = useAuth()
+import { useBase } from '@/hooks/useBase'
 
 /**
  * @param data 表格数据
  */
 export const userTable = (data: Ref<any[]>) => {
+  const { t } = i18n.global
+  const { judgmentRole } = useAuth()
+  const { editedData, rawData, drawerShow } = useBase()
+
   /*受控过滤器*/
   const statusColumn = reactive<DataTableBaseColumn<pageUser>>({
     title: '状态',
@@ -178,7 +178,8 @@ export const userTable = (data: Ref<any[]>) => {
                   status={status as any}
                   rail-color={railColor}
                   percentage={integrity}
-                  processing={integrity !== 100}></NProgress>
+                  processing={integrity !== 100}
+                />
               ),
               action: () => (
                 <NButton quaternary type={'warning'} size={'tiny'} onClick={() => handleEditTable(row.id)}>
@@ -197,7 +198,7 @@ export const userTable = (data: Ref<any[]>) => {
       minWidth: 80,
       render: (row) => {
         return (
-          <NSpace justify={'space-around'}>
+          <NSpace justify={'center'} size={20}>
             <NTooltip>
               {{
                 default: () => t('edit'),

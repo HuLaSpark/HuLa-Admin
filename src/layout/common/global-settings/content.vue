@@ -11,7 +11,7 @@
       @alertOff="alertOff" />
 
     <n-divider title-placement="center">
-      <span>主题模式</span>
+      <span>{{ t('theme') }}</span>
     </n-divider>
     <!--护眼模式-->
     <n-space justify="space-between" align="center">
@@ -70,7 +70,8 @@
     </n-config-provider>
 
     <n-divider title-placement="center">
-      <span>快捷键绑定</span>
+      <span>{{ t('keys_binding') }}</span>
+      <n-icon style="cursor: pointer" :component="Help" size="20" />
     </n-divider>
     <!--快捷键绑定-->
     <n-space justify="space-between" align="center">
@@ -100,7 +101,7 @@
 </template>
 
 <script setup lang="ts">
-import { Moon, Sun, Check, X, KeyboardHide } from '@vicons/tabler'
+import { Moon, Sun, Check, X, KeyboardHide, Help } from '@vicons/tabler'
 import { i18n } from '@/i18n'
 import { mainStore } from '@/stores/main'
 import { storeToRefs } from 'pinia'

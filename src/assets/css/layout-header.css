@@ -1,23 +1,29 @@
 .header-unfold {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   width: calc(100vw - 110px);
   height: 50px;
   border-radius: 10px;
   margin: 10px;
 }
 .header-shrink {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   width: calc(100vw - 240px);
   height: 50px;
   border-radius: 10px;
   margin: 10px;
 }
 .operation-list {
+  border-radius: 10px;
   height: 50px;
   line-height: 50px;
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  cursor: pointer;
-  padding: 0 15px 0 10px;
+  padding: 0 15px 0 15px;
 }
 .operation-list-box {
   display: flex;
@@ -48,3 +54,19 @@
     transform: scale(1);
   }
 }
+/*全局搜索框样式*/
+.search {
+  background: v-bind(BGC_OTHER);
+  cursor: pointer;
+  padding: 5px 10px 5px 10px;
+  border-radius: 8px;
+  border: 1px transparent solid; /* 设置一个透明的边框 */
+  transition: border-color 0.3s ease; /* 过渡效果应用于颜色而不是边框宽度 */
+}
+.search:hover {
+  border: 1px rgb(214, 211, 209) solid;
+}
+.search:hover .n-icon {
+  animation: twinkle 0.3s ease-in-out;
+}
+/*end*/

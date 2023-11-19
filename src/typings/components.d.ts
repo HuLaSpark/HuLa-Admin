@@ -58,6 +58,7 @@ declare module 'vue' {
     Paging: typeof import('./../components/paging/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    Tab: typeof import('./../components/tab/index.vue')['default']
     Terminal: typeof import('./../components/terminal/index.vue')['default']
     VerifyModal: typeof import('./../components/modal/timeout/verifyModal.vue')['default']
   }

@@ -1,6 +1,6 @@
 <template>
   <n-space vertical>
-    <n-button round secondary type="success" @click="userModalRef.showModal = true">
+    <n-button style="border-radius: 8px" secondary type="success" @click="userModalRef.showModal = true">
       <template #icon><n-icon :component="Plus" /></template>
       {{ t('add') }}
     </n-button>
@@ -52,7 +52,7 @@
   <userDrawer />
 
   <!--添加弹出框-->
-  <userModal ref="userModalRef" />
+  <userModal :title="title" ref="userModalRef" />
 </template>
 
 <script setup lang="ts">
@@ -73,6 +73,7 @@ const { pageNum, pageSize } = paging
 const checkedRowKeysRef = ref<DataTableRowKey[]>([])
 const loadingBarTargetRef = ref()
 const userModalRef = ref()
+const title = ref('添加用户')
 const { input } = userVar()
 const { pagingLoad, total, tableData, loading, NoAccess } = useBase()
 const { columns, statusColumn } = userTable(tableData)

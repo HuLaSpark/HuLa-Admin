@@ -63,29 +63,7 @@ export const useLogin = () => {
         const remember = { password, userName } as any
         const { value } = tenantStore.getTenant
         apis.login({ tenantId: value, password, userName }).then((res) => {
-          if (res.code === RCodeEnum.OK) {
-            //将res中的数据传给pinia做持久化
-            userInfoStore.setLoginInfo(res.data)
-            // 用户是否选择记住我
-            if (rememberOption.value) {
-              rememberStore.setRememberUser(remember, rememberOption.value)
-            } else {
-              rememberStore.deleteRemember()
-            }
-            loginText.value = t('login')
-            signInLoading.value = false
-            /*登录成功后放开按钮禁用*/
-            disabled.value = false
-            delay(() => {
-              Loading.remove()
-              router.push('/odometer')
-              window.$notification.success({
-                title: t('login_success'),
-                duration: 1500,
-                keepAliveOnHover: true
-              })
-            }, 300)
-          } else {
+          if (res.code !== RCodeEnum.OK) {
             Loading.remove()
             loginText.value = t('login')
             signInLoading.value = false
@@ -96,7 +74,29 @@ export const useLogin = () => {
               statusCode.value = res.code
               loginErrorTitle.value = res.code === RCodeEnum.FAIL ? t('account_error') : t('login_error')
             })
+            return false
           }
+          //将res中的数据传给pinia做持久化
+          userInfoStore.setLoginInfo(res.data)
+          // 用户是否选择记住我
+          if (rememberOption.value) {
+            rememberStore.setRememberUser(remember, rememberOption.value)
+          } else {
+            rememberStore.deleteRemember()
+          }
+          loginText.value = t('login')
+          signInLoading.value = false
+          /*登录成功后放开按钮禁用*/
+          disabled.value = false
+          delay(() => {
+            Loading.remove()
+            router.push('/odometer')
+            window.$notification.success({
+              title: t('login_success'),
+              duration: 1500,
+              keepAliveOnHover: true
+            })
+          }, 300)
         })
       })
       .catch(() => {
@@ -111,19 +111,20 @@ export const useLogin = () => {
    */
   const exit = async (exitUserId: string) => {
     await apis.logout(exitUserId).then((res) => {
-      if (res.code === RCodeEnum.OK) {
-        window.$notification.success({
-          title: res.msg,
-          duration: 1500,
-          keepAliveOnHover: true
-        })
-      } else {
+      if (res.code !== RCodeEnum.OK) {
         window.$notification.error({
-          title: res.msg,
+          title: res.msg ? res.msg : t('logout_error'),
           duration: 1500,
           keepAliveOnHover: true
         })
+        return false
       }
+      userInfoStore.logout()
+      window.$notification.success({
+        title: res.msg,
+        duration: 1500,
+        keepAliveOnHover: true
+      })
     })
   }
   /*弹出验证码输入框*/
