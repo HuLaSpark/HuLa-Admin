@@ -109,50 +109,52 @@ const save = (val: globalSetting, event: MouseEvent) => {
   loadingBut.value = true
   delay(() => {
     loadingBut.value = false
-    /*防止保存后二次保存的错误*/
-    if (!val.theme['aside'].status && val.theme['eye'].status) {
-      ASIDE_COLOR.value = val.theme['aside'].status
-      Form.theme['aside'].status = val.theme['aside'].status
-    }
-    /*需要判断是否修改的是主题*/
-    if (val.theme['eye'].status !== EYE_THEME.value) {
-      active.value = false
-      const x = event.clientX
-      const y = event.clientY
-      const endRadius = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y))
-      let isDark: boolean
-      /*判断当前浏览器是否支持startViewTransition API*/
-      if (document.startViewTransition) {
-        const transition = document.startViewTransition(() => {
-          const root = document.documentElement
-          isDark = root.classList.contains('dark')
-          root.classList.remove(isDark ? 'dark' : 'light')
-          root.classList.add(isDark ? 'light' : 'dark')
-        })
-        transition.ready.then(() => {
-          const clipPath = [`circle(0px at ${x}px ${y}px)`, `circle(${endRadius}px at ${x}px ${y}px)`]
-          document.documentElement.animate(
-            {
-              clipPath: isDark ? [...clipPath].reverse() : clipPath
-            },
-            {
-              duration: 500,
-              easing: 'ease-in',
-              pseudoElement: isDark ? '::view-transition-old(root)' : '::view-transition-new(root)'
-            }
-          )
+    /*View Transitions API来实现主图切换效果*/
+    const x = event.clientX
+    const y = event.clientY
+    const endRadius = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y))
+    let isDark: boolean
+    /*判断当前浏览器是否支持startViewTransition API*/
+    if (document.startViewTransition) {
+      const transition = document.startViewTransition(() => {
+        const root = document.documentElement
+        isDark = root.classList.contains('dark')
+        root.classList.remove(isDark ? 'dark' : 'light')
+        root.classList.add(isDark ? 'light' : 'dark')
+      })
+      transition.ready.then(() => {
+        const clipPath = [`circle(0px at ${x}px ${y}px)`, `circle(${endRadius}px at ${x}px ${y}px)`]
+        document.documentElement.animate(
+          {
+            clipPath: isDark ? [...clipPath].reverse() : clipPath
+          },
+          {
+            duration: 500,
+            easing: 'ease-in',
+            pseudoElement: isDark ? '::view-transition-old(root)' : '::view-transition-new(root)'
+          }
+        )
+        /*防止保存后二次保存的错误*/
+        if (!val.theme['aside'].status && val.theme['eye'].status) {
+          ASIDE_COLOR.value = val.theme['aside'].status
+          Form.theme['aside'].status = val.theme['aside'].status
+        }
+        /*是否修改的是护眼主题*/
+        if (val.theme['eye'].status !== EYE_THEME.value) {
+          active.value = false
           /*跟随动画结束后更新主题*/
           EYE_THEME.value = val.theme['eye'].status
           DISABLED.value = val.theme['eye'].status
           Form.theme['eye'].status = val.theme['eye'].status
           store.toggleTheme()
-        })
-      }
-    }
-    if (val.theme['aside'].status !== ASIDE_COLOR.value) {
-      ASIDE_COLOR.value = val.theme['aside'].status
-      Form.theme['aside'].status = val.theme['aside'].status
-      store.toggleAside()
+        }
+        /*是否修改的是侧边栏的颜色*/
+        if (val.theme['aside'].status !== ASIDE_COLOR.value) {
+          ASIDE_COLOR.value = val.theme['aside'].status
+          Form.theme['aside'].status = val.theme['aside'].status
+          store.toggleAside()
+        }
+      })
     }
     Form.tags['search'].item = [...val.tags['search'].item]
     Form.tags['search'].double = val.tags['search'].double
