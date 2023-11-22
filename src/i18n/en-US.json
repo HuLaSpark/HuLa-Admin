@@ -184,5 +184,6 @@
   "logout_error": "Logout Error",
   "drag": "Drag",
   "keys_binding": "Keys Binding",
-  "theme": "Theme Modal"
+  "theme": "Theme Modal",
+  "request_failed": "Request Failed"
 }

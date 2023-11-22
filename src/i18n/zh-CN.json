@@ -184,5 +184,6 @@
   "logout_error": "注销失败",
   "drag": "拖拽",
   "keys_binding": "快捷键绑定",
-  "theme": "主题模式"
+  "theme": "主题模式",
+  "request_failed": "请求失败"
 }

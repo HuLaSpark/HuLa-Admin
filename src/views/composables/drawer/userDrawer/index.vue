@@ -127,6 +127,7 @@ import { AlertIze, renderMessage } from '@/customize'
 import { useAuth } from '@/hooks/useAuth'
 import { handRelativeTime } from '@/utils/day'
 import { animation } from '@/components/modal/type'
+import router from '@/router'
 
 const { t } = i18n.global
 const { pageNum, pageSize } = paging
@@ -330,6 +331,25 @@ const cancel = () => {
     showModal.value = false
   }, 100)
 }
+
+/*在组件卸载之前执行把抽屉关闭(因为编辑抽屉不是全屏所以可以切换页面)*/
+onBeforeUnmount(() => {
+  drawerShow.value = false
+  // router.beforeEach((to: any, from: any, next: any) => {
+  //   if (drawerShow.value) {
+  //     showModal.value = true
+  //     if (showModal.value) {
+  //       console.log(11111)
+  //       next()
+  //     } else {
+  //       next(false)
+  //     }
+  //   } else {
+  //     drawerShow.value = false
+  //     next()
+  //   }
+  // })
+})
 </script>
 
 <style scoped>

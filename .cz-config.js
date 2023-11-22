@@ -46,7 +46,7 @@ module.exports = {
     },
     {
       value: ':construction_worker: ci',
-      name: '👷 ci:       CI related changes'
+      name: '👷 ci:       CI相关的变化'
     }
   ],
   messages: {
