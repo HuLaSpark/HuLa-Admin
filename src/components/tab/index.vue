@@ -1,23 +1,24 @@
 <template>
-  <div style="display: flex; align-items: center; gap: 10px">
-    <div
-      class="tab"
-      :class="{
-        'active-tab': '/' + item.path === router.currentRoute.path,
-        'inactive-tab': '/' + item.path !== router.currentRoute.path
-      }"
-      v-for="item in data"
-      :key="item.path"
-      @click.stop="router.push('/' + item.path)">
-      {{ item.title }}
-      <n-icon
-        v-if="Object.keys(data).length > 1"
-        class="del"
-        size="14"
-        :component="X"
-        @click.stop="jumpPath(item.path)" />
+  <!--TODO 如果标签栏过多操过宽度后需要滚动条滚动到选中的标签页下  (nyh-2023-11-23 07:22:29)-->
+  <n-scrollbar x-scrollable>
+    <div style="display: flex; align-items: center; gap: 10px; white-space: nowrap">
+      <div
+        class="tab"
+        :class="{ 'active-tab': '/' + item.path === currentPath }"
+        v-for="item in data"
+        :key="item.path"
+        @click.stop="router.push('/' + item.path)">
+        <n-icon size="16" :component="(vicons as any)[item.icon]" />
+        {{ item.title }}
+        <n-icon
+          v-if="Object.keys(data).length > 1"
+          class="del"
+          size="14"
+          :component="X"
+          @click.stop="jumpPath(item.path)" />
+      </div>
     </div>
-  </div>
+  </n-scrollbar>
 </template>
 
 <script setup lang="ts">
@@ -26,22 +27,29 @@ import { mainStore } from '@/stores/main'
 import { storeToRefs } from 'pinia'
 import { tabs } from '@/stores/tabs'
 import router from '@/router/index'
+import * as vicons from '@vicons/tabler'
 
 const store = mainStore()
 const tabsStore = tabs()
-const { BGC } = storeToRefs(store)
+const { BGC, TEXT_COLOR } = storeToRefs(store)
 const { data } = storeToRefs(tabsStore)
+const currentPath = computed(() => router.currentRoute.value.path)
 
 const jumpPath = (path: string) => {
-  let openPages = Object.keys(data.value) // 假设 data.value 是你的 openPages
+  let openPages = Object.keys(data.value)
   let index = openPages.findIndex((r) => r === path)
-  if (index === 0) {
-    router.push('/' + openPages[index + 1])
-    tabsStore.removeTab(path)
-  } else {
-    router.push('/' + openPages[index - 1])
-    tabsStore.removeTab(path)
+  /*判断当前删除的路由是否是当前的路由*/
+  if ('/' + path === currentPath.value) {
+    /*是否是第一个或者最后一个，否则就是在中间选中的默认是往回跳转*/
+    if (index === 0) {
+      router.push('/' + openPages[index + 1])
+    } else if (index === openPages.length - 1) {
+      router.push('/' + openPages[index - 1])
+    } else {
+      router.push('/' + openPages[index - 1])
+    }
   }
+  tabsStore.removeTab(path)
 }
 </script>
 
@@ -53,17 +61,15 @@ const jumpPath = (path: string) => {
   border-radius: 4px 6px 6px 4px;
   padding: 5px 6px 5px 10px;
   background: v-bind(BGC);
-  border-left: 4px solid #189f57;
+  color: v-bind(TEXT_COLOR);
+  border-bottom: 2px solid #189f57;
   gap: 10px;
-  .active-tab {
-    color: #2ba764;
-  }
-  .inactive-tab {
-    color: #666666;
-  }
   &:hover {
     cursor: pointer;
     color: #189f57;
+    .n-icon {
+      transform: scale(1.15);
+    }
   }
   .del {
     color: rgba(60, 60, 60);
@@ -73,5 +79,10 @@ const jumpPath = (path: string) => {
   .del:hover {
     background: rgba(60, 60, 60, 0.2);
   }
+}
+/*当前选中页面样式*/
+.active-tab {
+  color: #189f57;
+  background: #e5f3ec;
 }
 </style>

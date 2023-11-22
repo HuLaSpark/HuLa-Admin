@@ -110,6 +110,7 @@ document.addEventListener('keydown', (event) => {
   height: 25px;
   gap: 10px;
   span {
+    width: 25px;
     font-size: 12px;
   }
 }
