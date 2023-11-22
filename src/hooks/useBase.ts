@@ -96,7 +96,7 @@ export const useBase = () => {
       loading.value = false
       if (res.code === RCodeEnum.FREEZE) return false
       if (res.code === RCodeEnum.UNAUTHORIZED) return (NoAccess.value = false)
-      window.$message.error(res.msg)
+      window.$message.error(res.msg ? res.msg : t('request_failed'))
       return false
     }
     delay(() => {

@@ -44,6 +44,7 @@ export const setRoutes = (menus?: MenuItem[]) => {
         router.addRoute('system', {
           path: item.path,
           name: item.page,
+          meta: { title: item.name },
           component: modules['../views/system/' + item.page + '.vue']
         })
       } else {
@@ -53,6 +54,7 @@ export const setRoutes = (menus?: MenuItem[]) => {
               router.addRoute('system', {
                 path: sub.path,
                 name: sub.page,
+                meta: { title: sub.name },
                 component: modules['../views/system/' + sub.page + '.vue']
               })
             }
@@ -78,8 +80,10 @@ export const resetRouter = () => {
 
 setRoutes()
 
-// 路由守卫
+// 路由前置守卫
 router.beforeEach(async (to: any, from: any, next: any) => {
+  /*设置页面标题*/
+  document.title = to.meta.title || import.meta.env.VITE_APP_TITLE
   const store = userStore() // 拿到用户对象id信息判断是否登录
   const user = store.loginInfo.sysUser
   const hasUser = user && user.id

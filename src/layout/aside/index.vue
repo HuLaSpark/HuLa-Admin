@@ -21,13 +21,14 @@
               ref="menuInstRef"
               :root-indent="32"
               :indent="22"
-              :style="collapsed ? '' : 'padding: 0 5px 0 0'"
+              :style="collapsed ? '' : 'padding: 0 5px 0 5px'"
               :accordion="true"
               v-model:value="activeKey"
               :collapsed="collapsed"
               :collapsed-width="64"
               :collapsed-icon-size="22"
-              :options="menuOptions" />
+              :options="menuOptions"
+              @click="handleTab(activeKey)" />
           </n-scrollbar>
         </n-layout-sider>
       </n-layout>
@@ -56,6 +57,7 @@ import { i18n } from '@/i18n'
 import * as vicons from '@vicons/tabler'
 import { RouterLink, useRoute } from 'vue-router'
 import { Menu } from '@/services/types'
+import { tabs } from '@/stores/tabs'
 
 const { t } = i18n.global
 const route = useRoute()
@@ -65,6 +67,7 @@ const menuInstRef = ref()
 const store = mainStore()
 const menuStore = userStore()
 const menus = menuStore.getMenus
+const tabsStore = tabs()
 const { BGC, ASIDE_TEXT_COLOR, ASIDE_BGC, ASIDE_COLOR } = storeToRefs(store)
 
 /*使用全局搜索的时候传入值后自动展开目录菜单项*/
@@ -85,6 +88,25 @@ const emit = defineEmits(['collapsed'])
 const handleCollapsed = () => {
   collapsed.value = !collapsed.value
   emit('collapsed', collapsed.value)
+}
+
+/*处理tab选项*/
+const handleTab = (key: string) => {
+  menus.find((menu: any) => {
+    if (menu.path === key) {
+      tabsStore.addTab({
+        data: { icon: menu.icon, path: menu.path, title: menu.name }
+      })
+    } else {
+      menu.children?.find((child: any) => {
+        if (child.path === key) {
+          tabsStore.addTab({
+            data: { icon: child.icon, path: child.path, title: child.name }
+          })
+        }
+      })
+    }
+  })
 }
 
 const renderIcon = (icon: string) => {
@@ -154,7 +176,7 @@ const menuOptions: MenuOption[] = menus.map((menu: Menu) => {
   height: 30px;
   margin: 1em;
   cursor: pointer;
-  filter: drop-shadow(0 0 1em #2c964b);
+  filter: drop-shadow(0 0 1em #189f57);
 }
 .aside-head #unfold-img {
   width: 28px;
@@ -162,47 +184,29 @@ const menuOptions: MenuOption[] = menus.map((menu: Menu) => {
   margin: 1em 0;
   cursor: pointer;
 }
-/*!*图标的放大效果*!
-@keyframes logo-spin {
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.3);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-
-!*自动循环*!
-@media (prefers-reduced-motion: no-preference) {
-  .aside-head #collapsed-img {
-    animation: logo-spin infinite 2s linear;
-  }
-  .aside-head #unfold-img {
-    animation: logo-spin infinite 2s linear;
-  }
-}*/
 /*修改menu选择的样式*/
 :deep(.n-menu .n-menu-item-content) {
   font-weight: bold;
 }
-:deep(.n-menu .n-menu-item-content::before) {
-  border-radius: 12px;
+:deep(.n-menu .n-menu-item-content.n-menu-item-content--selected::before) {
+  border-left: 4px solid #189f57;
 }
-/*:deep(.n-menu .n-menu-item-content:not(.n-menu-item-content--disabled):hover::before) {*/
-/*	background-color: #e5f3ec;*/
-/*}*/
+:deep(.n-menu .n-menu-item-content::before) {
+  border-radius: 4px;
+}
+:deep(.n-menu .n-menu-item-content:hover::before) {
+  border-left: 4px solid #189f57;
+}
 :deep(.n-menu .n-menu-item-content:hover .n-menu-item-content-header),
 :deep(.n-menu .n-menu-item-content:hover .n-menu-item-content__arrow) {
-  color: #2c964b;
+  color: #189f57;
 }
 :deep(.n-menu .n-menu-item-content:hover .n-menu-item-content__icon) {
-  color: #2c964b;
+  color: #189f57;
+  transform: scale(1.2);
 }
 :deep(.n-menu .n-menu-item-content .n-menu-item-content-header a):hover {
-  color: #2c964b;
+  color: #189f57;
 }
 :deep(.n-layout-sider.n-layout-sider--bordered .n-layout-sider__border) {
   background-color: v-bind(BGC);

@@ -14,8 +14,8 @@ import Inspect from 'vite-plugin-inspect'
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
-  // 获取当前环境的配置
-  const config = loadEnv(mode, './')
+  // 获取当前环境的配置,如何设置第三个参数则加载所有变量，而不是以“VITE_”前缀的变量
+  const config = loadEnv(mode, process.cwd())
   return {
     // 起个别名，在引用资源时，可以用‘@/资源路径’直接访问
     resolve: {
