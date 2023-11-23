@@ -14,6 +14,9 @@ export const userStore = defineStore('localUserInfo', {
     getUserUId(): any {
       return this.loginInfo.sysUser ? this.loginInfo.sysUser.uid : 0
     },
+    getTenantId(): any {
+      return this.loginInfo.sysUser ? this.loginInfo.sysUser.tenantId : 0
+    },
     getUser(): any {
       return this.loginInfo.sysUser || {}
     },
@@ -32,8 +35,8 @@ export const userStore = defineStore('localUserInfo', {
     getRole(): any {
       return this.loginInfo.sysUser.role || ''
     },
-    getTag(): any {
-      return this.loginInfo.tag || ''
+    getCompanyName(): any {
+      return this.loginInfo.companyName || ''
     }
   },
   actions: {

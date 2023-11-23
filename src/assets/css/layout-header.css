@@ -37,6 +37,12 @@
 .header-shrink .operation-list-box:hover .n-icon {
   animation: twinkle 0.3s ease-in-out;
 }
+.header-unfold .operation-list-box:hover .n-badge {
+  animation: twinkle-badge 0.3s ease-in-out;
+}
+.header-shrink .operation-list-box:hover .n-badge {
+  animation: twinkle-badge 0.3s ease-in-out;
+}
 .header-unfold .operation-list-box:hover .n-avatar {
   animation: twinkle 0.3s ease-in-out;
 }
@@ -52,6 +58,14 @@
   }
   100% {
     transform: scale(1);
+  }
+}
+@keyframes twinkle-badge {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(0.9);
   }
 }
 /*全局搜索框样式*/

@@ -56,6 +56,7 @@ declare module 'vue' {
     NTooltip: typeof import('naive-ui')['NTooltip']
     NUpload: typeof import('naive-ui')['NUpload']
     Paging: typeof import('./../components/paging/index.vue')['default']
+    RoleOptions: typeof import('./../components/roleOptions/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     Tab: typeof import('./../components/tab/index.vue')['default']

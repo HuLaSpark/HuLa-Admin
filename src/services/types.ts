@@ -3,7 +3,7 @@
  * 注意：请使用TSDoc规范进行注释，以便在使用时能够获得良好提示。
  * @see TSDoc规范https://tsdoc.org/
  **/
-import type { RCodeEnum } from '@/enums'
+import { GlobalStatusEnum, RCodeEnum } from '@/enums'
 
 /*响应请求体*/
 export type Response = {
@@ -107,4 +107,4 @@ export type globalSetting = {
   }
 }
 /*全局按钮类型*/
-export type ButtonType = 'default' | 'tertiary' | 'primary' | 'success' | 'info' | 'warning' | 'error'
+export type ButtonType = keyof typeof GlobalStatusEnum
