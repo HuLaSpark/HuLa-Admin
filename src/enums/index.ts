@@ -59,3 +59,14 @@ export enum RoleFixEnum {
   HL_SYS = 'hl_sys',
   HL_ORD = 'hl_ord'
 }
+
+/*全局状态类型*/
+export enum GlobalStatusEnum {
+  'default',
+  'tertiary',
+  'primary',
+  'success',
+  'info',
+  'warning',
+  'error'
+}

@@ -40,23 +40,29 @@
         :rules="rules"
         style="padding: 10px 0">
         <n-form-item :label="t('user_name')" path="userName">
-          <n-input v-model:value="addData.userName" :placeholder="t('placeholder')" />
+          <n-input v-model:value="addData.userName" :placeholder="t('please_enter') + t('user_name')" />
         </n-form-item>
         <n-form-item :label="t('nick_name')">
-          <n-input v-model:value="addData.nickName" :placeholder="t('placeholder')" />
+          <n-input v-model:value="addData.nickName" :placeholder="t('please_enter') + t('nick_name')" />
+        </n-form-item>
+        <n-form-item :label="t('password')" path="password">
+          <n-input v-model:value="addData.password" :placeholder="t('please_enter') + t('password')" />
+        </n-form-item>
+        <n-form-item :label="t('role_flag')" path="role">
+          <RoleOptions />
         </n-form-item>
         <n-form-item :label="t('email')" path="email">
-          <n-input v-model:value="addData.email" :placeholder="t('placeholder')" />
+          <n-input v-model:value="addData.email" :placeholder="t('please_enter') + t('email')" />
         </n-form-item>
         <n-form-item :label="t('phone_number')">
-          <n-input v-model:value="addData.mobile" :placeholder="t('placeholder')" />
+          <n-input v-model:value="addData.mobile" :placeholder="t('please_enter') + t('phone_number')" />
         </n-form-item>
       </n-form>
     </n-scrollbar>
     <template #footer>
       <div style="display: flex; justify-content: space-between; gap: 10px">
         <n-button style="width: 50%" type="tertiary" secondary @click="showModal = false">取消</n-button>
-        <n-button style="width: 50%" type="primary" secondary @click="showModal = false">保存</n-button>
+        <n-button style="width: 50%" type="primary" secondary @click="save(formRef)">保存</n-button>
       </div>
     </template>
   </n-modal>
@@ -68,15 +74,37 @@ import { i18n } from '@/i18n'
 import UserVar from '@/views/composables/drawer/userDrawer/userVar'
 import { AlertIze } from '@/customize'
 import { DragDrop } from '@vicons/tabler'
+import apis from '@/services/apis'
+import paging from '@/hooks/usePaging'
+import { userStore } from '@/stores/user'
 
 const { t } = i18n.global
-const { formRef, rules } = UserVar()
-const { addData, warn, showWarn } = useBase()
+const { pageNum, pageSize } = paging
+const { formRef, rules, input } = UserVar()
+const { performAction, addData, warn, showWarn } = useBase()
+const userInfoStore = userStore()
+const tenantId = userInfoStore.getTenantId
 const { title } = defineProps<{
   title: string
 }>()
 const showModal = ref(false)
 defineExpose({ showModal })
+
+/*保存*/
+const save = async (form: any) => {
+  /*!注入租户id*/
+  const newData = { ...form.model, tenantId }
+  await performAction(
+    form,
+    () => apis.addUser(newData),
+    () =>
+      apis.userPage({
+        pageSize: pageSize.value,
+        pageNum: pageNum.value,
+        name: input.value
+      })
+  )
+}
 /*解决vue-drag-resize输入框无法选择的问题*/
 // const clickHandle = (e) => {
 //   console.log(e)
@@ -87,8 +115,36 @@ defineExpose({ showModal })
 </script>
 
 <style scoped>
+/*上传框样式*/
+:deep(.n-upload-file-list .n-upload-file.n-upload-file--image-card-type),
+:deep(.n-upload-trigger.n-upload-trigger--image-card .n-upload-dragger) {
+  border-radius: 10px;
+}
 /*输入框样式*/
 :deep(.n-input) {
   border-radius: 8px;
 }
+/*选择框样式*/
+:deep(.n-base-selection) {
+  border-radius: 8px;
+}
+:deep(.slide-left-enter-active),
+:deep(.slide-left-leave-active) {
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+:deep(.slide-left-enter-from),
+:deep(.slide-left-leave-to) {
+  position: absolute;
+  opacity: 0;
+}
+
+:deep(.slide-left-enter-from) {
+  transform: translateX(-10px);
+}
+
+:deep(.slide-left-leave-to) {
+  transform: translateX(10px);
+}
+/*end*/
 </style>

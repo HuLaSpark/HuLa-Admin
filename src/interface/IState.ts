@@ -2,10 +2,11 @@ interface IState {
   loginInfo: {
     sysUser: {
       id: number
-      uid: any
+      uid: string
+      tenantId: string
       role: string
     }
-    tag: string
+    companyName: string
     token: string
     menus: []
     auths: [{ auth: string }]

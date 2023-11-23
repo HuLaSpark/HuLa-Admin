@@ -13,8 +13,11 @@ const selectData = ref<Array<SelectOption | SelectGroupOption>>([])
 //   form: {} as User
 // })
 /*校验规则*/
+// TODO 角色校验规则待完善 (nyh-2023-11-24 07:40:26)
 const rules = reactive({
   userName: { required: true, message: t('user_name') + t('no_null'), trigger: 'blur' },
+  password: { required: true, message: t('password') + t('no_null'), trigger: 'blur' },
+  role: { required: true, message: t('role') + t('no_null'), trigger: 'blur' },
   email: { required: true, message: t('email') + t('no_null'), trigger: 'blur' }
 })
 

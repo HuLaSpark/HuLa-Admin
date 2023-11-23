@@ -1,7 +1,7 @@
 <template>
   <div :class="collapsed ? 'header-unfold' : 'header-shrink'">
     <!--标签页-->
-    <tab />
+    <Tab />
 
     <div class="operation-list">
       <!--全局搜索-->
@@ -9,30 +9,23 @@
         <GlobalSearch />
       </div>
       <n-divider vertical />
-      <!--首页-->
+      <!--清理缓存-->
       <div class="operation-list-box">
         <n-tooltip trigger="hover" style="padding: 5px 8px 5px 8px">
           <template #trigger>
-            <n-icon :size="24"><DeviceDesktop /></n-icon>
+            <n-icon :size="24"><Trash /></n-icon>
           </template>
-          {{ t('home') }}
+          {{ t('delete_cache') }}
         </n-tooltip>
       </div>
       <n-divider vertical />
       <!--全屏-->
       <div class="operation-list-box">
-        <n-tooltip v-if="fullIcon" trigger="hover" style="padding: 5px 8px 5px 8px">
+        <n-tooltip trigger="hover" style="padding: 5px 8px 5px 8px">
           <template #trigger>
-            <n-icon :size="24" @click="handleMaximize" :component="ArrowsMinimize" />
+            <n-icon :size="24" @click="handleMaximize" :component="fullIcon ? ArrowsMinimize : ArrowsMaximize" />
           </template>
-          {{ t('small_screen') }}
-        </n-tooltip>
-
-        <n-tooltip v-else trigger="hover" style="padding: 5px 8px 5px 8px">
-          <template #trigger>
-            <n-icon :size="24" @click="handleMaximize" :component="ArrowsMaximize" />
-          </template>
-          {{ t('full_screen') }}
+          {{ fullIcon ? t('small_screen') : t('full_screen') }}
         </n-tooltip>
       </div>
       <n-divider vertical />
@@ -49,13 +42,16 @@
         </n-tooltip>
       </div>
       <n-divider vertical />
-      <!--清理缓存-->
+      <!--消息-->
       <div class="operation-list-box">
         <n-tooltip trigger="hover" style="padding: 5px 8px 5px 8px">
           <template #trigger>
-            <n-icon :size="24"><Trash /></n-icon>
+            <div style="padding-right: 10px; display: flex; align-items: center">
+              <n-icon :size="24" :component="Bell" />
+              <n-badge style="position: absolute; transform: scale(0.75)" :value="1" :max="99" :offset="[28, -9]" />
+            </div>
           </template>
-          {{ t('delete_cache') }}
+          {{ t('msg') }}
         </n-tooltip>
       </div>
       <n-divider vertical />
@@ -70,8 +66,8 @@
           <template #header>
             <n-text depth="1">
               <n-space vertical>
-                <n-tag class="info-tag" size="small" round :bordered="false" :type="judgmentAuth(role)">
-                  {{ tag }}
+                <n-tag class="info-tag" size="small" round :bordered="false" type="success">
+                  {{ userInfoStore.getCompanyName }}
                 </n-tag>
                 <div class="info-content">
                   <n-avatar :size="64" :src="url" style="border-radius: 8px" />
@@ -130,32 +126,26 @@
 import { mainStore } from '@/stores/main'
 import { storeToRefs } from 'pinia'
 import { userStore } from '@/stores/user'
-import { DeviceDesktop, ArrowsMaximize, ArrowsMinimize, Trash, Terminal2, Power, AlertTriangle } from '@vicons/tabler'
+import { Bell, ArrowsMaximize, ArrowsMinimize, Trash, Terminal2, Power, AlertTriangle } from '@vicons/tabler'
 import { i18n } from '@/i18n'
-import Language from '@/components/Language/index.vue'
-import Terminal from '@/components/terminal/index.vue'
 import Settings from '@/layout/common/global-settings/index.vue'
 import screenfull from 'screenfull'
 import { useLogin } from '@/hooks/useLogin'
-import { useAuth } from '@/hooks/useAuth'
 import { Loading } from 'notiflix'
 import { delay } from 'lodash-es'
 import GlobalSearch from '@/layout/common/global-search/index.vue'
 import { networkIcon } from '@/services/request'
-import tab from '@/components/tab/index.vue'
 
 const { t } = i18n.global
 const message = useMessage()
 const store = mainStore()
 const userInfoStore = userStore()
 const user = userInfoStore.getUser
-const tag = userInfoStore.getTag
-const { uid, userName, email, role, url } = user
+const { uid, userName, email, url } = user
 const { BGC, TEXT_COLOR, BGC_OTHER } = storeToRefs(store)
 const showModal = ref(false)
 const fullIcon = ref(false)
 const { navigator } = window
-const { judgmentAuth } = useAuth()
 
 /*获取父组件传来的值*/
 const { collapsed } = defineProps<{
