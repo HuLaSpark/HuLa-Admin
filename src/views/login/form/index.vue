@@ -42,7 +42,7 @@
           <n-form-item path="userName" :label="t('un_or_el')" label-style="font-size: 14px;color: #cccccc">
             <n-input
               clearable
-              :allow-input="noSideSpace"
+              :allow-input="Common.noSideSpace"
               @keydown.enter="SignIn(formRef)"
               v-model:value="ruleForm.userName"
               style="border-radius: 8px"
@@ -70,7 +70,7 @@
               show-password-on="mousedown"
               type="password"
               clearable
-              :allow-input="noSideSpace"
+              :allow-input="Common.noSideSpace"
               :loading="loadingPaw"
               @keydown.enter="SignIn(formRef)"
               v-model:value="ruleForm.password"
@@ -177,6 +177,7 @@ import { delay } from 'lodash-es'
 import apis from '@/services/apis'
 import type { SelectGroupOption, SelectOption, SelectRenderTag, SelectRenderLabel } from 'naive-ui'
 import { NText, NAvatar } from 'naive-ui'
+import { Common } from '@/utils/Common'
 
 const { t } = i18n.global
 const store = mainStore()
@@ -255,9 +256,9 @@ const renderLabel: SelectRenderLabel = (option) => {
   )
 }
 /*处理输入空格事件*/
-const noSideSpace = (value: string) => {
-  return !value.startsWith(' ') && !value.endsWith(' ')
-}
+// const noSideSpace = (value: string) => {
+//   return !value.startsWith(' ') && !value.endsWith(' ')
+// }
 
 type Itenant = {
   companyName: string

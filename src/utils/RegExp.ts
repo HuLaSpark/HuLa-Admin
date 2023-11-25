@@ -1,4 +1,4 @@
-export class RegExpUtils {
+export class RegExp {
   /**
    * 使用正则来校验邮箱是否正确
    * @param email 邮箱

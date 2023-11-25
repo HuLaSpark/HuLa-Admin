@@ -6,10 +6,15 @@
         {{ t('add') }}
       </n-button>
 
-      <n-button style="border-radius: 8px" secondary type="error" @click="handleBatch">
-        <template #icon><n-icon :component="PlaylistX" /></template>
-        {{ t('delete_batch') }}
-      </n-button>
+      <n-popconfirm placement="bottom" @positive-click="handleBatch">
+        <template #trigger>
+          <n-button style="border-radius: 8px" secondary type="error">
+            <template #icon><n-icon :component="PlaylistX" /></template>
+            {{ t('delete_batch') }}
+          </n-button>
+        </template>
+        {{ t('confirm_delete_batch') }}
+      </n-popconfirm>
 
       <n-input
         :maxlength="10"
@@ -82,6 +87,8 @@ import userVar from '@/views/composables/drawer/userDrawer/userVar'
 import { userTable } from '@/views/composables/table/userTable'
 import { userModal } from '@/views/composables/modal/index'
 import { useDebounceFn } from '@vueuse/core'
+import { Report } from 'notiflix'
+import { RCodeEnum } from '@/enums'
 
 const { t } = i18n.global
 const { pageNum, pageSize } = paging
@@ -89,7 +96,7 @@ const loadingBarTargetRef = ref()
 const title = ref('添加用户')
 const { input } = userVar()
 const { pagingLoad, tableData, loading, NoAccess, contentData, showModal } = useBase()
-const { handleCheck, columns, statusColumn, pagination } = userTable(tableData)
+const { handleCheck, columns, statusColumn, pagination, checkedRowKeys } = userTable(tableData)
 
 /**使用defineComponent重新构建组件*/
 const LoadingBarTrigger = defineComponent({
@@ -127,8 +134,33 @@ const handleAdd = () => {
 }
 
 /*批量删除事件*/
-const handleBatch = () => {
-  console.log('批量删除')
+const handleBatch = async () => {
+  if (checkedRowKeys.value.length === 0) {
+    Report.failure(t('delete_batch_error'), t('batch_error_msg'), t('close'), {
+      titleFontSize: '18px',
+      messageFontSize: '16px'
+    })
+    return
+  }
+  const uids = tableData.value
+    .filter((item: any) => checkedRowKeys.value.includes(item.id))
+    .map((item: any) => item.uid)
+  const data = { ids: checkedRowKeys.value, uids }
+  const res = await apis.batchDeleteUsers(data)
+  if (res.code !== RCodeEnum.OK) {
+    return window.$message.error(res.code === RCodeEnum.PARAM_ERROR ? (res.data as any)[0] : res.msg)
+  }
+  await pagingLoad(() =>
+    apis.userPage({
+      pageSize: pageSize.value,
+      pageNum: pageNum.value,
+      userName: input.value
+    })
+  ).then(() => {
+    window.$message.success(res.msg)
+    /*初始化选中的行*/
+    checkedRowKeys.value.length = 0
+  })
 }
 
 /*搜索事件*/

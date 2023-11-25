@@ -2,7 +2,7 @@ import { WithNameQuery } from '@/api/user'
 import typeState from '@/hooks/useState'
 import { ref } from 'vue'
 import { i18n } from '@/i18n'
-import { RegExpUtils } from '@/utils/RegExpUtils'
+import { RegExp } from '@/utils/RegExp'
 
 const { AddOrEdit, tagType1, tagType2, tagType3, passwordComplexity, complexityShow, loadingPaw, ValidationStatus } =
   typeState
@@ -18,8 +18,8 @@ const { t } = i18n.global
 const validateLoginUsername = (rule: any, value: any, callback: any) => {
   if (!value) {
     callback(new Error(t('input_username')))
-  } else if (!RegExpUtils.isEngORNub(value) || value.length > 12) {
-    callback(new Error(t(!RegExpUtils.isEngORNub(value) ? 'is_standard' : 'UN_EX_limit')))
+  } else if (!RegExp.isEngORNub(value) || value.length > 12) {
+    callback(new Error(t(!RegExp.isEngORNub(value) ? 'is_standard' : 'UN_EX_limit')))
   } else {
     callback()
   }
@@ -127,7 +127,7 @@ const validateIsNull = (rule: any, value: any, callback: any) => {
 const validateEmail = (rule: any, value: any, callback: any) => {
   if (value === '' || value === undefined) {
     callback(new Error(t('no_null')))
-  } else if (!RegExpUtils.isEmail(value)) {
+  } else if (!RegExp.isEmail(value)) {
     callback(new Error(t('check_email')))
   } else {
     callback()
@@ -140,7 +140,7 @@ const validateEmail = (rule: any, value: any, callback: any) => {
  */
 const pawComplexity = (val: any) => {
   complexityShow.value = true
-  if (RegExpUtils.isPasswordComplex(val)) {
+  if (RegExp.isPasswordComplex(val)) {
     passwordComplexity.value = t('complexity_st')
     tagType1.value = 'success'
     tagType2.value = 'success'

@@ -18,7 +18,7 @@ const rules = reactive({
   userName: { required: true, message: t('user_name') + t('no_null'), trigger: 'blur' },
   password: { required: true, message: t('password') + t('no_null'), trigger: 'blur' },
   role: { required: true, message: t('role_flag') + t('no_null'), trigger: ['blur', 'change'] },
-  email: { required: true, message: t('email') + t('no_null'), trigger: 'blur' }
+  email: { required: true, message: t('email') + t('no_null'), trigger: ['blur', 'change'] }
 })
 
 export default () => ({

@@ -40,30 +40,45 @@
         :rules="rules"
         style="padding: 10px 0">
         <n-form-item :label="t('user_name')" path="userName">
-          <n-input v-model:value="contentData.userName" :placeholder="t('please_enter') + t('user_name')" />
+          <n-input
+            :allow-input="Common.noSideSpace"
+            v-model:value="contentData.userName"
+            :placeholder="t('please_enter') + t('user_name')" />
         </n-form-item>
-        <n-form-item :label="t('password')" path="password">
+        <n-form-item :allow-input="Common.noSideSpace" :label="t('password')" path="password">
           <n-input v-model:value="contentData.password" :placeholder="t('please_enter') + t('password')" />
         </n-form-item>
         <n-form-item :label="t('role_flag')" path="role">
           <RoleOptions />
         </n-form-item>
         <n-form-item :label="t('email')" path="email">
-          <n-input v-model:value="contentData.email" :placeholder="t('please_enter') + t('email')" />
+          <n-auto-complete
+            clearable
+            v-model:value="contentData.email"
+            :options="emailOptions"
+            :placeholder="t('please_enter') + t('email')" />
         </n-form-item>
         <!--不是必填的选项进行隐藏-->
-        <n-space justify="center" v-if="!showMore" @click="showMore = true">
-          <n-space vertical align="center" style="cursor: pointer; color: #afabab">
+        <n-space justify="center" v-if="!showMore">
+          <n-space style="cursor: pointer; color: #afabab" @click="showMore = true">
             <span>展开更多选项</span>
             <n-icon size="22" :component="Badges" />
           </n-space>
         </n-space>
-        <n-form-item v-show="showMore" :label="t('nick_name')">
-          <n-input v-model:value="contentData.nickName" :placeholder="t('please_enter') + t('nick_name')" />
-        </n-form-item>
-        <n-form-item v-show="showMore" :label="t('phone_number')">
-          <n-input v-model:value="contentData.mobile" :placeholder="t('please_enter') + t('phone_number')" />
-        </n-form-item>
+        <n-collapse-transition v-show="showMore">
+          <n-form-item :label="t('nick_name')">
+            <n-input v-model:value="contentData.nickName" :placeholder="t('please_enter') + t('nick_name')" />
+          </n-form-item>
+          <n-form-item :label="t('phone_number')">
+            <n-input v-model:value="contentData.mobile" :placeholder="t('please_enter') + t('phone_number')" />
+          </n-form-item>
+          <n-space justify="center">
+            <n-space style="cursor: pointer; color: #afabab" @click="showMore = false">
+              <span>收起</span>
+              <n-icon size="22" :component="ArrowBigUpLines" />
+            </n-space>
+          </n-space>
+        </n-collapse-transition>
       </n-form>
     </n-scrollbar>
     <template #footer>
@@ -85,11 +100,12 @@ import { useBase } from '@/hooks/useBase'
 import { i18n } from '@/i18n'
 import UserVar from '@/views/composables/drawer/userDrawer/userVar'
 import { AlertIze } from '@/customize'
-import { DragDrop, Badges } from '@vicons/tabler'
+import { DragDrop, Badges, ArrowBigUpLines } from '@vicons/tabler'
 import apis from '@/services/apis'
 import paging from '@/hooks/usePaging'
 import { userStore } from '@/stores/user'
 import { NIcon } from 'naive-ui'
+import { Common } from '@/utils/Common'
 
 const { t } = i18n.global
 const { pageNum, pageSize } = paging
@@ -99,6 +115,22 @@ const { performAction, contentData, warn, showWarn, butText, loadingBut, butType
 const userInfoStore = userStore()
 const tenantId = userInfoStore.getTenantId
 const showMore = ref(false)
+/*邮箱字段自动填充*/
+const emailOptions = computed(() => {
+  return [
+    ['谷歌', '@gmail.com'],
+    ['网易', '@163.com'],
+    ['腾讯', '@qq.com']
+  ].map((emailInfo) => {
+    const email = contentData.value.email || ''
+    return {
+      type: 'group',
+      label: emailInfo[0],
+      key: emailInfo[0],
+      children: [email.split('@')[0] + emailInfo[1]]
+    }
+  })
+})
 const { title } = defineProps<{
   title: string
 }>()

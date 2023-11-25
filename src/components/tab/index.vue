@@ -31,7 +31,7 @@ import * as vicons from '@vicons/tabler'
 
 const store = mainStore()
 const tabsStore = tabs()
-const { BGC, TEXT_COLOR } = storeToRefs(store)
+const { BGC, TEXT_COLOR, TAB_ACTIVE_BGC, HOVER_BGC } = storeToRefs(store)
 const { data } = storeToRefs(tabsStore)
 const currentPath = computed(() => router.currentRoute.value.path)
 
@@ -82,19 +82,20 @@ onMounted(() => {
     }
   }
   .del {
-    color: rgba(60, 60, 60);
+    color: v-bind(TEXT_COLOR);
     border-radius: 50px;
     transition: 0.5s;
     &:hover {
-      background: rgba(60, 60, 60, 0.2);
+      background: v-bind(HOVER_BGC);
     }
   }
 }
 /*当前选中页面样式*/
 .active-tab {
   color: #189f57;
-  background: #e5f3ec;
+  background: v-bind(TAB_ACTIVE_BGC);
 }
+/*end*/
 @keyframes twinkle {
   0% {
     transform: scale(0);
