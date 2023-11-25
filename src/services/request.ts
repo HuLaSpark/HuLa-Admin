@@ -4,7 +4,6 @@ import router from '@/router'
 import { nextTick } from 'vue'
 import { RCodeEnum } from '@/enums'
 import { Report } from 'notiflix'
-import { handleVerify } from '@/components/modal/timeout'
 
 //加载配置
 // let loadingInstance: any,
@@ -61,6 +60,7 @@ export const createAxios = (config?: AxiosRequestConfig): AxiosInstance => {
         // 设置请求头
         config.headers['Authorization'] = token
       }
+      networkIcon.value = 'success'
       return config
     },
     function (error) {
@@ -171,8 +171,14 @@ export const createAxios = (config?: AxiosRequestConfig): AxiosInstance => {
           error.message = '连接服务器失败'
         }
       }
+      /*提示*/
       networkIcon.value = 'error'
-      //提示
+      if (error.response.status === 500) {
+        Report.failure(error.message, error.response.statusText, '知道了', {
+          titleFontSize: '18px',
+          messageFontSize: '16px'
+        })
+      }
       window.$message.error(error.message)
       /***** 处理结束 *****/
       return Promise.resolve(error.response)

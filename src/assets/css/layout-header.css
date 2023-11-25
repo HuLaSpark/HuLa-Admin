@@ -1,25 +1,23 @@
 .header-unfold {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   width: calc(100vw - 110px);
-  height: 50px;
   border-radius: 10px;
-  margin: 10px;
+  margin: 10px 10px 5px 10px;
 }
 .header-shrink {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   width: calc(100vw - 240px);
-  height: 50px;
   border-radius: 10px;
-  margin: 10px;
+  margin: 10px 10px 5px 10px;
 }
 .operation-list {
   border-radius: 10px;
-  height: 50px;
-  line-height: 50px;
+  height: 55px;
+  line-height: 55px;
   display: flex;
   align-items: center;
   justify-content: flex-end;
