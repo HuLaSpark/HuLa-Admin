@@ -89,20 +89,21 @@ export const createAxios = (config?: AxiosRequestConfig): AxiosInstance => {
       if (res.code === RCodeEnum.UNAUTHORIZED) {
         window.$message.error(res.msg)
       }
-      /*判断响应体中的错误码，如果是FREEZE则是登录时间内长时间不操作需要验证登录，如果是RENEW_PAW_ERROR是续签时候密码错误*/
+      // TODO 暂时除去手动续签的方法和校验验证码 (nyh-2023-11-24 23:36:03)
+      // /*判断响应体中的错误码，如果是FREEZE则是登录时间内长时间不操作需要验证登录，如果是RENEW_PAW_ERROR是续签时候密码错误*/
+      // if (res.code === RCodeEnum.FREEZE) {
+      //   /*传入错误信息*/
+      //   /*window.$message.error(res.msg)*/
+      //   Report.warning(res.msg, res.code, '怎么办?', () => {
+      //     handleVerify(res.msg)
+      //   })
+      // }
+      // /*如果密码错误返回错误信息*/
+      // if (res.code === RCodeEnum.RENEW_PAW_ERROR) {
+      //   handleVerify(res.msg)
+      // }
+      //判断响应体中的错误码，如果是U00006则需要重新登录
       if (res.code === RCodeEnum.FREEZE) {
-        /*传入错误信息*/
-        /*window.$message.error(res.msg)*/
-        Report.warning(res.msg, res.code, '怎么办?', () => {
-          handleVerify(res.msg)
-        })
-      }
-      /*如果密码错误返回错误信息*/
-      if (res.code === RCodeEnum.RENEW_PAW_ERROR) {
-        handleVerify(res.msg)
-      }
-      //判断响应体中的错误码，如果是401则需要重新登录
-      if (res.code === RCodeEnum.FAIL) {
         nextTick(() => {
           window.$message.error(res.msg)
         }).then(() => {

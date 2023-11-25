@@ -126,28 +126,8 @@ searchStores.searchDB.length().then((val) => {
     })
   }
 })
-/*使用vueUse中的防抖*/
-const handleSearch = useDebounceFn(search, 300)
-
-const show = computed({
-  get() {
-    return props.value
-  },
-  set(val: boolean) {
-    emit('update:value', val)
-  }
-})
-
-watch(show, async (val) => {
-  if (val) {
-    /** 自动聚焦 */
-    await nextTick()
-    inputRef.value?.focus()
-  }
-})
-
-/** 查询 */
-function search() {
+/*使用vueUse中的防抖进行查询*/
+const handleSearch = useDebounceFn(() => {
   /*清空值的时候还原*/
   if (!keyword.value) {
     NOT_FOUND.value = false
@@ -183,7 +163,24 @@ function search() {
     activePath.value = ''
     activeName.value = ''
   }
-}
+}, 300)
+
+const show = computed({
+  get() {
+    return props.value
+  },
+  set(val: boolean) {
+    emit('update:value', val)
+  }
+})
+
+watch(show, async (val) => {
+  if (val) {
+    /** 自动聚焦 */
+    await nextTick()
+    inputRef.value?.focus()
+  }
+})
 
 const handleClose = () => {
   NOT_FOUND.value = false

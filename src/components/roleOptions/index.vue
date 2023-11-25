@@ -1,7 +1,7 @@
 <template>
   <n-select
     :render-tag="renderTag"
-    v-model:value="editedData.role"
+    v-model:value="contentData.role"
     v-model:show="showSelect"
     :placeholder="t('select')"
     :render-label="renderLabel"
@@ -26,7 +26,6 @@ import type { VNodeChild } from 'vue'
 import UserVar from '@/views/composables/drawer/userDrawer/userVar'
 import { LetterM, LetterR, LetterU, UserCheck, UserSearch } from '@vicons/tabler'
 import { i18n } from '@/i18n'
-import { useBase } from '@/hooks/useBase'
 import { delay } from 'lodash-es'
 import apis from '@/services/apis'
 import { Role } from '@/services/types'
@@ -34,10 +33,11 @@ import { userStore } from '@/stores/user'
 import { RoleEnum, RoleFixEnum } from '@/enums'
 import { renderMessage } from '@/customize'
 import { useAuth } from '@/hooks/useAuth'
+import { useBase } from '@/hooks/useBase'
 
 const { t } = i18n.global
 const { showSelect, loadingSelect, selectData } = UserVar()
-const { editedData } = useBase()
+const { contentData } = useBase()
 const { judgmentRole } = useAuth()
 
 /*点击选中框后进行异步查询选项框内容*/

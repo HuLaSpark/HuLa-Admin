@@ -36,33 +36,45 @@
         ref="formRef"
         label-placement="left"
         label-width="auto"
-        :model="addData"
+        :model="contentData"
         :rules="rules"
         style="padding: 10px 0">
         <n-form-item :label="t('user_name')" path="userName">
-          <n-input v-model:value="addData.userName" :placeholder="t('please_enter') + t('user_name')" />
-        </n-form-item>
-        <n-form-item :label="t('nick_name')">
-          <n-input v-model:value="addData.nickName" :placeholder="t('please_enter') + t('nick_name')" />
+          <n-input v-model:value="contentData.userName" :placeholder="t('please_enter') + t('user_name')" />
         </n-form-item>
         <n-form-item :label="t('password')" path="password">
-          <n-input v-model:value="addData.password" :placeholder="t('please_enter') + t('password')" />
+          <n-input v-model:value="contentData.password" :placeholder="t('please_enter') + t('password')" />
         </n-form-item>
         <n-form-item :label="t('role_flag')" path="role">
           <RoleOptions />
         </n-form-item>
         <n-form-item :label="t('email')" path="email">
-          <n-input v-model:value="addData.email" :placeholder="t('please_enter') + t('email')" />
+          <n-input v-model:value="contentData.email" :placeholder="t('please_enter') + t('email')" />
         </n-form-item>
-        <n-form-item :label="t('phone_number')">
-          <n-input v-model:value="addData.mobile" :placeholder="t('please_enter') + t('phone_number')" />
+        <!--不是必填的选项进行隐藏-->
+        <n-space justify="center" v-if="!showMore" @click="showMore = true">
+          <n-space vertical align="center" style="cursor: pointer; color: #afabab">
+            <span>展开更多选项</span>
+            <n-icon size="22" :component="Badges" />
+          </n-space>
+        </n-space>
+        <n-form-item v-show="showMore" :label="t('nick_name')">
+          <n-input v-model:value="contentData.nickName" :placeholder="t('please_enter') + t('nick_name')" />
+        </n-form-item>
+        <n-form-item v-show="showMore" :label="t('phone_number')">
+          <n-input v-model:value="contentData.mobile" :placeholder="t('please_enter') + t('phone_number')" />
         </n-form-item>
       </n-form>
     </n-scrollbar>
     <template #footer>
       <div style="display: flex; justify-content: space-between; gap: 10px">
         <n-button style="width: 50%" type="tertiary" secondary @click="showModal = false">取消</n-button>
-        <n-button style="width: 50%" type="primary" secondary @click="save(formRef)">保存</n-button>
+        <n-button style="width: 50%" :type="butType" secondary :loading="loadingBut" @click="save(formRef)">
+          <template #icon>
+            <n-icon v-if="iconShow" :component="butIcon" />
+          </template>
+          {{ butText }}
+        </n-button>
       </div>
     </template>
   </n-modal>
@@ -73,22 +85,23 @@ import { useBase } from '@/hooks/useBase'
 import { i18n } from '@/i18n'
 import UserVar from '@/views/composables/drawer/userDrawer/userVar'
 import { AlertIze } from '@/customize'
-import { DragDrop } from '@vicons/tabler'
+import { DragDrop, Badges } from '@vicons/tabler'
 import apis from '@/services/apis'
 import paging from '@/hooks/usePaging'
 import { userStore } from '@/stores/user'
+import { NIcon } from 'naive-ui'
 
 const { t } = i18n.global
 const { pageNum, pageSize } = paging
 const { formRef, rules, input } = UserVar()
-const { performAction, addData, warn, showWarn } = useBase()
+const { performAction, contentData, warn, showWarn, butText, loadingBut, butType, butIcon, iconShow, showModal } =
+  useBase()
 const userInfoStore = userStore()
 const tenantId = userInfoStore.getTenantId
+const showMore = ref(false)
 const { title } = defineProps<{
   title: string
 }>()
-const showModal = ref(false)
-defineExpose({ showModal })
 
 /*保存*/
 const save = async (form: any) => {
@@ -101,7 +114,7 @@ const save = async (form: any) => {
       apis.userPage({
         pageSize: pageSize.value,
         pageNum: pageNum.value,
-        name: input.value
+        userName: input.value
       })
   )
 }

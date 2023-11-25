@@ -203,7 +203,7 @@ const menuOptions: MenuOption[] = menus.map((menu: Menu) => {
 }
 :deep(.n-menu .n-menu-item-content:hover .n-menu-item-content__icon) {
   color: #189f57;
-  transform: scale(1.2);
+  animation: twinkle 0.3s ease-in-out;
 }
 :deep(.n-menu .n-menu-item-content .n-menu-item-content-header a):hover {
   color: #189f57;
@@ -216,4 +216,15 @@ const menuOptions: MenuOption[] = menus.map((menu: Menu) => {
   width: 0;
 }
 /*end*/
+@keyframes twinkle {
+  0% {
+    transform: scale(0);
+  }
+  80% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
 </style>

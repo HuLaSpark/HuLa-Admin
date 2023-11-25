@@ -30,7 +30,7 @@ export type Menu = {
 export type parameter = {
   pageNum: number
   pageSize: number
-  name: string
+  userName: string
 }
 /*登录类型*/
 export type login = {
@@ -55,6 +55,7 @@ export type User = {
 /*分页用户*/
 export type pageUser = {
   id: number
+  uid: string
   userName: string
   nickName: string
   role: string

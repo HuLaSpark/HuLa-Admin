@@ -18,13 +18,13 @@ const { pageNum, pageSize, total } = paging
 /*解构状态类型参数*/
 const { loading } = typeState
 /*编辑框中的数据*/
-const editedData = ref(<any>{})
-/*新增的数据*/
-const addData = ref(<any>{})
+const contentData = ref(<any>{})
 /*没有进行编辑时的数据*/
 const rawData = ref(<any>{})
 /*抽屉*/
-const drawerShow = ref<boolean>(false)
+const showDrawer = ref<boolean>(false)
+/*模态框*/
+const showModal = ref(false)
 
 export const useBase = () => {
   /*全局通用按钮异常提示*/
@@ -34,13 +34,14 @@ export const useBase = () => {
   const iconShow = ref(false)
   const warn = ref()
   const showWarn = ref(false)
+  /*end*/
   const loadingBut = ref<boolean>(false)
 
   /*监听国际化切换时实时切换语言*/
   watchEffect(() => {
     warn.value = t('alert_warning_description')
     /*监听表单是否被修改*/
-    if (!isEqual(rawData.value, editedData.value)) {
+    if (!isEqual(rawData.value, contentData.value)) {
       showWarn.value = false
     }
   })
@@ -89,7 +90,7 @@ export const useBase = () => {
     const res = await fnPage({
       pageNum: pageNum.value,
       pageSize: pageSize.value,
-      name: input.value
+      userName: input.value
     })
     if (res.code !== RCodeEnum.OK) {
       loadingBar.error()
@@ -105,7 +106,7 @@ export const useBase = () => {
       if (editId) {
         const data = tableData.value.find((item: any) => item.id === editId)
         Object.assign(rawData.value, data)
-        Object.assign(editedData.value, data)
+        Object.assign(contentData.value, data)
       }
       total.value = res.data.total
       nextTick(() => {
@@ -116,9 +117,9 @@ export const useBase = () => {
   }
 
   /**
-   * 通用CRUD函数
+   * 通用增加和修改函数
    * @param formEl 表单校验参数
-   * @param requestFn CRUD请求函数
+   * @param requestFn 请求函数
    * @param fnPage 分页加载函数
    * @param successMsg 成功提示
    * @param errorMsg 错误提示
@@ -142,9 +143,11 @@ export const useBase = () => {
           return throwError(errorText)
         }
         successMsg ? window.$message.success(successMsg) : window.$message.success(res.msg)
-        await pagingLoad(fnPage, window.$loadingBar, formEl.model.id)
-        textChange(t('save_success'), CircleCheck)
-        showWarn.value = false
+        await pagingLoad(fnPage, window.$loadingBar, formEl.model.id).then(() => {
+          textChange(t('save_success'), CircleCheck)
+          showWarn.value = false
+          showModal.value = false
+        })
       })
       .catch(() => {
         textChange(t('save_error'), CircleX, 'error')
@@ -182,8 +185,7 @@ export const useBase = () => {
     tableRowClassName,
     pagingLoad,
     textChange,
-    editedData,
-    addData,
+    contentData,
     rawData,
     butText,
     butType,
@@ -191,8 +193,9 @@ export const useBase = () => {
     iconShow,
     showWarn,
     warn,
-    drawerShow,
+    showDrawer,
     loadingBut,
+    showModal,
     tableData,
     total,
     loading,

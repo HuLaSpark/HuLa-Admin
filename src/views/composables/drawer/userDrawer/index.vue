@@ -2,7 +2,7 @@
   <!--抽屉-->
   <n-drawer
     to="#drawer-target"
-    v-model:show="drawerShow"
+    v-model:show="showDrawer"
     :width="350"
     :on-mask-click="clone"
     :on-esc="clone"
@@ -24,38 +24,38 @@
         <n-upload style="border-radius: 10px" list-type="image-card" :max="1">点击上传</n-upload>
       </n-space>
 
-      <n-form ref="formRef" :model="editedData" :rules="rules" style="padding: 10px 0">
+      <n-form ref="formRef" :model="contentData" :rules="rules" style="padding: 10px 0">
         <n-form-item :label="t('user_name')" path="userName">
-          <n-input v-model:value="editedData.userName" :placeholder="t('placeholder')" />
+          <n-input v-model:value="contentData.userName" :placeholder="t('placeholder')" />
         </n-form-item>
         <n-form-item :label="t('nick_name')">
           <n-input
-            :status="handleStatus(editedData.nickName)"
-            v-model:value="editedData.nickName"
+            :status="handleStatus(contentData.nickName)"
+            v-model:value="contentData.nickName"
             :placeholder="t('placeholder')" />
         </n-form-item>
         <n-form-item :label="t('role_flag')" path="role">
           <RoleOptions />
         </n-form-item>
         <n-form-item :label="t('email')" path="email">
-          <n-input disabled v-model:value="editedData.email" :placeholder="t('placeholder')" />
+          <n-input disabled v-model:value="contentData.email" :placeholder="t('placeholder')" />
         </n-form-item>
         <n-form-item :label="t('phone_number')">
-          <n-input disabled v-model:value="editedData.mobile" :placeholder="t('placeholder')" />
+          <n-input disabled v-model:value="contentData.mobile" :placeholder="t('placeholder')" />
         </n-form-item>
 
         <n-space vertical :size="20">
           <n-space align="center">
             <span>创建于：</span>
             <n-tag :bordered="false" style="border-radius: 10px" type="primary">
-              {{ handRelativeTime(editedData.createTime) }}
+              {{ handRelativeTime(contentData.createTime) }}
             </n-tag>
           </n-space>
 
           <n-space align="center">
             <span>最后一次活动：</span>
             <n-tag :bordered="false" style="border-radius: 10px" type="info">
-              {{ handRelativeTime(editedData.updateTime) }}
+              {{ handRelativeTime(contentData.updateTime) }}
             </n-tag>
           </n-space>
         </n-space>
@@ -112,14 +112,14 @@ const { input, showModal, formRef, rules } = UserVar()
 const {
   performAction,
   textChange,
-  editedData,
+  contentData,
   rawData,
   butText,
   butType,
   butIcon,
   iconShow,
   warn,
-  drawerShow,
+  showDrawer,
   showWarn,
   loadingBut
 } = useBase()
@@ -131,7 +131,7 @@ const handleStatus = (status: any) => {
 /*保存事件*/
 const saveData = async (form: any) => {
   // 判断是否修改了数据
-  if (isEqual(rawData.value, editedData.value)) {
+  if (isEqual(rawData.value, contentData.value)) {
     showWarn.value = true
     warn.value = t('alert_warning_description')
     textChange(t('save_warning'), AlertCircle, 'warning')
@@ -139,16 +139,16 @@ const saveData = async (form: any) => {
   }
   await performAction(
     form,
-    () => apis.editUser(editedData.value),
+    () => apis.editUser(contentData.value),
     () =>
       apis.userPage({
         pageSize: pageSize.value,
         pageNum: pageNum.value,
-        name: input.value
+        userName: input.value
       })
   )
   // 清空临时对象
-  // editedData.value = {} as pageUser
+  // contentData.value = {} as pageUser
 }
 /*新增事件*/
 const AddInfo = async (formEl: any) => {
@@ -156,12 +156,12 @@ const AddInfo = async (formEl: any) => {
   const addRoleErrorMessage = '添加失败'
   await performAction(
     formEl,
-    () => apis.addUser(editedData as any),
+    () => apis.addUser(contentData as any),
     () =>
       apis.userPage({
         pageSize: pageSize.value,
         pageNum: pageNum.value,
-        name: input.value
+        userName: input.value
       }),
     addRoleSuccessMessage,
     addRoleErrorMessage
@@ -172,7 +172,7 @@ const clone = () => {
   // TODO animation是全局的值，如果当其他地方的值改变了，就要在其他地方初始化的时候来初始化动画 (nyh-2023-10-03 03:56:34)
   animation.value = 'modal-container animate__animated animate__shakeX'
   showModal.value = true
-  drawerShow.value = true
+  showDrawer.value = true
 }
 
 /*关闭弹框*/
@@ -180,7 +180,7 @@ const shutDown = (formRef: FormInst) => {
   animation.value = 'modal-container animate__animated animate__fadeOutLeft'
   setTimeout(() => {
     showModal.value = false
-    drawerShow.value = false
+    showDrawer.value = false
     showWarn.value = false
     formRef.restoreValidation()
   }, 100)
@@ -196,9 +196,9 @@ const cancel = () => {
 
 /*在组件卸载之前执行把抽屉关闭(因为编辑抽屉不是全屏所以可以切换页面)*/
 onBeforeUnmount(() => {
-  drawerShow.value = false
+  showDrawer.value = false
   // router.beforeEach((to: any, from: any, next: any) => {
-  //   if (drawerShow.value) {
+  //   if (showDrawer.value) {
   //     showModal.value = true
   //     if (showModal.value) {
   //       console.log(11111)
@@ -207,7 +207,7 @@ onBeforeUnmount(() => {
   //       next(false)
   //     }
   //   } else {
-  //     drawerShow.value = false
+  //     showDrawer.value = false
   //     next()
   //   }
   // })
