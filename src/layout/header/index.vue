@@ -46,10 +46,55 @@
       <div class="operation-list-box">
         <n-tooltip trigger="hover" style="padding: 5px 8px 5px 8px">
           <template #trigger>
-            <div style="padding-right: 10px; display: flex; align-items: center">
-              <n-icon :size="24" :component="Bell" />
-              <n-badge style="position: absolute; transform: scale(0.75)" :value="1" :max="99" :offset="[28, -9]" />
-            </div>
+            <n-popover trigger="click" placement="bottom" :width="250">
+              <template #trigger>
+                <div style="padding-right: 10px; display: flex; align-items: center">
+                  <n-icon :size="24" :component="Bell" />
+                  <n-badge style="position: absolute; transform: scale(0.75)" :value="1" :max="99" :offset="[28, -9]" />
+                </div>
+              </template>
+              <n-tabs type="segment" :animated="true">
+                <n-tab-pane name="msg" tab="我的消息">
+                  <n-scrollbar style="max-height: 375px">
+                    <n-list hoverable clickable>
+                      <n-list-item>
+                        <n-thing title="相见恨晚" content-style="margin-top: 10px;">
+                          <template #description>
+                            <n-space size="small" style="margin-top: 4px">
+                              <n-tag :bordered="false" type="info" size="small"> 暑夜 </n-tag>
+                              <n-tag :bordered="false" type="info" size="small"> 晚春 </n-tag>
+                            </n-space>
+                          </template>
+                          奋勇呀然后休息呀<br />
+                          完成你伟大的人生
+                        </n-thing>
+                      </n-list-item>
+                      <n-list-item>
+                        <n-thing title="他在时间门外" content-style="margin-top: 10px;">
+                          <template #description>
+                            <n-space size="small" style="margin-top: 4px">
+                              <n-tag :bordered="false" type="info" size="small"> 环形公路 </n-tag>
+                              <n-tag :bordered="false" type="info" size="small"> 潜水艇司机 </n-tag>
+                            </n-space>
+                          </template>
+                          最新的打印机<br />
+                          复制着彩色傀儡<br />
+                          早上好我的罐头先生<br />
+                          让他带你去被工厂敲击
+                        </n-thing>
+                      </n-list-item>
+                    </n-list>
+                  </n-scrollbar>
+                </n-tab-pane>
+                <n-tab-pane name="inform" tab="通知">
+                  “威尔！着火了！快来帮忙！”我听到女朋友大喊。现在一个难题在我面前——是恢复一个重要的 Amazon
+                  服务，还是救公寓的火。<br /><br />
+                  我的脑海中忽然出现了 Amazon
+                  著名的领导力准则”客户至上“，有很多的客户还依赖我们的服务，我不能让他们失望！所以着火也不管了，女朋友喊我也无所谓，我开始
+                  debug 这个线上问题。
+                </n-tab-pane>
+              </n-tabs>
+            </n-popover>
           </template>
           {{ t('msg') }}
         </n-tooltip>

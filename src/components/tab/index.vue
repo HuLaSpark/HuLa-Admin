@@ -8,7 +8,7 @@
         v-for="item in data"
         :key="item.path"
         @click.stop="router.push('/' + item.path)">
-        <n-icon class="tab-icon" size="16" :component="(vicons as any)[item.icon]" />
+        <n-icon class="tab-icon" size="18" :component="(vicons as any)[item.icon]" />
         {{ item.title }}
         <n-icon
           v-if="Object.keys(data).length > 1"
@@ -69,7 +69,7 @@ onMounted(() => {
   align-items: center;
   justify-content: space-between;
   border-radius: 4px 6px 6px 4px;
-  padding: 5px 6px 5px 10px;
+  padding: 8px 6px 8px 10px;
   background: v-bind(BGC);
   color: v-bind(TEXT_COLOR);
   border-bottom: 2px solid #189f57;
