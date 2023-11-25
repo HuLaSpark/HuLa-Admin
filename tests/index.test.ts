@@ -1,5 +1,5 @@
 import { createPinia, setActivePinia } from 'pinia'
-import { RegExpUtils } from '@/utils/RegExpUtils'
+import { RegExp } from '@/utils/RegExp'
 import { useAuth } from '@/hooks/useAuth'
 import { expect } from 'vitest'
 
@@ -16,11 +16,11 @@ describe('测试组件', () => {
 
   test('测试用户输入格式是否符合标准', () => {
     /*判断邮箱格式*/
-    const email = RegExpUtils.isEmail('123@123.com')
+    const email = RegExp.isEmail('123@123.com')
     /*判断密码的复杂度*/
-    const paw = RegExpUtils.isPasswordComplex('Kk.123456')
+    const paw = RegExp.isPasswordComplex('Kk.123456')
     /*判断输入的内容是否只包含数字和英文*/
-    const engOrNub = RegExpUtils.isEngORNub('婚纱店静安寺')
+    const engOrNub = RegExp.isEngORNub('婚纱店静安寺')
     expect(email).toBe(true)
     expect(paw).toBe(true)
     expect(engOrNub).toBe(false)

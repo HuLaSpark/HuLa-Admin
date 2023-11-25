@@ -10,16 +10,17 @@ import {
   NAvatar,
   NPopconfirm,
   NButton,
-  DataTableRowKey
+  DataTableRowKey,
+  NText
 } from 'naive-ui'
 import { pageUser } from '@/services/types'
 import { i18n } from '@/i18n'
 import type { Ref } from 'vue'
 import { RCodeEnum, RoleEnum } from '@/enums'
-import { EditCircle, LetterM, LetterR, LetterU, Power, TrashX, X, Minus, AlertTriangle } from '@vicons/tabler'
+import { EditCircle, LetterM, LetterR, LetterU, Power, TrashX, X, Minus } from '@vicons/tabler'
 import { Report } from 'notiflix'
 import { useAuth } from '@/hooks/useAuth'
-import { handRelativeTime } from '@/utils/day'
+import { handRelativeTime } from '@/utils/Day'
 import { useBase } from '@/hooks/useBase'
 import apis from '@/services/apis'
 import paging from '@/hooks/usePaging'
@@ -34,7 +35,7 @@ export const userTable = (data: Ref<any[]>) => {
   const { judgmentRole } = useAuth()
   const { input } = UserVar()
   const { pagingLoad, contentData, rawData, showDrawer, total } = useBase()
-  const checkedRowKeysRef = ref<DataTableRowKey[]>([])
+  const checkedRowKeys = ref<DataTableRowKey[]>([])
 
   /*受控过滤器*/
   const statusColumn = reactive<DataTableBaseColumn<pageUser>>({
@@ -242,7 +243,6 @@ export const userTable = (data: Ref<any[]>) => {
                   <NPopconfirm onPositiveClick={() => handleDeleteTable(row)}>
                     {{
                       default: () => t('confirm_delete'),
-                      icon: () => <NIcon color={'#ce304f'} size={18} component={AlertTriangle} />,
                       trigger: () => (
                         <NIconWrapper size={26} borderRadius={6} color={'#f5dce1'} iconColor={'#ce304f'}>
                           <NIcon size={22} style={{ cursor: 'pointer' }} component={TrashX}></NIcon>
@@ -274,14 +274,12 @@ export const userTable = (data: Ref<any[]>) => {
     if (res.code !== RCodeEnum.OK) {
       return window.$message.error(res.msg)
     }
-    await pagingLoad(
-      () =>
-        apis.userPage({
-          pageSize: pageSize.value,
-          pageNum: pageNum.value,
-          userName: input.value
-        }),
-      window.$loadingBar
+    await pagingLoad(() =>
+      apis.userPage({
+        pageSize: pageSize.value,
+        pageNum: pageNum.value,
+        userName: input.value
+      })
     ).then(() => {
       window.$message.success(res.msg)
     })
@@ -301,13 +299,13 @@ export const userTable = (data: Ref<any[]>) => {
             bordered={false}
             type={'success'}
             style={{
-              display: checkedRowKeysRef.value.length > 0 ? '' : 'none',
+              display: checkedRowKeys.value.length > 0 ? '' : 'none',
               padding: '0 20px',
               borderRadius: '6px'
             }}>
-            选中了 {checkedRowKeysRef.value.length} 条数据
+            选中了 {checkedRowKeys.value.length} 条数据
           </NTag>
-          <span>共 {total.value} 项</span>
+          <NText>共 {total.value} 项</NText>
         </div>
       )
     },
@@ -322,13 +320,14 @@ export const userTable = (data: Ref<any[]>) => {
 
   /*多选选中的方法*/
   const handleCheck = (rowKeys: DataTableRowKey[]) => {
-    checkedRowKeysRef.value = rowKeys
+    checkedRowKeys.value = rowKeys
   }
 
   return {
     columns,
     statusColumn,
     pagination,
+    checkedRowKeys,
     handleCheck
   }
 }

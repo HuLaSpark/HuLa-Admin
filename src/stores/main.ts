@@ -15,6 +15,10 @@ export const mainStore = defineStore('main', {
       MASK_BGC: 'rgba(231, 229, 228, 0.75)',
       /*菜单栏的按钮颜色*/
       BTN: 'rgb(229, 243, 237)',
+      /*tabs选中时的背景颜色*/
+      TAB_ACTIVE_BGC: '#e5f3ec',
+      /*hover时的背景颜色*/
+      HOVER_BGC: 'rgba(60, 60, 60, 0.2)',
       /*文本的颜色*/
       TEXT_COLOR: '#000',
       /*侧边栏文本颜色*/
@@ -37,6 +41,8 @@ export const mainStore = defineStore('main', {
       this.LOGIN_BGC = this.LOGIN_BGC === '#FFF' ? '#141414' : '#FFF'
       this.BTN = this.BTN === 'rgb(229, 243, 237)' ? 'rgba(229, 243, 237, .1)' : 'rgb(229, 243, 237)'
       this.MASK_BGC = this.EYE_THEME ? 'rgba(41, 37, 36, 0.75)' : 'rgba(231, 229, 228, 0.75)'
+      this.TAB_ACTIVE_BGC = this.EYE_THEME ? '#233633' : '#e5f3ec'
+      this.HOVER_BGC = this.EYE_THEME ? 'rgba(255, 255, 255, 0.2)' : 'rgba(60, 60, 60, 0.2)'
       this.BGC_OTHER = this.BGC_OTHER === '#f4f4f4' ? '#1d1d1d' : '#f4f4f4'
       this.TEXT_COLOR = this.TEXT_COLOR === '#000' ? '#cdd1da' : '#000'
       this.ASIDE_TEXT_COLOR = this.TEXT_COLOR

@@ -1,6 +1,6 @@
 import { createAxios } from '@/services/request'
 import urls from '@/services/urls'
-import type { Response, UpdateUser, User, parameter, Renew, login } from '@/services/types'
+import type { Response, UpdateUser, User, parameter, Renew, login, BatchDeleteUser } from '@/services/types'
 
 const request = createAxios()
 
@@ -21,6 +21,8 @@ export default {
   /*删除单个 用户*/
   deleteUser: (id: number, username: string, uid: string): Promise<Response> =>
     DELETE(urls.userCRUD + '/' + id + '/' + username + '/' + uid),
+  /*批量删除 用户*/
+  batchDeleteUsers: (data: BatchDeleteUser): Promise<Response> => POST(urls.userCRUD + '/delete/batch', data),
   /*修改 用户*/
   editUser: (form: UpdateUser): Promise<Response> => PUT(urls.userCRUD, form),
   /*续签 请求*/

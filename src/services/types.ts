@@ -4,6 +4,7 @@
  * @see TSDoc规范https://tsdoc.org/
  **/
 import { GlobalStatusEnum, RCodeEnum } from '@/enums'
+import { DataTableRowKey } from 'naive-ui'
 
 /*响应请求体*/
 export type Response = {
@@ -75,6 +76,11 @@ export type UpdateUser = {
   role: string
   status: number
   avatar: string
+}
+/*批量删除用户*/
+export type BatchDeleteUser = {
+  ids: DataTableRowKey[]
+  uids: string[]
 }
 /*记住我*/
 export type Renew = {

@@ -26,10 +26,14 @@
 
       <n-form ref="formRef" :model="contentData" :rules="rules" style="padding: 10px 0">
         <n-form-item :label="t('user_name')" path="userName">
-          <n-input v-model:value="contentData.userName" :placeholder="t('placeholder')" />
+          <n-input
+            :allow-input="Common.noSideSpace"
+            v-model:value="contentData.userName"
+            :placeholder="t('placeholder')" />
         </n-form-item>
         <n-form-item :label="t('nick_name')">
           <n-input
+            :allow-input="Common.noSideSpace"
             :status="handleStatus(contentData.nickName)"
             v-model:value="contentData.nickName"
             :placeholder="t('placeholder')" />
@@ -103,8 +107,9 @@ import apis from '@/services/apis'
 import paging from '@/hooks/usePaging'
 import UserVar from './userVar'
 import { AlertIze } from '@/customize'
-import { handRelativeTime } from '@/utils/day'
+import { handRelativeTime } from '@/utils/Day'
 import { animation } from '@/components/modal/type'
+import { Common } from '@/utils/Common'
 
 const { t } = i18n.global
 const { pageNum, pageSize } = paging
@@ -149,23 +154,6 @@ const saveData = async (form: any) => {
   )
   // 清空临时对象
   // contentData.value = {} as pageUser
-}
-/*新增事件*/
-const AddInfo = async (formEl: any) => {
-  const addRoleSuccessMessage = '添加成功'
-  const addRoleErrorMessage = '添加失败'
-  await performAction(
-    formEl,
-    () => apis.addUser(contentData as any),
-    () =>
-      apis.userPage({
-        pageSize: pageSize.value,
-        pageNum: pageNum.value,
-        userName: input.value
-      }),
-    addRoleSuccessMessage,
-    addRoleErrorMessage
-  )
 }
 
 const clone = () => {
