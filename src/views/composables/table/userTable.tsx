@@ -9,40 +9,48 @@ import {
   NProgress,
   NAvatar,
   NPopconfirm,
-  NButton
+  NButton,
+  DataTableRowKey
 } from 'naive-ui'
 import { pageUser } from '@/services/types'
 import { i18n } from '@/i18n'
 import type { Ref } from 'vue'
-import { RoleEnum } from '@/enums'
-import { EditCircle, LetterM, LetterR, LetterU, Power, TrashX, X, Minus } from '@vicons/tabler'
+import { RCodeEnum, RoleEnum } from '@/enums'
+import { EditCircle, LetterM, LetterR, LetterU, Power, TrashX, X, Minus, AlertTriangle } from '@vicons/tabler'
 import { Report } from 'notiflix'
 import { useAuth } from '@/hooks/useAuth'
 import { handRelativeTime } from '@/utils/day'
 import { useBase } from '@/hooks/useBase'
+import apis from '@/services/apis'
+import paging from '@/hooks/usePaging'
+import UserVar from '@/views/composables/drawer/userDrawer/userVar'
 
 /**
  * @param data 表格数据
  */
 export const userTable = (data: Ref<any[]>) => {
   const { t } = i18n.global
+  const { pageNum, pageSize } = paging
   const { judgmentRole } = useAuth()
-  const { editedData, rawData, drawerShow } = useBase()
+  const { input } = UserVar()
+  const { pagingLoad, contentData, rawData, showDrawer, total } = useBase()
+  const checkedRowKeysRef = ref<DataTableRowKey[]>([])
 
   /*受控过滤器*/
   const statusColumn = reactive<DataTableBaseColumn<pageUser>>({
-    title: '状态',
+    title: t('status'),
     key: 'status',
+    width: 120,
     filterMultiple: false,
     filterOptionValue: null,
     sorter: 'default',
     filterOptions: [
       {
-        label: '开启',
+        label: t('enable'),
         value: 1
       },
       {
-        label: '禁用',
+        label: t('forbidden'),
         value: 0
       }
     ],
@@ -76,8 +84,9 @@ export const userTable = (data: Ref<any[]>) => {
       }
     },
     {
-      title: '用户',
+      title: t('user'),
       key: 'userName',
+      width: 230,
       render: (row) => {
         return (
           <NSpace justify={'start'} align={'center'}>
@@ -85,7 +94,18 @@ export const userTable = (data: Ref<any[]>) => {
               <NAvatar size={'large'}></NAvatar>
             </div>
             <NSpace vertical size={5}>
-              <p style={{ fontWeight: 'bold', padding: 0, margin: 0 }}>{row.nickName ? row.nickName : row.email}</p>
+              <p
+                style={{
+                  fontWeight: 'bold',
+                  padding: 0,
+                  margin: 0,
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap',
+                  maxWidth: '120px'
+                }}>
+                {row.nickName ? row.nickName : row.email}
+              </p>
               <p style={{ color: '#ccc', fontSize: '12px', transform: 'scale(1)', padding: 0, margin: 0 }}>
                 {row.userName}
               </p>
@@ -95,25 +115,28 @@ export const userTable = (data: Ref<any[]>) => {
       }
     },
     {
-      title: '邮箱',
-      key: 'email'
+      title: t('email'),
+      key: 'email',
+      ellipsis: {
+        tooltip: true
+      }
     },
     {
-      title: '手机号',
+      title: t('phone_number'),
       key: 'mobile',
       render: (row) => {
         return row.mobile ? row.mobile : <NIcon component={Minus} />
       }
     },
     {
-      title: '头像',
+      title: t('avatar'),
       key: 'avatar',
       render: (row) => {
         return row.avatar ? row.avatar : <NIcon component={Minus} />
       }
     },
     {
-      title: '创建时间',
+      title: t('create_time'),
       key: 'createTime',
       render: (row) => {
         return (
@@ -127,7 +150,7 @@ export const userTable = (data: Ref<any[]>) => {
       }
     },
     {
-      title: '更新时间',
+      title: t('update_time'),
       key: 'updateTime',
       render: (row) => {
         return (
@@ -141,7 +164,7 @@ export const userTable = (data: Ref<any[]>) => {
       }
     },
     {
-      title: '角色',
+      title: t('role_flag'),
       key: 'role',
       render: (row) => {
         const roleText = judgmentRole(row.role as RoleEnum)
@@ -158,9 +181,9 @@ export const userTable = (data: Ref<any[]>) => {
       }
     },
     {
-      title: '资料完整度',
+      title: t('data_integrity'),
       key: 'integrity',
-      minWidth: 140,
+      width: 180,
       render: (row) => {
         const integrity = calculateIntegrity(row)
         const color = getColor(integrity)
@@ -193,9 +216,9 @@ export const userTable = (data: Ref<any[]>) => {
     },
     statusColumn,
     {
-      title: '操作',
+      title: t('operation'),
       key: 'actions',
-      minWidth: 80,
+      width: 110,
       render: (row) => {
         return (
           <NSpace justify={'center'} size={20}>
@@ -216,9 +239,17 @@ export const userTable = (data: Ref<any[]>) => {
               {{
                 default: () => t('delete'),
                 trigger: () => (
-                  <NIconWrapper size={26} borderRadius={6} color={'#f5dce1'} iconColor={'#ce304f'}>
-                    <NIcon size={22} style={{ cursor: 'pointer' }} component={TrashX}></NIcon>
-                  </NIconWrapper>
+                  <NPopconfirm onPositiveClick={() => handleDeleteTable(row)}>
+                    {{
+                      default: () => t('confirm_delete'),
+                      icon: () => <NIcon color={'#ce304f'} size={18} component={AlertTriangle} />,
+                      trigger: () => (
+                        <NIconWrapper size={26} borderRadius={6} color={'#f5dce1'} iconColor={'#ce304f'}>
+                          <NIcon size={22} style={{ cursor: 'pointer' }} component={TrashX}></NIcon>
+                        </NIconWrapper>
+                      )
+                    }}
+                  </NPopconfirm>
                 )
               }}
             </NTooltip>
@@ -227,19 +258,78 @@ export const userTable = (data: Ref<any[]>) => {
       }
     }
   ])
+  /*编辑处理*/
   const handleEditTable = (rowId: number) => {
-    drawerShow.value = true
+    showDrawer.value = true
     const findItem = data.value.find((item: pageUser) => item.id === rowId)
     if (findItem) {
       /*同时赋值给原始数据，用来判断表单是否被修改，编辑时是操作editedData数据的内容*/
       Object.assign(rawData.value, findItem)
-      Object.assign(editedData.value, findItem)
+      Object.assign(contentData.value, findItem)
     }
+  }
+  /*删除处理*/
+  const handleDeleteTable = async (row: pageUser) => {
+    const res = await apis.deleteUser(row.id, row.userName, row.uid)
+    if (res.code !== RCodeEnum.OK) {
+      return window.$message.error(res.msg)
+    }
+    await pagingLoad(
+      () =>
+        apis.userPage({
+          pageSize: pageSize.value,
+          pageNum: pageNum.value,
+          userName: input.value
+        }),
+      window.$loadingBar
+    ).then(() => {
+      window.$message.success(res.msg)
+    })
+  }
+
+  /*分页处理*/
+  const pagination = reactive({
+    page: pageNum.value,
+    pageSize: pageSize.value,
+    pageSizes: [5, 10, 15],
+    showSizePicker: true,
+    showQuickJumper: true,
+    prefix: () => {
+      return (
+        <div style={{ display: 'flex', alignItems: 'center', height: 'fit-content', gap: '10px' }}>
+          <NTag
+            bordered={false}
+            type={'success'}
+            style={{
+              display: checkedRowKeysRef.value.length > 0 ? '' : 'none',
+              padding: '0 20px',
+              borderRadius: '6px'
+            }}>
+            选中了 {checkedRowKeysRef.value.length} 条数据
+          </NTag>
+          <span>共 {total.value} 项</span>
+        </div>
+      )
+    },
+    onChange: (page: number) => {
+      pagination.page = page
+    },
+    onUpdatePageSize: (pageSize: number) => {
+      pagination.pageSize = pageSize
+      pagination.page = 1
+    }
+  })
+
+  /*多选选中的方法*/
+  const handleCheck = (rowKeys: DataTableRowKey[]) => {
+    checkedRowKeysRef.value = rowKeys
   }
 
   return {
     columns,
-    statusColumn
+    statusColumn,
+    pagination,
+    handleCheck
   }
 }
 

@@ -21,6 +21,10 @@ module.exports = {
       name: '🎉 release:  发布正式版'
     },
     {
+      value: ':new: version',
+      name:'🎖️version:  发布新版本'
+    },
+    {
       value: ':lipstick: style',
       name: '💄 style:    代码的样式美化'
     },

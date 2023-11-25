@@ -8,7 +8,7 @@
         v-for="item in data"
         :key="item.path"
         @click.stop="router.push('/' + item.path)">
-        <n-icon size="16" :component="(vicons as any)[item.icon]" />
+        <n-icon class="tab-icon" size="16" :component="(vicons as any)[item.icon]" />
         {{ item.title }}
         <n-icon
           v-if="Object.keys(data).length > 1"
@@ -51,6 +51,16 @@ const jumpPath = (path: string) => {
   }
   tabsStore.removeTab(path)
 }
+
+onMounted(() => {
+  /*初始化的时候判断data是否为空*/
+  if (Object.keys(data.value).length === 0) {
+    // TODO 这了为空的时候应该查询localStorage中缓存的菜单项目并且是全部权限都可查看的菜单 (nyh-2023-11-25 08:09:06)
+    tabsStore.addTab({
+      data: { icon: 'DeviceAnalytics', path: 'odometer', title: '仪表板' } as any
+    })
+  }
+})
 </script>
 
 <style lang="scss" scoped>
@@ -67,22 +77,33 @@ const jumpPath = (path: string) => {
   &:hover {
     cursor: pointer;
     color: #189f57;
-    .n-icon {
-      transform: scale(1.15);
+    .tab-icon {
+      animation: twinkle 0.3s ease-in-out;
     }
   }
   .del {
     color: rgba(60, 60, 60);
     border-radius: 50px;
     transition: 0.5s;
-  }
-  .del:hover {
-    background: rgba(60, 60, 60, 0.2);
+    &:hover {
+      background: rgba(60, 60, 60, 0.2);
+    }
   }
 }
 /*当前选中页面样式*/
 .active-tab {
   color: #189f57;
   background: #e5f3ec;
+}
+@keyframes twinkle {
+  0% {
+    transform: scale(0);
+  }
+  80% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 </style>

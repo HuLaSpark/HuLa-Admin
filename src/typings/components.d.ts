@@ -10,7 +10,6 @@ declare module 'vue' {
     Cascader: typeof import('./../components/cascader/index.vue')['default']
     Codeinput: typeof import('./../components/codeinput/index.vue')['default']
     Countdown: typeof import('./../components/countdown/index.vue')['default']
-    Descriptions: typeof import('./../components/descriptions/index.vue')['default']
     HeadOperation: typeof import('./../components/headOperation/index.vue')['default']
     Language: typeof import('./../components/Language/index.vue')['default']
     Modal: typeof import('./../components/modal/index.vue')['default']

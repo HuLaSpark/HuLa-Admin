@@ -1,22 +1,43 @@
 <template>
   <n-space vertical>
-    <n-button style="border-radius: 8px" secondary type="success" @click="userModalRef.showModal = true">
-      <template #icon><n-icon :component="Plus" /></template>
-      {{ t('add') }}
-    </n-button>
+    <n-space align="center">
+      <n-button style="border-radius: 8px" secondary type="success" @click="handleAdd">
+        <template #icon><n-icon :component="Plus" /></template>
+        {{ t('add') }}
+      </n-button>
+
+      <n-button style="border-radius: 8px" secondary type="error" @click="handleBatch">
+        <template #icon><n-icon :component="PlaylistX" /></template>
+        {{ t('delete_batch') }}
+      </n-button>
+
+      <n-input
+        :maxlength="10"
+        style="border-radius: 10px"
+        v-model:value="input"
+        clearable
+        placeholder="请输入关键词搜索"
+        @input="handleSearch">
+        <template #prefix>
+          <n-icon :component="Search" />
+        </template>
+      </n-input>
+    </n-space>
+
     <!--表格-->
     <n-loading-bar-provider :to="loadingBarTargetRef" container-style="position: relative">
       <div ref="loadingBarTargetRef" style="height: 2px; overflow: hidden; pointer-events: none" />
       <!--   表格     -->
       <n-data-table
+        :max-height="600"
         :loading="loading"
-        striped
         :bordered="false"
         single-line
         single-column
         :row-key="rowKey"
         :columns="columns"
         :data="tableData"
+        :pagination="pagination"
         @update:filters="handleUpdateFilter"
         @update:checked-row-keys="handleCheck">
         <!--为空时表格状态-->
@@ -37,13 +58,6 @@
           </n-spin>
         </template>
       </n-data-table>
-      <n-tag
-        v-show="checkedRowKeysRef.length > 0"
-        :bordered="false"
-        type="success"
-        style="margin: 20px 0; padding: 0 20px; border-radius: 6px">
-        选中了 {{ checkedRowKeysRef.length }} 条数据
-      </n-tag>
       <loading-bar-trigger />
     </n-loading-bar-provider>
   </n-space>
@@ -52,31 +66,30 @@
   <userDrawer />
 
   <!--添加弹出框-->
-  <userModal :title="title" ref="userModalRef" />
+  <userModal :title="title" />
 </template>
 
 <script setup lang="ts">
 import { useBase } from '@/hooks/useBase'
-import type { DataTableBaseColumn, DataTableFilterState, DataTableRowKey } from 'naive-ui'
+import type { DataTableBaseColumn, DataTableFilterState } from 'naive-ui'
 import apis from '@/services/apis'
 import paging from '@/hooks/usePaging'
 import { pageUser, Response } from '@/services/types'
 import { i18n } from '@/i18n'
-import { RotateClockwise2, Plus } from '@vicons/tabler'
+import { RotateClockwise2, Plus, PlaylistX, Search } from '@vicons/tabler'
 import { userDrawer } from '@/views/composables/drawer/index'
 import userVar from '@/views/composables/drawer/userDrawer/userVar'
 import { userTable } from '@/views/composables/table/userTable'
 import { userModal } from '@/views/composables/modal/index'
+import { useDebounceFn } from '@vueuse/core'
 
 const { t } = i18n.global
 const { pageNum, pageSize } = paging
-const checkedRowKeysRef = ref<DataTableRowKey[]>([])
 const loadingBarTargetRef = ref()
-const userModalRef = ref()
 const title = ref('添加用户')
 const { input } = userVar()
-const { pagingLoad, total, tableData, loading, NoAccess } = useBase()
-const { columns, statusColumn } = userTable(tableData)
+const { pagingLoad, tableData, loading, NoAccess, contentData, showModal } = useBase()
+const { handleCheck, columns, statusColumn, pagination } = userTable(tableData)
 
 /**使用defineComponent重新构建组件*/
 const LoadingBarTrigger = defineComponent({
@@ -88,7 +101,7 @@ const LoadingBarTrigger = defineComponent({
         return await apis.userPage({
           pageSize: pageSize.value,
           pageNum: pageNum.value,
-          name: input.value
+          userName: input.value
         })
       } catch (error) {
         loadingBar.error()
@@ -102,14 +115,32 @@ const LoadingBarTrigger = defineComponent({
 })
 /*表格中每个key值*/
 const rowKey = (row: pageUser) => row.id
-/*多选选中的方法*/
-const handleCheck = (rowKeys: DataTableRowKey[]) => {
-  checkedRowKeysRef.value = rowKeys
-}
 /*受控过滤方法*/
 const handleUpdateFilter = (filters: DataTableFilterState, sourceColumn: DataTableBaseColumn) => {
   statusColumn.filterOptionValue = filters[sourceColumn.key] as number
 }
+/*处理新增事件*/
+const handleAdd = () => {
+  showModal.value = true
+  /*重新打开弹框的时候清空表单内容*/
+  contentData.value = {}
+}
+
+/*批量删除事件*/
+const handleBatch = () => {
+  console.log('批量删除')
+}
+
+/*搜索事件*/
+const handleSearch = useDebounceFn(async () => {
+  await pagingLoad(() => {
+    return apis.userPage({
+      pageSize: pageSize.value,
+      pageNum: pageNum.value,
+      userName: input.value
+    })
+  })
+}, 300)
 
 /*点击表格栏事件*/
 // const rowProps = (row: pageUser) => {
