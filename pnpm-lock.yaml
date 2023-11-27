@@ -8,6 +8,9 @@ dependencies:
   '@intlify/unplugin-vue-i18n':
     specifier: ^0.11.0
     version: registry.npmmirror.com/@intlify/unplugin-vue-i18n@0.11.0(vue-i18n@9.5.0)
+  '@types/jsrsasign':
+    specifier: ^10.5.12
+    version: 10.5.12
   '@vicons/tabler':
     specifier: ^0.12.0
     version: registry.npmmirror.com/@vicons/tabler@0.12.0
@@ -29,6 +32,9 @@ dependencies:
   hotkeys-js:
     specifier: ^3.12.0
     version: registry.npmmirror.com/hotkeys-js@3.12.0
+  jsrsasign:
+    specifier: ^10.8.6
+    version: 10.8.6
   localforage:
     specifier: ^1.10.0
     version: registry.npmmirror.com/localforage@1.10.0
@@ -689,6 +695,10 @@ packages:
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
     dev: true
 
+  /@types/jsrsasign@10.5.12:
+    resolution: {integrity: sha512-sOA+eVnHU+FziThpMhuqs/tjFKe5gHVJKIS7g1BzhXP+e2FS8OvtzM0K3IzFxVksDOr98Gz5FJiZVxZ9uFoHhw==}
+    dev: false
+
   /@types/node@20.9.0:
     resolution: {integrity: sha512-nekiGu2NDb1BcVofVcEKMIwzlx4NjHlcjhoxxKBNLtz15Y1z7MYf549DFvkHSId02Ax6kGwWntIBPC3l/JZcmw==}
     dependencies:
@@ -1218,6 +1228,10 @@ packages:
     engines: {node: '>=6'}
     hasBin: true
     dev: true
+
+  /jsrsasign@10.8.6:
+    resolution: {integrity: sha512-bQmbVtsfbgaKBTWCKiDCPlUPbdlRIK/FzSwT3BzIgZl/cU6TqXu6pZJsCI/dJVrZ9Gir5GC4woqw9shH/v7MBw==}
+    dev: false
 
   /jstransformer@1.0.0:
     resolution: {integrity: sha512-C9YK3Rf8q6VAPDCCU9fnqo3mAfOH6vUGnMcP4AQAYIEpWtfGLpwOTmZ+igtdK5y+VvI2n3CyYSzy4Qh34eq24A==}

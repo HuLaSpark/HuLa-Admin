@@ -8,10 +8,10 @@ import { sendEmail } from '@/api/passwordReset'
 import { remember } from '@/stores/remember'
 import apis from '@/services/apis'
 import { RCodeEnum } from '@/enums'
-import type { Response } from '@/services/types'
 import { Loading } from 'notiflix'
 import { delay } from 'lodash-es'
 import { tenant } from '@/stores/tenant'
+import { RSA } from '@/utils/RSA'
 
 export const useLogin = () => {
   //定义初始化数据
@@ -44,6 +44,7 @@ export const useLogin = () => {
   const loginErrorTitle = ref<string>()
   const loginErrorType = ref<string>()
   const statusCode = ref<string>()
+  const cipherData = ref()
   /**
    * 用户登录校验
    * @param formInstance 表单校验
@@ -55,14 +56,19 @@ export const useLogin = () => {
     loginErrorMsg.value = false
     await formInstance
       ?.validate()
-      .then(() => {
+      .then(async () => {
         loginText.value = t('in_check')
         signInLoading.value = true
         Loading.pulse()
         const { password, userName } = formInstance.model
         const remember = { password, userName } as any
         const { value } = tenantStore.getTenant
-        apis.login({ tenantId: value, password, userName }).then((res) => {
+        const res = await apis.getPublicKey()
+        if (res.code === RCodeEnum.OK) {
+          cipherData.value = RSA.encryptByPublicKey(password, res.msg)
+          console.log(cipherData.value)
+        }
+        apis.login({ tenantId: value, password: cipherData.value, userName }).then((res) => {
           if (res.code !== RCodeEnum.OK) {
             Loading.remove()
             loginText.value = t('login')
