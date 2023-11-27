@@ -90,8 +90,8 @@ export const createAxios = (config?: AxiosRequestConfig): AxiosInstance => {
         window.$message.error(res.msg)
       }
       // TODO 暂时除去手动续签的方法和校验验证码 (nyh-2023-11-24 23:36:03)
-      // /*判断响应体中的错误码，如果是FREEZE则是登录时间内长时间不操作需要验证登录，如果是RENEW_PAW_ERROR是续签时候密码错误*/
-      // if (res.code === RCodeEnum.FREEZE) {
+      // /*判断响应体中的错误码，如果是STATE_EXCEPTION则是登录时间内长时间不操作需要验证登录，如果是RENEW_PAW_ERROR是续签时候密码错误*/
+      // if (res.code === RCodeEnum.STATE_EXCEPTION) {
       //   /*传入错误信息*/
       //   /*window.$message.error(res.msg)*/
       //   Report.warning(res.msg, res.code, '怎么办?', () => {
@@ -103,7 +103,7 @@ export const createAxios = (config?: AxiosRequestConfig): AxiosInstance => {
       //   handleVerify(res.msg)
       // }
       //判断响应体中的错误码，如果是U00006则需要重新登录
-      if (res.code === RCodeEnum.FREEZE) {
+      if (res.code === RCodeEnum.STATE_EXCEPTION) {
         nextTick(() => {
           window.$message.error(res.msg)
         }).then(() => {

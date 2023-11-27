@@ -19,9 +19,9 @@ export enum RCodeEnum {
   /**无权限*/
   UNAUTHORIZED = 'U00004',
   /**服务器出现问题*/
-  EXCEPTION = 'U00005',
+  SERVE_EXCEPTION = 'U00005',
   /**冻结*/
-  FREEZE = 'U00006',
+  STATE_EXCEPTION = 'U00006',
   /**数据重复*/
   REPEAT = 'U00007',
   /**参数校验失败*/

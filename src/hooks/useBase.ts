@@ -95,7 +95,7 @@ export const useBase = () => {
     if (res.code !== RCodeEnum.OK) {
       loadingBar.error()
       loading.value = false
-      if (res.code === RCodeEnum.FREEZE) return false
+      if (res.code === RCodeEnum.STATE_EXCEPTION) return false
       if (res.code === RCodeEnum.UNAUTHORIZED) return (NoAccess.value = false)
       window.$message.error(res.msg ? res.msg : t('request_failed'))
       return false
