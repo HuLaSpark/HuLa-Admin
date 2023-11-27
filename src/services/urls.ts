@@ -5,6 +5,7 @@ const prefix = import.meta.env.PROD ? import.meta.env.VITE_BASE_URL : ''
 export default {
   login: `${prefix + URLEnum.PASS}/login`,
   logout: `${prefix + URLEnum.PASS}/logout`,
+  getPublicKey: `${prefix + URLEnum.PASS}/publicKey`,
   renew: `${prefix + URLEnum.PASS}/renew`,
   userPage: `${prefix + URLEnum.USER}/page`,
   userCRUD: `${prefix + URLEnum.USER}`,

@@ -118,9 +118,11 @@ const showMore = ref(false)
 /*邮箱字段自动填充*/
 const emailOptions = computed(() => {
   return [
-    ['谷歌', '@gmail.com'],
+    ['腾讯', '@qq.com'],
     ['网易', '@163.com'],
-    ['腾讯', '@qq.com']
+    ['新浪', '@sina.com'],
+    ['搜狐', '@sohu.com'],
+    ['谷歌', '@gmail.com']
   ].map((emailInfo) => {
     const email = contentData.value.email || ''
     return {

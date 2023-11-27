@@ -14,6 +14,8 @@ export default {
   login: (form: login): Promise<Response> => POST(urls.login, form),
   /*退出 请求*/
   logout: (uid: string): Promise<Response> => GET(urls.logout + '/' + uid),
+  /*获取公钥*/
+  getPublicKey: (): Promise<Response> => POST(urls.getPublicKey),
   /*系统用户分页 请求*/
   userPage: (params: parameter): Promise<Response> => GET(urls.userPage, { params }),
   /*新增 用户*/
