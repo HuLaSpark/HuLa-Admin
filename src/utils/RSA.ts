@@ -1,4 +1,5 @@
 import { KJUR, KEYUTIL, RSAKey } from 'jsrsasign'
+import JSEncrypt from 'jsencrypt'
 
 export class RSA {
   /**
@@ -21,8 +22,8 @@ export class RSA {
    * @returns 加密后的数据
    */
   public static encryptByPublicKey(data: string, pubKey: string) {
-    const pub = '-----BEGIN PUBLIC KEY-----' + pubKey + '-----END PUBLIC KEY-----'
-    const keyObj = KEYUTIL.getKey(pub)
-    return KJUR.crypto.Cipher.encrypt(data, keyObj as RSAKey, 'RSA')
+    const jsEncrypt = new JSEncrypt()
+    jsEncrypt.setPublicKey(pubKey)
+    return jsEncrypt.encrypt(data)
   }
 }

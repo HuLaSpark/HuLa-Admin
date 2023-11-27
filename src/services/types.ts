@@ -35,9 +35,7 @@ export type parameter = {
 }
 /*登录类型*/
 export type login = {
-  userName: string
-  password: string
-  tenantId: string
+  cipherData: string
 }
 /*用户*/
 export type User = {

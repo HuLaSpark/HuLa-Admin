@@ -44,6 +44,7 @@ export const useLogin = () => {
   const loginErrorTitle = ref<string>()
   const loginErrorType = ref<string>()
   const statusCode = ref<string>()
+  /*加密的数据*/
   const cipherData = ref()
   /**
    * 用户登录校验
@@ -63,12 +64,13 @@ export const useLogin = () => {
         const { password, userName } = formInstance.model
         const remember = { password, userName } as any
         const { value } = tenantStore.getTenant
+        /*获取公钥*/
         const res = await apis.getPublicKey()
-        if (res.code === RCodeEnum.OK) {
-          cipherData.value = RSA.encryptByPublicKey(password, res.msg)
-          console.log(cipherData.value)
+        if (res.code !== RCodeEnum.OK) {
+          return window.$message.error(res.msg)
         }
-        apis.login({ tenantId: value, password: cipherData.value, userName }).then((res) => {
+        cipherData.value = RSA.encryptByPublicKey(JSON.stringify({ password, userName, tenantId: value }), res.msg)
+        apis.login({ cipherData: cipherData.value }).then((res) => {
           if (res.code !== RCodeEnum.OK) {
             Loading.remove()
             loginText.value = t('login')
