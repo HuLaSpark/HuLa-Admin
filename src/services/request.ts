@@ -1,7 +1,6 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios'
 import { userStore } from '@/stores/user'
 import router from '@/router'
-import { nextTick } from 'vue'
 import { RCodeEnum } from '@/enums'
 import { Report } from 'notiflix'
 

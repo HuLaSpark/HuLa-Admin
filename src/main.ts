@@ -14,8 +14,8 @@ app.use(router)
 app.use(pinia)
 app.use(i18n)
 pinia.use(piniaPluginPersistedstate)
-app.mount('#app')
 app.directive('drag', drag)
+app.mount('#app')
 // app.component('vue-drag-resize', VueDragResize)
 const { version } = pkgJson
 console.log(
