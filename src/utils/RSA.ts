@@ -22,6 +22,7 @@ export class RSA {
    * @returns 加密后的数据
    */
   public static encryptByPublicKey(data: string, pubKey: string) {
+    // TODO 还需要实现加签 (nyh-2023-11-28 08:11:39)
     const jsEncrypt = new JSEncrypt()
     jsEncrypt.setPublicKey(pubKey)
     return jsEncrypt.encrypt(data)
