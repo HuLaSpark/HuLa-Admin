@@ -3,6 +3,7 @@ import { userStore } from '@/stores/user'
 import router from '@/router'
 import { RCodeEnum } from '@/enums'
 import { Report } from 'notiflix'
+import { useLogin } from '@/hooks/useLogin'
 
 //加载配置
 // let loadingInstance: any,
@@ -104,7 +105,11 @@ export const createAxios = (config?: AxiosRequestConfig): AxiosInstance => {
       //判断响应体中的错误码，如果是U00006则需要重新登录
       if (res.code === RCodeEnum.STATE_EXCEPTION) {
         nextTick(() => {
-          window.$message.error(res.msg)
+          useLogin()
+            .exit(false)
+            .then(() => {
+              window.$message.error(res.msg)
+            })
         }).then(() => {
           router.push('/login')
           /*需要重新登录的都需要把localStorage中的用户信息给清除*/

@@ -3,8 +3,6 @@ import useState from '@/hooks/useState'
 import { i18n } from '@/i18n'
 import router from '@/router'
 import { FormInst } from 'naive-ui'
-import { animation } from '@/components/modal/type'
-import { sendEmail } from '@/api/passwordReset'
 import { remember } from '@/stores/remember'
 import apis from '@/services/apis'
 import { RCodeEnum } from '@/enums'
@@ -115,10 +113,10 @@ export const useLogin = () => {
 
   /**
    * 用户注销
-   * @param exitUserId uid
+   * @param notifi 是否显示提示
    */
-  const exit = async (exitUserId: string) => {
-    await apis.logout(exitUserId).then((res) => {
+  const exit = async (notifi = true) => {
+    await apis.logout().then((res) => {
       if (res.code !== RCodeEnum.OK) {
         window.$notification.error({
           title: res.msg ? res.msg : t('logout_error'),
@@ -128,28 +126,30 @@ export const useLogin = () => {
         return false
       }
       userInfoStore.logout()
-      window.$notification.success({
-        title: res.msg,
-        duration: 1500,
-        keepAliveOnHover: true
-      })
+      if (notifi) {
+        window.$notification.success({
+          title: res.msg,
+          duration: 1500,
+          keepAliveOnHover: true
+        })
+      }
     })
   }
   /*弹出验证码输入框*/
   const handleCodeInput = async (formInstance: any) => {
     await formInstance?.validate().then(() => {
-      sendEmail(formInstance.model.email).then((res) => {
-        if (res.code === RCodeEnum.OK) {
-          /*关闭输入邮箱弹框*/
-          showModal.value = false
-          nextTick(() => {
-            animation.value = 'modal-container animate__animated animate__jackInTheBox'
-            showCode.value = true
-          })
-        } else {
-          emailMsg.value = res.msg
-        }
-      })
+      // sendEmail(formInstance.model.email).then((res) => {
+      //   if (res.code === RCodeEnum.OK) {
+      //     /*关闭输入邮箱弹框*/
+      //     showModal.value = false
+      //     nextTick(() => {
+      //       animation.value = 'modal-container animate__animated animate__jackInTheBox'
+      //       showCode.value = true
+      //     })
+      //   } else {
+      //     emailMsg.value = res.msg
+      //   }
+      // })
     })
   }
 

@@ -1,13 +1,14 @@
 <template>
   <!--TODO 如果标签栏过多操过宽度后需要滚动条滚动到选中的标签页下  (nyh-2023-11-23 07:22:29)-->
   <n-scrollbar x-scrollable>
-    <div style="display: flex; align-items: center; gap: 10px; white-space: nowrap">
+    <div style="display: flex; align-items: center; padding: 0 2px 4px 2px; gap: 10px; white-space: nowrap">
       <div
         class="tab"
         :class="{ 'active-tab': '/' + item.path === currentPath }"
         v-for="item in data"
         :key="item.path"
         @click.stop="router.push('/' + item.path)">
+        <div class="tabs-left" />
         <n-icon class="tab-icon" size="18" :component="(vicons as any)[item.icon]" />
         {{ item.title }}
         <n-icon
@@ -65,6 +66,7 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .tab {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -72,7 +74,8 @@ onMounted(() => {
   padding: 8px 6px 8px 10px;
   background: v-bind(BGC);
   color: v-bind(TEXT_COLOR);
-  border-bottom: 2px solid #189f57;
+  border: 1px solid rgba(60, 60, 60, 0.1);
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
   gap: 10px;
   &:hover {
     cursor: pointer;
@@ -80,6 +83,14 @@ onMounted(() => {
     .tab-icon {
       animation: twinkle 0.3s ease-in-out;
     }
+  }
+  .tabs-left {
+    position: absolute;
+    left: -2px;
+    border-radius: 8px;
+    background: #189f57;
+    height: 20px;
+    width: 4px;
   }
   .del {
     color: v-bind(TEXT_COLOR);

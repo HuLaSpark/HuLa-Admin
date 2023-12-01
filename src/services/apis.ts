@@ -13,7 +13,7 @@ export default {
   /*登录 请求*/
   login: (form: login): Promise<Response> => POST(urls.login, form),
   /*退出 请求*/
-  logout: (uid: string): Promise<Response> => GET(urls.logout + '/' + uid),
+  logout: (): Promise<Response> => GET(urls.logout),
   /*获取公钥*/
   getPublicKey: (): Promise<Response> => POST(urls.getPublicKey),
   /*系统用户分页 请求*/

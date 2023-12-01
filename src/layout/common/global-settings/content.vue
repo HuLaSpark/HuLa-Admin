@@ -279,6 +279,9 @@ const handleKeyDown = (event: KeyboardEvent) => {
     case event.key === 'Tab':
       showError('不可以使用Tab键')
       break
+    case event.key === ' ':
+      showErrorAndBlur('不可以使用空格键')
+      break
     case item.includes(event.key):
       showErrorAndBlur('该键已存在')
       break

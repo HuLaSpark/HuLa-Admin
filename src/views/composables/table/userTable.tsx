@@ -240,7 +240,7 @@ export const userTable = (data: Ref<any[]>) => {
               {{
                 default: () => t('delete'),
                 trigger: () => (
-                  <NPopconfirm onPositiveClick={() => handleDeleteTable(row)}>
+                  <NPopconfirm positive-button-props={{ type: 'error' }} onPositiveClick={() => handleDeleteTable(row)}>
                     {{
                       default: () => t('confirm_delete'),
                       trigger: () => (
