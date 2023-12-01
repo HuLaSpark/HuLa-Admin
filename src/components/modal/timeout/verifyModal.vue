@@ -49,14 +49,13 @@ import { delay } from 'lodash-es'
 
 const { t } = i18n.global
 const userInfoStore = userStore()
-const uid = userInfoStore.getUserUId
 const userExit = () => {
   Loading.hourglass()
   delay(() => {
     show.value = false
     userInfoStore.logout()
     Loading.remove()
-    useLogin().exit(uid)
+    useLogin().exit()
   }, 300)
 }
 const { butShow, validateRenewPassword } = check()

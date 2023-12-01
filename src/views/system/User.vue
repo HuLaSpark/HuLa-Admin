@@ -6,7 +6,11 @@
         {{ t('add') }}
       </n-button>
 
-      <n-popconfirm placement="bottom" @positive-click="handleBatch">
+      <n-popconfirm
+        :positive-text="t('delete')"
+        :positive-button-props="{ type: 'error' }"
+        placement="bottom"
+        @positive-click="handleBatch">
         <template #trigger>
           <n-button style="border-radius: 8px" secondary type="error">
             <template #icon><n-icon :component="PlaylistX" /></template>

@@ -14,7 +14,6 @@ const { pageNum, pageSize, total } = paging
 /*解构状态类型参数*/
 const {
   loading,
-  drawer,
   verify,
   disabled,
   AddOrEdit,
@@ -163,7 +162,7 @@ const EditRoleInfo = async (formEl: any) => {
               verify.value = false
               nextTick(() => {
                 userInfoStore.logout()
-                useLogin().exit(uid)
+                useLogin().exit()
               })
             } else {
               load()

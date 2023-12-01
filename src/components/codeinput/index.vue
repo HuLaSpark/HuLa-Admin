@@ -8,7 +8,7 @@
         type="text"
         maxlength="1"
         :value="code[index]"
-        @input="onInput($event.target.value, index)"
+        @input="onInput(($event.target as any).value, index)"
         @keydown="onKeyDown($event, index)"
         :style="{ width: inputSize + 'px', height: inputSize + 'px' }" />
     </div>
@@ -18,7 +18,6 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
 import { mainStore } from '@/stores/main'
-import { passwordReset } from '@/api/passwordReset'
 import { animation } from '@/components/modal/type'
 import useState from '@/hooks/useState'
 import { i18n } from '@/i18n'
@@ -127,23 +126,23 @@ const onPaste = (event: ClipboardEvent) => {
 /*重置密码方法*/
 const handlePawReset = async () => {
   const emailCode = code.value.join('')
-  await passwordReset({ email, emailCode }).then((r) => {
-    if (r.code === '00000') {
-      window.$notification.success({
-        title: t('reset_success'),
-        content: r.msg,
-        duration: 0
-      })
-      animation.value = 'modal-container animate__animated animate__rotateOutDownRight'
-      nextTick(() => {
-        showCode.value = false
-        showModal.value = false
-        animation.value = 'modal-container animate__animated animate__shakeX'
-      })
-    } else {
-      codeMsg.value = r.msg
-    }
-  })
+  // await passwordReset({ email, emailCode }).then((r) => {
+  //   if (r.code === '00000') {
+  //     window.$notification.success({
+  //       title: t('reset_success'),
+  //       content: r.msg,
+  //       duration: 0
+  //     })
+  //     animation.value = 'modal-container animate__animated animate__rotateOutDownRight'
+  //     nextTick(() => {
+  //       showCode.value = false
+  //       showModal.value = false
+  //       animation.value = 'modal-container animate__animated animate__shakeX'
+  //     })
+  //   } else {
+  //     codeMsg.value = r.msg
+  //   }
+  // })
 }
 
 onMounted(() => {

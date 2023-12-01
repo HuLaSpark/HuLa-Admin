@@ -130,7 +130,11 @@
               <n-button quaternary type="tertiary"> 个人信息 </n-button>
               <n-tooltip trigger="hover" content-style="padding: 0">
                 <template #trigger>
-                  <n-popconfirm :positive-text="t('confirm')" :negative-text="t('cancel')" @positive-click="userExit">
+                  <n-popconfirm
+                    :positive-button-props="{ type: 'error' }"
+                    :positive-text="t('confirm')"
+                    :negative-text="t('cancel')"
+                    @positive-click="userExit">
                     <template #icon>
                       <n-icon color="#e86060"><AlertTriangle /></n-icon>
                     </template>
@@ -186,7 +190,7 @@ const message = useMessage()
 const store = mainStore()
 const userInfoStore = userStore()
 const user = userInfoStore.getUser
-const { uid, userName, email, url } = user
+const { userName, email, url } = user
 const { BGC, TEXT_COLOR, BGC_OTHER } = storeToRefs(store)
 const showModal = ref(false)
 const fullIcon = ref(false)
@@ -232,7 +236,7 @@ const userExit = () => {
   Loading.hourglass()
   delay(() => {
     Loading.remove()
-    useLogin().exit(uid)
+    useLogin().exit()
   }, 500)
 }
 </script>
