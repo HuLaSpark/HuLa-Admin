@@ -94,7 +94,6 @@ document.addEventListener('keydown', (event) => {
     const combinedKeys = key.value.item.join('+')
     hotkeys(combinedKeys, () => {
       delay(() => {
-        console.log(combinedKeys)
         showSearch()
       }, 300)
     })

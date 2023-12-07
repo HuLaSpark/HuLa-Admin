@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import router from '@/router/index'
 
 type Tab = {
   data: {
@@ -16,6 +17,8 @@ export const tabs = defineStore('tabs', {
     },
   actions: {
     addTab(tab: Tab) {
+      /*添加标签页的时候排除home路由*/
+      if ((tab.data.path as any) === 'home') return
       this.data = {
         ...this.data,
         [tab.data.path as any]: {
@@ -27,6 +30,9 @@ export const tabs = defineStore('tabs', {
     },
     removeTab(path: string) {
       this.data = Object.fromEntries(Object.entries(this.data).filter(([key]) => key !== path))
+      if (Object.keys(this.data).length === 0) {
+        router.push('/home')
+      }
     }
   },
   //开启数据持久化

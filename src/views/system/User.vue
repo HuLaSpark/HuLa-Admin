@@ -1,36 +1,45 @@
 <template>
   <n-space vertical>
-    <n-space align="center">
-      <n-button style="border-radius: 8px" secondary type="success" @click="handleAdd">
-        <template #icon><n-icon :component="Plus" /></template>
-        {{ t('add') }}
-      </n-button>
+    <n-space justify="space-between">
+      <n-space align="center">
+        <n-button style="border-radius: 8px" secondary type="success" @click="handleAdd">
+          <template #icon><n-icon :component="Plus" /></template>
+          {{ t('add') }}
+        </n-button>
+        <n-popconfirm
+          :positive-text="t('delete')"
+          :positive-button-props="{ type: 'error' }"
+          placement="bottom"
+          @positive-click="handleBatch">
+          <template #trigger>
+            <n-button style="border-radius: 8px" secondary type="error">
+              <template #icon><n-icon :component="PlaylistX" /></template>
+              {{ t('delete_batch') }}
+            </n-button>
+          </template>
+          {{ t('confirm_delete_batch') }}
+        </n-popconfirm>
+      </n-space>
 
-      <n-popconfirm
-        :positive-text="t('delete')"
-        :positive-button-props="{ type: 'error' }"
-        placement="bottom"
-        @positive-click="handleBatch">
-        <template #trigger>
-          <n-button style="border-radius: 8px" secondary type="error">
-            <template #icon><n-icon :component="PlaylistX" /></template>
-            {{ t('delete_batch') }}
-          </n-button>
-        </template>
-        {{ t('confirm_delete_batch') }}
-      </n-popconfirm>
+      <n-space align="center">
+        <n-input
+          :maxlength="10"
+          style="border-radius: 10px"
+          v-model:value="input"
+          clearable
+          placeholder="请输入关键词搜索"
+          @input="handleSearch">
+          <template #prefix>
+            <n-icon :component="Search" />
+          </template>
+        </n-input>
 
-      <n-input
-        :maxlength="10"
-        style="border-radius: 10px"
-        v-model:value="input"
-        clearable
-        placeholder="请输入关键词搜索"
-        @input="handleSearch">
-        <template #prefix>
-          <n-icon :component="Search" />
-        </template>
-      </n-input>
+        <n-button circle secondary type="primary">
+          <template #icon>
+            <n-icon :component="Refresh" />
+          </template>
+        </n-button>
+      </n-space>
     </n-space>
 
     <!--表格-->
@@ -85,7 +94,7 @@ import apis from '@/services/apis'
 import paging from '@/hooks/usePaging'
 import { pageUser, Response } from '@/services/types'
 import { i18n } from '@/i18n'
-import { RotateClockwise2, Plus, PlaylistX, Search } from '@vicons/tabler'
+import { RotateClockwise2, Plus, PlaylistX, Search, Refresh } from '@vicons/tabler'
 import { userDrawer } from '@/views/composables/drawer/index'
 import userVar from '@/views/composables/drawer/userDrawer/userVar'
 import { userTable } from '@/views/composables/table/userTable'
@@ -124,12 +133,15 @@ const LoadingBarTrigger = defineComponent({
     return null
   }
 })
+
 /*表格中每个key值*/
 const rowKey = (row: pageUser) => row.id
+
 /*受控过滤方法*/
 const handleUpdateFilter = (filters: DataTableFilterState, sourceColumn: DataTableBaseColumn) => {
   statusColumn.filterOptionValue = filters[sourceColumn.key] as number
 }
+
 /*处理新增事件*/
 const handleAdd = () => {
   showModal.value = true
@@ -138,6 +150,7 @@ const handleAdd = () => {
 }
 
 /*批量删除事件*/
+// TODO 考虑系统用户应该是第三方登录或者是超级管理员或者管理员创建的用户所以批量删除是否有必要存在，建议逻辑删除或者不需要删除的功能 (nyh-2023-12-02 06:27:30)
 const handleBatch = async () => {
   if (checkedRowKeys.value.length === 0) {
     Report.failure(t('delete_batch_error'), t('batch_error_msg'), t('close'), {

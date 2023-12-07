@@ -27,8 +27,7 @@
               :collapsed="collapsed"
               :collapsed-width="64"
               :collapsed-icon-size="22"
-              :options="menuOptions"
-              @click="handleTab(activeKey)" />
+              :options="menuOptions" />
           </n-scrollbar>
         </n-layout-sider>
       </n-layout>
@@ -57,7 +56,6 @@ import { i18n } from '@/i18n'
 import * as vicons from '@vicons/tabler'
 import { RouterLink, useRoute } from 'vue-router'
 import { Menu } from '@/services/types'
-import { tabs } from '@/stores/tabs'
 
 const { t } = i18n.global
 const route = useRoute()
@@ -67,7 +65,6 @@ const menuInstRef = ref()
 const store = mainStore()
 const menuStore = userStore()
 const menus = menuStore.getMenus
-const tabsStore = tabs()
 const { BGC, ASIDE_TEXT_COLOR, ASIDE_BGC, ASIDE_COLOR } = storeToRefs(store)
 
 /*使用全局搜索的时候传入值后自动展开目录菜单项*/
@@ -90,48 +87,30 @@ const handleCollapsed = () => {
   emit('collapsed', collapsed.value)
 }
 
-/*处理tab选项*/
-const handleTab = (key: string) => {
-  menus.find((menu: any) => {
-    if (menu.path === key) {
-      tabsStore.addTab({
-        data: { icon: menu.icon, path: menu.path, title: menu.name }
-      })
-    } else {
-      menu.children?.find((child: any) => {
-        if (child.path === key) {
-          tabsStore.addTab({
-            data: { icon: child.icon, path: child.path, title: child.name }
-          })
-        }
-      })
-    }
-  })
-}
-
+/*渲染菜单图标*/
 const renderIcon = (icon: string) => {
   return () => <NIcon component={(vicons as any)[icon]} />
 }
+/*菜单数据 注意:排除了主页的路由*/
+const menuOptions: MenuOption[] = menus
+  .filter((menu: Menu) => menu.path !== 'home')
+  .map((menu: Menu) => {
+    const menuOption: MenuOption = {
+      label: () => <RouterLink to={{ name: menu.page }}>{() => menu.name}</RouterLink>,
+      key: menu.path as string,
+      icon: renderIcon(menu.icon)
+    }
+    if (menu.path) {
+      return menuOption
+    }
 
-const menuOptions: MenuOption[] = menus.map((menu: Menu) => {
-  const menuOption: MenuOption = {
-    label: () => <RouterLink to={{ name: menu.page }}>{() => menu.name}</RouterLink>,
-    key: menu.path as string,
-    icon: renderIcon(menu.icon)
-  }
-
-  if (menu.path) {
+    menuOption.children = menu.children?.map((child) => ({
+      label: () => <RouterLink to={{ name: child.page }}>{() => child.name}</RouterLink>,
+      key: child.path as string,
+      icon: renderIcon(child.icon)
+    }))
     return menuOption
-  }
-
-  menuOption.children = menu.children?.map((child) => ({
-    label: () => <RouterLink to={{ name: child.page }}>{() => child.name}</RouterLink>,
-    key: child.path as string,
-    icon: renderIcon(child.icon)
-  }))
-
-  return menuOption
-})
+  })
 </script>
 <style scoped>
 .aside {

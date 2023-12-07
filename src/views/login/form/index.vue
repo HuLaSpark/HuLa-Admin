@@ -15,80 +15,78 @@
     <!-- 登录表单 -->
     <n-card class="form">
       <n-form ref="formRef" :show-require-mark="false" :rules="rules as any" :model="ruleForm">
-        <div style="margin: 10px 0">
-          <!--租户选中框-->
-          <n-form-item path="tenantName" :label="t('tenant')" label-style="font-size: 14px;color: #cccccc">
-            <n-select
-              v-model:value="ruleForm.tenantName"
-              v-model:show="showSelect"
-              :placeholder="t('select')"
-              :loading="loadingSelect"
-              @focus="handleShowSelect"
-              :render-label="renderLabel"
-              :render-tag="renderSingleSelectTag"
-              @updateValue="handleUpdateValue"
-              clearable
-              remote
-              :options="selectData">
-              <template #arrow>
-                <transition name="slide-left">
-                  <Cloud v-if="showSelect" />
-                  <BuildingSkyscraper v-else />
-                </transition>
-              </template>
-            </n-select>
-          </n-form-item>
-          <!--用户名输入框-->
-          <n-form-item path="userName" :label="t('un_or_el')" label-style="font-size: 14px;color: #cccccc">
-            <n-input
-              clearable
-              :allow-input="Common.noSideSpace"
-              @keydown.enter="SignIn(formRef)"
-              v-model:value="ruleForm.userName"
-              style="border-radius: 8px"
-              :placeholder="t('input_username_email')">
-              <template #prefix>
-                <n-icon color="#000"><User /></n-icon>
-              </template>
-            </n-input>
-          </n-form-item>
-          <!--忘记密码-->
-          <div class="paw-title">
-            <p style="font-size: 14px; color: #cccccc">{{ t('password') }}</p>
-            <n-popover trigger="hover">
-              <template #trigger>
-                <p style="font-size: 12px; color: #337ecc; cursor: pointer" @click="changePawBox">
-                  {{ t('forgot_password') }}
-                </p>
-              </template>
-              <img src="@/assets/svg/forgotPwd.svg" style="width: 140px; height: 140px" alt="" />
-            </n-popover>
-          </div>
-          <!--密码输入框-->
-          <n-form-item :validation-status="ValidationStatus" path="password" :label="t('password')" :show-label="false">
-            <n-input
-              show-password-on="mousedown"
-              type="password"
-              clearable
-              :allow-input="Common.noSideSpace"
-              :loading="loadingPaw"
-              @keydown.enter="SignIn(formRef)"
-              v-model:value="ruleForm.password"
-              style="border-radius: 8px"
-              :placeholder="t('input_paw')">
-              <template #prefix>
-                <n-icon color="#000"><Lock /></n-icon>
-              </template>
-            </n-input>
-          </n-form-item>
-          <!--记住我-->
-          <n-checkbox
-            :on-update:checked="() => (rememberOption = !rememberOption)"
-            :checked="rememberOption"
-            style="margin: 5px 0 10px 5px">
-            <n-text depth="3">{{ t('remember_me') }}</n-text>
-          </n-checkbox>
+        <!--租户选中框-->
+        <n-form-item path="tenantName" :label="t('tenant')" label-style="font-size: 14px;color: #cccccc">
+          <n-select
+            v-model:value="ruleForm.tenantName"
+            v-model:show="showSelect"
+            :placeholder="t('select')"
+            :loading="loadingSelect"
+            @focus="handleShowSelect"
+            :render-label="renderLabel"
+            :render-tag="renderSingleSelectTag"
+            @updateValue="handleUpdateValue"
+            clearable
+            remote
+            :options="selectData">
+            <template #arrow>
+              <transition name="slide-left">
+                <Cloud v-if="showSelect" />
+                <BuildingSkyscraper v-else />
+              </transition>
+            </template>
+          </n-select>
+        </n-form-item>
+        <!--用户名输入框-->
+        <n-form-item path="userName" :label="t('un_or_el')" label-style="font-size: 14px;color: #cccccc">
+          <n-input
+            clearable
+            :allow-input="Common.noSideSpace"
+            @keydown.enter="SignIn(formRef)"
+            v-model:value="ruleForm.userName"
+            style="border-radius: 8px"
+            :placeholder="t('input_username_email')">
+            <template #prefix>
+              <n-icon color="#000"><User /></n-icon>
+            </template>
+          </n-input>
+        </n-form-item>
+        <!--忘记密码-->
+        <div class="paw-title">
+          <p style="font-size: 14px; color: #cccccc">{{ t('password') }}</p>
+          <n-popover trigger="hover">
+            <template #trigger>
+              <p style="font-size: 12px; color: #337ecc; cursor: pointer" @click="changePawBox">
+                {{ t('forgot_password') }}
+              </p>
+            </template>
+            <img src="@/assets/svg/forgotPwd.svg" style="width: 140px; height: 140px" alt="" />
+          </n-popover>
         </div>
+        <!--密码输入框-->
+        <n-form-item :validation-status="ValidationStatus" path="password" :label="t('password')" :show-label="false">
+          <n-input
+            show-password-on="mousedown"
+            type="password"
+            clearable
+            :allow-input="Common.noSideSpace"
+            :loading="loadingPaw"
+            @keydown.enter="SignIn(formRef)"
+            v-model:value="ruleForm.password"
+            style="border-radius: 8px"
+            :placeholder="t('input_paw')">
+            <template #prefix>
+              <n-icon color="#000"><Lock /></n-icon>
+            </template>
+          </n-input>
+        </n-form-item>
+        <!--记住我-->
+        <n-checkbox
+          :on-update:checked="() => (rememberOption = !rememberOption)"
+          :checked="rememberOption"
+          style="margin: 5px 0 10px 5px">
+          <n-text depth="3">{{ t('remember_me') }}</n-text>
+        </n-checkbox>
 
         <n-button
           @click="SignIn(formRef)"

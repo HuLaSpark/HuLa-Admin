@@ -1,6 +1,6 @@
 import { createAxios } from '@/services/request'
 import urls from '@/services/urls'
-import type { Response, UpdateUser, User, parameter, Renew, login, BatchDeleteUser } from '@/services/types'
+import type { Response, UpdateUser, User, parameter, Renew, login, BatchDelete } from '@/services/types'
 
 const request = createAxios()
 
@@ -16,21 +16,31 @@ export default {
   logout: (): Promise<Response> => GET(urls.logout),
   /*获取公钥*/
   getPublicKey: (): Promise<Response> => POST(urls.getPublicKey),
-  /*系统用户分页 请求*/
-  userPage: (params: parameter): Promise<Response> => GET(urls.userPage, { params }),
+  /*获取租户列表*/
+  getTenantList: (): Promise<Response> => GET(urls.tenantList),
+  /*手动续签 请求*/
+  renew: (user: Renew): Promise<Response> => POST(urls.renew, user),
   /*新增 用户*/
-  addUser: (form: User): Promise<Response> => POST(urls.userCRUD, form),
+  addUser: (form: User): Promise<Response> => POST(urls.user, form),
   /*删除单个 用户*/
   deleteUser: (id: number, username: string, uid: string): Promise<Response> =>
-    DELETE(urls.userCRUD + '/' + id + '/' + username + '/' + uid),
+    DELETE(urls.user + '/' + id + '/' + username + '/' + uid),
   /*批量删除 用户*/
-  batchDeleteUsers: (data: BatchDeleteUser): Promise<Response> => POST(urls.userCRUD + '/delete/batch', data),
+  batchDeleteUsers: (data: BatchDelete): Promise<Response> => POST(urls.user + '/delete/batch', data),
   /*修改 用户*/
-  editUser: (form: UpdateUser): Promise<Response> => PUT(urls.userCRUD, form),
-  /*续签 请求*/
-  renew: (user: Renew): Promise<Response> => POST(urls.renew, user),
+  editUser: (form: UpdateUser): Promise<Response> => PUT(urls.user, form),
+  /*用户分页 请求*/
+  userPage: (params: parameter): Promise<Response> => GET(urls.user + '/page', { params }),
+  /*新增 角色*/
+  addRole: (form: any): Promise<Response> => POST(urls.role, form),
+  /*删除单个 角色*/
+  deleteRole: (id: number): Promise<Response> => DELETE(urls.role + '/' + id),
+  /*批量删除 角色*/
+  batchDeleteRoles: (data: BatchDelete): Promise<Response> => POST(urls.role + '/delete/batch', data),
+  /*修改 角色*/
+  editRole: (form: any): Promise<Response> => PUT(urls.role, form),
+  /*角色分页 请求*/
+  rolePage: (params: parameter): Promise<Response> => GET(urls.role + '/page', { params }),
   /*获取角色列表*/
-  getRoleList: (): Promise<Response> => GET(urls.roleList),
-  /*获取租户列表*/
-  getTenantList: (): Promise<Response> => GET(urls.tenantList)
+  getRoleList: (): Promise<Response> => GET(urls.role)
 }

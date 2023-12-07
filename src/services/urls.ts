@@ -6,9 +6,8 @@ export default {
   login: `${prefix + URLEnum.PASS}/login`,
   logout: `${prefix + URLEnum.PASS}/logout`,
   getPublicKey: `${prefix + URLEnum.PASS}/publicKey`,
+  tenantList: `${prefix + URLEnum.TENANT}/tenantList`,
   renew: `${prefix + URLEnum.PASS}/renew`,
-  userPage: `${prefix + URLEnum.USER}/page`,
-  userCRUD: `${prefix + URLEnum.USER}`,
-  roleList: `${prefix + URLEnum.ROLE}`,
-  tenantList: `${prefix + URLEnum.TENANT}/tenantList`
+  user: `${prefix + URLEnum.USER}`,
+  role: `${prefix + URLEnum.ROLE}`
 }

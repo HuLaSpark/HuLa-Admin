@@ -114,7 +114,8 @@ const save = (val: globalSetting, event: MouseEvent) => {
     const y = event.clientY
     const endRadius = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y))
     let isDark: boolean
-    /*判断当前浏览器是否支持startViewTransition API*/
+    /*判断当前浏览器是否支持View Transition API*/
+    // TODO 遇到表格数据多的时候会卡顿一下 (nyh-2023-12-02 06:48:52)
     if (document.startViewTransition) {
       const transition = document.startViewTransition(() => {
         const root = document.documentElement
