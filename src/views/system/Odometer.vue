@@ -21,14 +21,16 @@
   </div>
 </template>
 <script setup lang="ts">
-import Areachart from '@/views/odometer/layout/Areachart.vue'
-import Piechart from '@/views/odometer/layout/Piechart.vue'
-import Barchart from '@/views/odometer/layout/Barchart.vue'
-import Barchart2 from '@/views/odometer/layout/Barchart-second.vue'
-import Barchart3 from '@/views/odometer/layout/Barchart-third.vue'
-import Cardchart from '@/views/odometer/layout/Cardchart.vue'
-import CardchartSecond from '@/views/odometer/layout/Cardchart-second.vue'
-import CardchartThird from '@/views/odometer/layout/Cardchart-third.vue'
+import {
+  Areachart,
+  Piechart,
+  Barchart,
+  Barchart2,
+  Barchart3,
+  Cardchart,
+  CardchartSecond,
+  CardchartThird
+} from '@/views/pagination/odometer/index'
 import { useDefer } from '@/hooks/useDefer'
 
 const defer = useDefer(16)

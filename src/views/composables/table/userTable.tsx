@@ -1,4 +1,4 @@
-import type { DataTableBaseColumn, DataTableColumns } from 'naive-ui'
+import type { DataTableBaseColumn, DataTableColumns, DataTableRowKey } from 'naive-ui'
 import {
   NIcon,
   NIconWrapper,
@@ -10,7 +10,6 @@ import {
   NAvatar,
   NPopconfirm,
   NButton,
-  DataTableRowKey,
   NText
 } from 'naive-ui'
 import { pageUser } from '@/services/types'
@@ -138,6 +137,7 @@ export const userTable = (data: Ref<any[]>) => {
     },
     {
       title: t('create_time'),
+      width: 120,
       key: 'createTime',
       render: (row) => {
         return (
@@ -152,6 +152,7 @@ export const userTable = (data: Ref<any[]>) => {
     },
     {
       title: t('update_time'),
+      width: 120,
       key: 'updateTime',
       render: (row) => {
         return (

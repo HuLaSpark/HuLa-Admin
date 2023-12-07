@@ -96,7 +96,7 @@ export const useLogin = () => {
           disabled.value = false
           delay(() => {
             Loading.remove()
-            router.push('/odometer')
+            router.push('/')
             window.$notification.success({
               title: t('login_success'),
               duration: 1500,

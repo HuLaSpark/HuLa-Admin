@@ -100,20 +100,18 @@ export const useBase = () => {
       window.$message.error(res.msg ? res.msg : t('request_failed'))
       return false
     }
-    delay(() => {
-      tableData.value = res.data.records
-      /*如果是编辑操作传过来的id需要进行判断*/
-      if (editId) {
-        const data = tableData.value.find((item: any) => item.id === editId)
-        Object.assign(rawData.value, data)
-        Object.assign(contentData.value, data)
-      }
-      total.value = res.data.total
-      nextTick(() => {
-        loadingBar?.finish()
-        loading.value = false
-      })
-    }, 500)
+    tableData.value = res.data.records
+    /*如果是编辑操作传过来的id需要进行判断*/
+    if (editId) {
+      const data = tableData.value.find((item: any) => item.id === editId)
+      Object.assign(rawData.value, data)
+      Object.assign(contentData.value, data)
+    }
+    total.value = res.data.total
+    await nextTick(() => {
+      loadingBar?.finish()
+      loading.value = false
+    })
   }
 
   /**

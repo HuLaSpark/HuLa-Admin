@@ -5,7 +5,7 @@ import App from '@/App.vue'
 import router from '@/router'
 import pinia from '@/stores/index'
 import { i18n } from '@/i18n'
-import { pkgJson } from '@/views/composables/aboutUs/model'
+import { pkgJson } from '@/views/pagination/aboutUs/model'
 // import VueDragResize from 'vue-drag-resize'
 import drag from '@/directives/drag'
 

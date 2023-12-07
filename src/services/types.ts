@@ -75,10 +75,10 @@ export type UpdateUser = {
   status: number
   avatar: string
 }
-/*批量删除用户*/
-export type BatchDeleteUser = {
+/*批量删除*/
+export type BatchDelete = {
   ids: DataTableRowKey[]
-  uids: string[]
+  uids?: string[]
 }
 /*记住我*/
 export type Renew = {
