@@ -12,7 +12,7 @@ import vueJsx from '@vitejs/plugin-vue-jsx'
 import { viteDefine } from './build/config/define'
 
 // https://vitejs.dev/config/
-export default defineConfig(({ mode }) => {
+export default defineConfig(({ mode }): object => {
   // 获取当前环境的配置,如何设置第三个参数则加载所有变量，而不是以“VITE_”前缀的变量
   const config = loadEnv(mode, process.cwd())
   return {

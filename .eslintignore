@@ -7,5 +7,5 @@ dist
 public
 index.html
 src/assets
-.eslintrc.js
+.eslintrc.cjs
 **/config

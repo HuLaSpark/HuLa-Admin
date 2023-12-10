@@ -1,8 +1,9 @@
 {
-  "name": "HuLa-vue3",
+  "name": "hula-vue3",
   "private": true,
   "version": "v1.1.0-beta",
   "packageManager": "pnpm@8.11.0",
+  "type": "module",
   "engines": {
     "node": "18.x || 20.x"
   },
@@ -115,6 +116,9 @@
   "config": {
     "commitizen": {
       "path": "./node_modules/cz-customizable"
+    },
+    "cz-customizable": {
+      "config": ".cz-config.cjs"
     }
   }
 }
