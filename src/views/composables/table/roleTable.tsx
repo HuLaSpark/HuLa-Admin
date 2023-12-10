@@ -124,8 +124,8 @@ export const roleTable = (data: Ref<any[]>) => {
     }
   }
   /*删除处理*/
-  const handleDeleteTable = async (row: pageUser) => {
-    const res = await apis.deleteUser(row.id, row.userName, row.uid)
+  const handleDeleteTable = async ({ id, userName, uid }: pageUser) => {
+    const res = await apis.deleteUser(id, userName, uid)
     if (res.code !== RCodeEnum.OK) {
       return window.$message.error(res.msg)
     }
