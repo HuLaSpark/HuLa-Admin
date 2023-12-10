@@ -10,7 +10,6 @@ import vueJsx from '@vitejs/plugin-vue-jsx'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import { viteDefine } from './build/config/define'
-import Inspect from 'vite-plugin-inspect'
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
@@ -38,7 +37,6 @@ export default defineConfig(({ mode }) => {
        * 设置defineProps解构语法
        * */
       vue({ script: { propsDestructure: true, defineModel: true } }),
-      Inspect(), // 代码执行参考工具
       vueDevTools(), // 开发工具
       vueJsx(), // 开启jsx功能
       AutoImport({
