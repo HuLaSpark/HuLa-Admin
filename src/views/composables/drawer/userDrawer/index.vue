@@ -96,8 +96,7 @@
 </template>
 
 <script setup lang="tsx">
-import type { FormInst } from 'naive-ui'
-import { NTag, NIcon } from 'naive-ui'
+import { NForm, NIcon, NTag } from 'naive-ui'
 import { i18n } from '@/i18n'
 import Modal from '@/components/modal/index.vue'
 import { AlertCircle } from '@vicons/tabler'
@@ -134,7 +133,7 @@ const handleStatus = (status: any) => {
 }
 
 /*保存事件*/
-const saveData = async (form: any) => {
+const saveData = async (formRef: InstanceType<typeof NForm>) => {
   // 判断是否修改了数据
   if (isEqual(rawData.value, contentData.value)) {
     showWarn.value = true
@@ -143,7 +142,7 @@ const saveData = async (form: any) => {
     return
   }
   await performAction(
-    form,
+    formRef,
     () => apis.editUser(contentData.value),
     () =>
       apis.userPage({
@@ -164,7 +163,7 @@ const clone = () => {
 }
 
 /*关闭弹框*/
-const shutDown = (formRef: FormInst) => {
+const shutDown = (formRef: InstanceType<typeof NForm>) => {
   animation.value = 'modal-container animate__animated animate__fadeOutLeft'
   setTimeout(() => {
     showModal.value = false

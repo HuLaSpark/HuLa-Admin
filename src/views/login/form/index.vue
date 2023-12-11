@@ -166,29 +166,25 @@ import { tenant } from '@/stores/tenant'
 import typeState from '@/hooks/useState'
 import { storeToRefs } from 'pinia'
 import check from '@/hooks/useCheck'
-import useModal from '@/hooks/useModal'
 import { useLogin } from '@/hooks/useLogin'
 import { animation } from '@/components/modal/type'
-import { Lock, User, BuildingSkyscraper, Cloud } from '@vicons/tabler'
+import { BuildingSkyscraper, Cloud, Lock, User } from '@vicons/tabler'
 import { AlertIze } from '@/customize'
 import { delay } from 'lodash-es'
 import apis from '@/services/apis'
-import type { SelectGroupOption, SelectOption, SelectRenderTag, SelectRenderLabel } from 'naive-ui'
-import { NText, NAvatar } from 'naive-ui'
+import { NAvatar, NForm, NText, SelectGroupOption, SelectOption, SelectRenderLabel, SelectRenderTag } from 'naive-ui'
 import { Common } from '@/utils/Common'
 
 const { t } = i18n.global
 const store = mainStore()
 const rememberStore = remember()
 const tenantStore = tenant()
-/*验证码输入框内容*/
-const code = ref('')
 
 const showSelect = ref()
 const loadingSelect = ref(false)
 const selectData = ref<Array<SelectOption | SelectGroupOption>>([])
 /*选中租户之后就存入localStorage*/
-const handleUpdateValue = (value: string, option: SelectOption) => {
+const handleUpdateValue = (_value: string, option: SelectOption) => {
   if (option) {
     const data = { label: option.label, value: option.value }
     tenantStore.setTenant(data)
@@ -253,10 +249,6 @@ const renderLabel: SelectRenderLabel = (option) => {
     ]
   )
 }
-/*处理输入空格事件*/
-// const noSideSpace = (value: string) => {
-//   return !value.startsWith(' ') && !value.endsWith(' ')
-// }
 
 type Itenant = {
   companyName: string
@@ -306,13 +298,17 @@ const {
   SignIn
 } = useLogin()
 const { validateLoginUsername, validatePassword } = check()
-/*引入全局的关闭方法*/
-const { close } = useModal()
 
 const rules = reactive({
   userName: { required: true, asyncValidator: validateLoginUsername, trigger: 'blur' },
   password: { required: true, asyncValidator: validatePassword, trigger: 'blur' },
-  tenantName: { required: true, message: t('choose'), trigger: ['blur', 'change'] }
+  tenantName: {
+    required: true,
+    renderMessage: () => {
+      return t('choose')
+    },
+    trigger: ['blur', 'change']
+  }
 })
 
 const linkList = reactive<any>({

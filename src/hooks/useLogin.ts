@@ -2,7 +2,7 @@ import { userStore } from '@/stores/user'
 import useState from '@/hooks/useState'
 import { i18n } from '@/i18n'
 import router from '@/router'
-import { FormInst } from 'naive-ui'
+import { NForm } from 'naive-ui'
 import { remember } from '@/stores/remember'
 import apis from '@/services/apis'
 import { RCodeEnum } from '@/enums'
@@ -20,7 +20,7 @@ export const useLogin = () => {
   const { disabled, showModal, showCode } = useState
   disabled.value = false
   const signInLoading = ref<boolean>(false)
-  const formRef = ref<FormInst | null>(null)
+  const formRef = ref(<InstanceType<typeof NForm>>{})
   const ruleForm = reactive({
     userName: '',
     password: '',
@@ -46,20 +46,20 @@ export const useLogin = () => {
   const cipherData = ref()
   /**
    * 用户登录校验
-   * @param formInstance 表单校验
+   * @param formRef 表单校验
    */
-  const SignIn = async (formInstance: any) => {
+  const SignIn = async (formRef: InstanceType<typeof NForm>) => {
     /*使用按钮禁用的方式来实现按钮节流*/
     disabled.value = true
     /*初始化登录错误提示*/
     loginErrorMsg.value = false
-    await formInstance
+    await formRef
       ?.validate()
       .then(async () => {
         loginText.value = t('in_check')
         signInLoading.value = true
         Loading.pulse()
-        const { password, userName } = formInstance.model
+        const { password, userName } = formRef.model
         const remember = { password, userName } as any
         const { value } = tenantStore.getTenant
         /*获取公钥*/

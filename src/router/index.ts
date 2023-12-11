@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import { userStore } from '@/stores/user'
 import type { MenuItem } from '@/interface/IRouter'
-import { paginationPage } from './paginationArray'
+import { noPermissionPaths, paginationPage } from './options.ts'
 import { tabs } from '@/stores/tabs'
 
 // const modules = import.meta.glob('../views/system/*.vue')
@@ -77,7 +77,7 @@ export const resetRouter = () => {
 }
 
 // 路由前置守卫
-router.beforeEach(async (to: any, from: any, next: any) => {
+router.beforeEach(async (to: any, _from: any, next: any) => {
   const tabsStore = tabs()
   if (to.meta.requiresAuth && to.path !== '/home') {
     tabsStore.addTab({
@@ -89,10 +89,9 @@ router.beforeEach(async (to: any, from: any, next: any) => {
   document.title = to.meta.title ? to.meta.title + VITE_TITLE_SUFFIX : VITE_APP_TITLE
   const store = userStore() // 拿到用户对象id信息判断是否登录
   const hasUser = store.loginInfo.sysUser && store.loginInfo.sysUser.id
-  const noPermissionPaths = ['/login', '/404'] // 定义无需登录的路由
   /*判断页面是否需要分页*/
   paginationPage.includes(to.name) ? (to.meta.pagination = true) : (to.meta.pagination = false)
-  if (to.meta.requiresAuth && !hasUser) {
+  if (!hasUser && !noPermissionPaths.includes(to.path)) {
     // 用户没登录,  假如你当前跳转login页面，然后login页面没有用户信息，这个时候你再去往 login页面跳转，就会发生无限循环跳转
     // 获取缓存的用户数据
     //  如果to.path === '/login' 的时候   !noPermissionPaths.includes(to.path) 是返回 false的，也就不会进 next("/login")

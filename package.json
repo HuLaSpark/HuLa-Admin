@@ -25,7 +25,6 @@
     "lint:prettier": "prettier --write  \"src/**/*.{js,ts,json,tsx,css,scss,vue,html,md}\"",
     "lint:stylelint": "stylelint --cache --fix \"**/*.{html,vue,css,scss}\" --cache --cache-location node_modules/.cache/stylelint/",
     "fix": "eslint --ext .js,.jsx,.ts,.vue src --fix",
-    "commitlint": "commitlint --config commitlint.config.js -e -V",
     "preinstall": "npx only-allow pnpm",
     "prepare": "npx husky install",
     "commit": "git add . && lint-staged && git-cz && conventional-changelog -p cz-config.js -i CHANGELOG.md -s -r 0",
@@ -65,8 +64,6 @@
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.23.3",
-    "@commitlint/cli": "^17.8.1",
-    "@commitlint/config-conventional": "^17.8.1",
     "@types/lodash-es": "^4.17.12",
     "@types/node": "^20.10.4",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
@@ -76,7 +73,6 @@
     "@vitest/ui": "^0.32.4",
     "@vue/test-utils": "^2.4.3",
     "commitizen": "^4.3.0",
-    "commitlint-config-cz": "^0.13.3",
     "conventional-changelog": "^4.0.0",
     "conventional-changelog-cli": "^3.0.0",
     "cz-conventional-changelog": "^3.3.0",
@@ -118,7 +114,7 @@
       "path": "./node_modules/cz-customizable"
     },
     "cz-customizable": {
-      "config": ".cz-config.cjs"
+      "config": "config/.cz-config.cjs"
     }
   }
 }
