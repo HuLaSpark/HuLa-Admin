@@ -1,24 +1,17 @@
 import { createApp } from 'vue'
-import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import 'animate.css'
 import App from '@/App.vue'
 import router from '@/router'
-import pinia from '@/stores/index'
+import { pinia } from '@/stores'
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import { i18n } from '@/i18n'
-import { pkgJson } from '@/views/pagination/aboutUs/model'
 // import VueDragResize from 'vue-drag-resize'
 import drag from '@/directives/drag'
+import { consolePrinter } from '@/simple/consolePrinter.ts'
 
-const app = createApp(App)
-app.use(router)
-app.use(pinia)
-app.use(i18n)
 pinia.use(piniaPluginPersistedstate)
-app.directive('drag', drag)
-app.mount('#app')
+const app = createApp(App)
+/*使用链式调用挂载*/
+app.use(pinia).use(router).use(i18n).directive('drag', drag).mount('#app')
 // app.component('vue-drag-resize', VueDragResize)
-const { version } = pkgJson
-console.log(
-  `%c🎉 HuLa ${version}`,
-  'font-size:20px; background:#FFF; color:#581845;padding:10px; border: 3px solid #581845;border-radius:10px;'
-)
+consolePrinter()

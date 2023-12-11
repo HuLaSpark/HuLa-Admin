@@ -1,6 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import pkg from '/package.json'
+import pkg from '~/package.json'
 
 /** npm依赖包版本信息 */
 export interface PkgVersionInfo {
@@ -25,7 +23,7 @@ interface PkgJson {
 
 const pkgWithType = pkg as Package
 
-function transformVersionData(tuple: [string, string]): PkgVersionInfo {
+const transformVersionData = (tuple: [string, string]): PkgVersionInfo => {
   const [name, version] = tuple
   return {
     name,

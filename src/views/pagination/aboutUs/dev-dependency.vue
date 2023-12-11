@@ -27,7 +27,7 @@
 </template>
 
 <script setup lang="ts">
-import { pkgJson } from './model'
+import { pkgJson } from '@/common/model.ts'
 import { Help } from '@vicons/tabler'
 
 defineOptions({ name: 'DevDependency' })

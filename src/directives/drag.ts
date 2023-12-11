@@ -62,7 +62,7 @@ const drag = (el: HTMLElementWithDragAttribute) => {
     /**
      * 鼠标松开事件
      */
-    document.onmouseup = (e: MouseEvent) => {
+    document.onmouseup = () => {
       document.onmousemove = null
       document.onmouseup = null
       document.onselectstart = null
