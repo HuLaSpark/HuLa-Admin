@@ -34,10 +34,10 @@ import { storeToRefs } from 'pinia'
 import { mainStore } from '@/stores/main'
 import { i18n } from '@/i18n'
 import { useLogin } from '@/hooks/useLogin'
-import { Moon, Sun, BrandGit, ArrowUpRight } from '@vicons/tabler'
+import { ArrowUpRight, BrandGit, Moon, Sun } from '@vicons/tabler'
 import Language from '@/components/Language/index.vue'
 import { delay } from 'lodash-es'
-import { pkgJson } from '@/views/pagination/aboutUs/model'
+import { pkgJson } from '@/common/model.ts'
 
 const { version } = pkgJson
 const gitee = 'https://gitee.com/nongyehong'

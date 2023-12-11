@@ -53,7 +53,7 @@
 <script setup lang="ts">
 import { DevDependency, ProDependency } from '@/views/pagination/aboutUs/index'
 import { AdjustmentsHorizontal, BrandGit, Package, Versions } from '@vicons/tabler'
-import { pkgJson } from '@/views/pagination/aboutUs/model'
+import { pkgJson } from '@/common/model.ts'
 import { indexedDB } from '@/stores/indexedDB'
 
 const aboutUsStores = indexedDB()

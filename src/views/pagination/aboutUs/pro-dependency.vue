@@ -8,8 +8,8 @@
         </template>
         <n-text depth="3">
           <n-space vertical>
-            <span> <n-text type="warning">黄色</n-text>表示当前库的版本更新到第一个数字中的最新版本 </span>
-            <span> <n-text type="success">绿色</n-text>表示固定版本 </span>
+            <span> <n-text type="warning">黄色</n-text>表示当前库的版本更新到第一个数字中的最新版本</span>
+            <span> <n-text type="success">绿色</n-text>表示固定版本</span>
           </n-space>
         </n-text>
       </n-popover>
@@ -27,7 +27,7 @@
 </template>
 
 <script setup lang="ts">
-import { pkgJson } from './model'
+import { pkgJson } from '@/common/model.ts'
 import { Help } from '@vicons/tabler'
 
 defineOptions({ name: 'ProDependency' })
