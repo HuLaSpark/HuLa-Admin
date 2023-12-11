@@ -191,24 +191,23 @@ import { mainStore } from '@/stores/main'
 import { storeToRefs } from 'pinia'
 import { userStore } from '@/stores/user'
 import {
-  Bell,
+  AlertTriangle,
   ArrowsMaximize,
   ArrowsMinimize,
-  Trash,
-  Terminal2,
-  Power,
-  AlertTriangle,
-  Message2,
+  Bell,
   Mail,
-  ChevronDown
+  Message2,
+  Power,
+  Terminal2,
+  Trash
 } from '@vicons/tabler'
 import { i18n } from '@/i18n'
-import Settings from '@/layout/common/global-settings/index.vue'
+import Settings from '@/global/settings/index.vue'
 import screenfull from 'screenfull'
 import { useLogin } from '@/hooks/useLogin'
 import { Loading } from 'notiflix'
 import { delay } from 'lodash-es'
-import GlobalSearch from '@/layout/common/global-search/index.vue'
+import GlobalSearch from '@/global/search/index.vue'
 import { networkIcon } from '@/services/request'
 
 const { t } = i18n.global

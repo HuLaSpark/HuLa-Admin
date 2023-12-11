@@ -7,6 +7,7 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
+    ActionBar: typeof import('./../views/composables/actionBar/index.vue')['default']
     Cascader: typeof import('./../components/cascader/index.vue')['default']
     Codeinput: typeof import('./../components/codeinput/index.vue')['default']
     Countdown: typeof import('./../components/countdown/index.vue')['default']
@@ -16,12 +17,15 @@ declare module 'vue' {
     NAutoComplete: typeof import('naive-ui')['NAutoComplete']
     NAvatar: typeof import('naive-ui')['NAvatar']
     NBadge: typeof import('naive-ui')['NBadge']
+    NBlockquote: typeof import('naive-ui')['NBlockquote']
     NButton: typeof import('naive-ui')['NButton']
     NCard: typeof import('naive-ui')['NCard']
     NCheckbox: typeof import('naive-ui')['NCheckbox']
     NCollapseTransition: typeof import('naive-ui')['NCollapseTransition']
     NConfigProvider: typeof import('naive-ui')['NConfigProvider']
     NDataTable: typeof import('naive-ui')['NDataTable']
+    NDescriptions: typeof import('naive-ui')['NDescriptions']
+    NDescriptionsItem: typeof import('naive-ui')['NDescriptionsItem']
     NDivider: typeof import('naive-ui')['NDivider']
     NDrawer: typeof import('naive-ui')['NDrawer']
     NDrawerContent: typeof import('naive-ui')['NDrawerContent']
@@ -43,6 +47,7 @@ declare module 'vue' {
     NNotificationProvider: typeof import('naive-ui')['NNotificationProvider']
     NPopconfirm: typeof import('naive-ui')['NPopconfirm']
     NPopover: typeof import('naive-ui')['NPopover']
+    NPopselect: typeof import('naive-ui')['NPopselect']
     NResult: typeof import('naive-ui')['NResult']
     NScrollbar: typeof import('naive-ui')['NScrollbar']
     NSelect: typeof import('naive-ui')['NSelect']
@@ -54,6 +59,7 @@ declare module 'vue' {
     NTag: typeof import('naive-ui')['NTag']
     NText: typeof import('naive-ui')['NText']
     NThing: typeof import('naive-ui')['NThing']
+    NTime: typeof import('naive-ui')['NTime']
     NTooltip: typeof import('naive-ui')['NTooltip']
     NUpload: typeof import('naive-ui')['NUpload']
     Paging: typeof import('./../components/paging/index.vue')['default']
@@ -62,6 +68,8 @@ declare module 'vue' {
     RouterView: typeof import('vue-router')['RouterView']
     Tab: typeof import('./../components/tab/index.vue')['default']
     Terminal: typeof import('./../components/terminal/index.vue')['default']
+    UserDrawer: typeof import('./../views/composables/drawer/userDrawer/index.vue')['default']
+    UserModal: typeof import('./../views/composables/modal/userModal/index.vue')['default']
     VerifyModal: typeof import('./../components/modal/timeout/verifyModal.vue')['default']
   }
 }

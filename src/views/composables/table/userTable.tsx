@@ -1,22 +1,22 @@
 import type { DataTableBaseColumn, DataTableColumns, DataTableRowKey } from 'naive-ui'
 import {
+  NAvatar,
+  NButton,
   NIcon,
   NIconWrapper,
+  NPopconfirm,
+  NProgress,
   NSpace,
   NSwitch,
   NTag,
-  NTooltip,
-  NProgress,
-  NAvatar,
-  NPopconfirm,
-  NButton,
-  NText
+  NText,
+  NTooltip
 } from 'naive-ui'
 import { pageUser } from '@/services/types'
 import { i18n } from '@/i18n'
 import type { Ref } from 'vue'
 import { RCodeEnum, RoleEnum } from '@/enums'
-import { EditCircle, LetterM, LetterR, LetterU, Power, TrashX, X, Minus } from '@vicons/tabler'
+import { EditCircle, LetterM, LetterR, LetterU, Minus, Power, TrashX, X } from '@vicons/tabler'
 import { Report } from 'notiflix'
 import { useAuth } from '@/hooks/useAuth'
 import { handRelativeTime } from '@/utils/Day'

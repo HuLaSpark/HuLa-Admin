@@ -7,8 +7,6 @@ import viteCompression from 'vite-plugin-compression' //vite开启gzip压缩
 import path from 'path' //使用path需要按照@types/node依赖
 import vueDevTools from 'vite-plugin-vue-devtools'
 import vueJsx from '@vitejs/plugin-vue-jsx'
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
 import { viteDefine } from './build/config/define'
 
 // https://vitejs.dev/config/
@@ -16,11 +14,12 @@ export default defineConfig(({ mode }): object => {
   // 获取当前环境的配置,如何设置第三个参数则加载所有变量，而不是以“VITE_”前缀的变量
   const config = loadEnv(mode, process.cwd())
   return {
-    // 起个别名，在引用资源时，可以用‘@/资源路径’直接访问
     resolve: {
       alias: {
         // 配置路径别名@
         '@': path.resolve(__dirname, 'src'),
+        // 配置路径别名~(根路径)
+        '~': path.resolve(__dirname, process.cwd()),
         /*加入路径别名,解决控制台i18n报警*/
         'vue-i18n': 'vue-i18n/dist/vue-i18n.cjs.js'
       }
@@ -33,8 +32,9 @@ export default defineConfig(({ mode }): object => {
     define: viteDefine,
     plugins: [
       /**
-       * 设置defineModel
-       * 设置defineProps解构语法
+       * !实验性功能
+       * 开启defineModel
+       * 开启defineProps解构语法
        * */
       vue({ script: { propsDestructure: true, defineModel: true } }),
       vueDevTools(), // 开发工具
@@ -43,7 +43,9 @@ export default defineConfig(({ mode }): object => {
         imports: ['vue', { 'naive-ui': ['useDialog', 'useMessage', 'useNotification', 'useLoadingBar'] }],
         dts: 'src/typings/auto-imports.d.ts'
       }),
+      /*自动导入组件，但是不会自动导入jsx和tsx*/
       Components({
+        dirs: ['src/components', 'src/views/composables'], // 设置需要扫描的目录
         resolvers: [NaiveUiResolver()],
         dts: 'src/typings/components.d.ts'
       }),

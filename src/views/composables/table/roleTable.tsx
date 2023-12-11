@@ -6,9 +6,9 @@ import { useBase } from '@/hooks/useBase'
 import paging from '@/hooks/usePaging'
 import UserVar from '@/views/composables/drawer/userDrawer/userVar'
 import type { DataTableColumns, DataTableRowKey } from 'naive-ui'
-import { RoleEnum, RCodeEnum } from '@/enums'
-import { NIcon, NIconWrapper, NSpace, NTooltip, NPopconfirm, NText, NTag } from 'naive-ui'
-import { EditCircle, Minus, TrashX } from '@vicons/tabler'
+import { NIcon, NIconWrapper, NPopconfirm, NSpace, NTag, NText, NTooltip } from 'naive-ui'
+import { RCodeEnum, RoleEnum } from '@/enums'
+import { EditCircle, TrashX } from '@vicons/tabler'
 import apis from '@/services/apis'
 
 /**
