@@ -20,8 +20,8 @@
 </template>
 
 <script setup lang="tsx">
-import type { SelectRenderTag, SelectOption } from 'naive-ui'
-import { NTag, NIcon } from 'naive-ui'
+import type { SelectOption, SelectRenderTag } from 'naive-ui'
+import { NIcon, NTag } from 'naive-ui'
 import type { VNodeChild } from 'vue'
 import UserVar from '@/views/composables/drawer/userDrawer/userVar'
 import { LetterM, LetterR, LetterU, UserCheck, UserSearch } from '@vicons/tabler'

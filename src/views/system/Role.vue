@@ -1,37 +1,7 @@
 <template>
   <n-space vertical>
-    <n-space align="center">
-      <n-button style="border-radius: 8px" secondary type="success" @click="handleAdd">
-        <template #icon><n-icon :component="Plus" /></template>
-        {{ t('add') }}
-      </n-button>
-
-      <n-popconfirm
-        :positive-text="t('delete')"
-        :positive-button-props="{ type: 'error' }"
-        placement="bottom"
-        @positive-click="handleBatch">
-        <template #trigger>
-          <n-button style="border-radius: 8px" secondary type="error">
-            <template #icon><n-icon :component="PlaylistX" /></template>
-            {{ t('delete_batch') }}
-          </n-button>
-        </template>
-        {{ t('confirm_delete_batch') }}
-      </n-popconfirm>
-
-      <n-input
-        :maxlength="10"
-        style="border-radius: 10px"
-        v-model:value="input"
-        clearable
-        placeholder="请输入关键词搜索"
-        @input="handleSearch">
-        <template #prefix>
-          <n-icon :component="Search" />
-        </template>
-      </n-input>
-    </n-space>
+    <!--操作栏-->
+    <ActionBar />
 
     <!--表格-->
     <n-loading-bar-provider :to="loadingBarTargetRef" container-style="position: relative">
@@ -79,11 +49,9 @@ import apis from '@/services/apis'
 import paging from '@/hooks/usePaging'
 import { pageUser, Response } from '@/services/types'
 import { i18n } from '@/i18n'
-import { RotateClockwise2, Plus, PlaylistX, Search } from '@vicons/tabler'
-import { userDrawer } from '@/views/composables/drawer/index'
+import { RotateClockwise2 } from '@vicons/tabler'
 import userVar from '@/views/composables/drawer/userDrawer/userVar'
 import { roleTable } from '@/views/composables/table/roleTable'
-import { userModal } from '@/views/composables/modal/index'
 import { useDebounceFn } from '@vueuse/core'
 import { Report } from 'notiflix'
 import { RCodeEnum } from '@/enums'

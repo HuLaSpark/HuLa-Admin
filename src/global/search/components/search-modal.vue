@@ -31,7 +31,7 @@
         <div
           v-if="!orderedArray.length"
           style="margin-top: 10px; display: flex; flex-direction: column; align-items: center; gap: 5px">
-          <img src="@/assets/svg/empty.svg" style="width: 140px; height: 140px" alt="" />
+          <img src="../../../assets/svg/empty.svg" style="width: 140px; height: 140px" alt="" />
           <span style="color: #c0c0c0">暂无搜索记录</span>
         </div>
 
@@ -57,7 +57,7 @@
 
       <!--没有找到内容-->
       <n-space v-if="NOT_FOUND" align="center">
-        <img src="@/assets/svg/no-found.svg" style="width: 120px" alt="" />
+        <img src="../../../assets/svg/no-found.svg" style="width: 120px" alt="" />
         <n-space vertical justify="center" align="center">
           <span style="font-size: 16px">
             无法找到相关结果"
