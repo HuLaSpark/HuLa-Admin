@@ -10,12 +10,13 @@ const butShow = ref<boolean>()
 const { t } = i18n.global
 
 /**
- * @description 校验登录用户名方法
- * @param rule 规则
+ * 校验登录用户名方法
+ * @param _rule 规则
  * @param value 表单的内容的值
  * @param callback 回调函数
  */
-const validateLoginUsername = (rule: any, value: any, callback: any) => {
+const validateLoginUsername = (_rule: any, value: any, callback: any) => {
+  // TODO 验证函数只在值变更时运行一次，并且错误信息只在这个时候生成。如果之后用户更改了语言，这个错误信息将不会自动更新 (nyh-2023-12-11 17:09:05)
   if (!value) {
     callback(new Error(t('input_username')))
   } else if (!RegExp.isEngORNub(value) || value.length > 12) {
@@ -25,12 +26,12 @@ const validateLoginUsername = (rule: any, value: any, callback: any) => {
   }
 }
 /**
- * @description 校验登录密码方法
- * @param rule 规则
+ * 校验登录密码方法
+ * @param _rule 规则
  * @param value 表单的内容的值
  * @param callback 回调函数
  */
-const validatePassword = (rule: any, value: any, callback: any) => {
+const validatePassword = (_rule: any, value: any, callback: any) => {
   if (value === '' || value === undefined) {
     ValidationStatus.value = 'error'
     callback(new Error(t('input_paw')))
@@ -51,7 +52,7 @@ const validatePassword = (rule: any, value: any, callback: any) => {
 }
 
 //创建时候校验数据方法
-const validateCreateUsername = (rule: any, value: any, callback: any) => {
+const validateCreateUsername = (_rule: any, value: any, callback: any) => {
   if (AddOrEdit.value === 'Edit') {
     if (value === '' || value === undefined) {
       callback(new Error(t('input_username')))
@@ -75,7 +76,7 @@ const validateCreateUsername = (rule: any, value: any, callback: any) => {
   }
 }
 // TODO 这些校验还需要解决一些bug
-const validateCreatePassword = (rule: any, value: any, callback: any) => {
+const validateCreatePassword = (_rule: any, value: any, callback: any) => {
   if (value === '' || value === undefined) {
     complexityShow.value = false
     callback(new Error(t('input_paw')))
@@ -95,7 +96,7 @@ const validateCreatePassword = (rule: any, value: any, callback: any) => {
   }
 }
 
-const validateRenewPassword = (rule: any, value: any, callback: any) => {
+const validateRenewPassword = (_rule: any, value: any, callback: any) => {
   if (value === '' || value === undefined) {
     butShow.value = false
     callback(new Error(t('input_paw')))
@@ -110,7 +111,7 @@ const validateRenewPassword = (rule: any, value: any, callback: any) => {
   }
 }
 
-const validateIsNull = (rule: any, value: any, callback: any) => {
+const validateIsNull = (_rule: any, value: any, callback: any) => {
   if (value === '' || value === undefined) {
     callback(new Error(t('no_null')))
   } else {
@@ -120,11 +121,11 @@ const validateIsNull = (rule: any, value: any, callback: any) => {
 
 /**
  * 校验邮箱格式
- * @param rule 规则
+ * @param _rule 规则
  * @param value 表单的内容的值
  * @param callback 回调函数
  */
-const validateEmail = (rule: any, value: any, callback: any) => {
+const validateEmail = (_rule: any, value: any, callback: any) => {
   if (value === '' || value === undefined) {
     callback(new Error(t('no_null')))
   } else if (!RegExp.isEmail(value)) {

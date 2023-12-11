@@ -5,6 +5,7 @@ import { RCodeEnum } from '@/enums'
 import { delay, isEqual } from 'lodash-es'
 import { CircleCheck, CircleX } from '@vicons/tabler'
 import { i18n } from '@/i18n'
+import { NForm } from 'naive-ui'
 
 const { t } = i18n.global
 /*表格数据*/
@@ -63,20 +64,20 @@ export const useBase = () => {
    * 普通加载数据方法
    * @param Fn 函数
    */
-  const load = async (Fn: () => Promise<Response>) => {
-    loading.value = true
-    const res = await Fn()
-    if (res.code === RCodeEnum.OK) {
-      delay(() => {
-        tableData.value = res.data.records
-        nextTick(() => {
-          loading.value = false
-        })
-      }, 500)
-    } else {
-      window.$message.error(res.msg)
-    }
-  }
+  // const load = async (Fn: () => Promise<Response>) => {
+  //   loading.value = true
+  //   const res = await Fn()
+  //   if (res.code === RCodeEnum.OK) {
+  //     delay(() => {
+  //       tableData.value = res.data.records
+  //       nextTick(() => {
+  //         loading.value = false
+  //       })
+  //     }, 500)
+  //   } else {
+  //     window.$message.error(res.msg)
+  //   }
+  // }
 
   /**
    * 分页加载数据
@@ -116,14 +117,14 @@ export const useBase = () => {
 
   /**
    * 通用增加和修改函数
-   * @param formEl 表单校验参数
+   * @param formRef 表单校验参数
    * @param requestFn 请求函数
    * @param fnPage 分页加载函数
    * @param successMsg 成功提示
    * @param errorMsg 错误提示
    */
   const performAction = async (
-    formEl: any,
+    formRef: InstanceType<typeof NForm>,
     requestFn: () => Promise<Omit<Response, 'data'> & { data: any }>,
     fnPage: (val: parameter) => Promise<Response>,
     successMsg?: string,
@@ -131,8 +132,8 @@ export const useBase = () => {
   ) => {
     loadingBut.value = true
 
-    if (!formEl) return
-    await formEl
+    if (!formRef) return
+    await formRef
       ?.validate()
       .then(async () => {
         const res = await requestFn()
@@ -141,7 +142,7 @@ export const useBase = () => {
           return throwError(errorText)
         }
         successMsg ? window.$message.success(successMsg) : window.$message.success(res.msg)
-        await pagingLoad(fnPage, window.$loadingBar, formEl.model.id).then(() => {
+        await pagingLoad(fnPage, window.$loadingBar, formRef.model.id).then(() => {
           textChange(t('save_success'), CircleCheck)
           showWarn.value = false
           showModal.value = false
