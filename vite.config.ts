@@ -4,22 +4,25 @@ import AutoImport from 'unplugin-auto-import/vite' //自动导入
 import Components from 'unplugin-vue-components/vite' //组件注册
 import { NaiveUiResolver } from 'unplugin-vue-components/resolvers'
 import viteCompression from 'vite-plugin-compression' //vite开启gzip压缩
-import path from 'path' //使用path需要按照@types/node依赖
 import vueDevTools from 'vite-plugin-vue-devtools'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import { viteDefine } from './build/config/define'
+import { getRootPath, getSrcPath } from './build/config/getPath'
+import pkg from './package.json'
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }): object => {
   // 获取当前环境的配置,如何设置第三个参数则加载所有变量，而不是以“VITE_”前缀的变量
   const config = loadEnv(mode, process.cwd())
+  console.log(`🥝 ${'\x1b[32m'}${'\x1b[1m'} HuLa-vue3 ${'\x1b[0m'}${'\x1b[90m'}${pkg.version}${'\x1b[0m'}`)
+  console.log('项目地址: ' + 'https://gitee.com/nongyehong')
   return {
     resolve: {
       alias: {
         // 配置路径别名@
-        '@': path.resolve(__dirname, 'src'),
+        '@': getSrcPath(),
         // 配置路径别名~(根路径)
-        '~': path.resolve(__dirname, process.cwd()),
+        '~': getRootPath(),
         /*加入路径别名,解决控制台i18n报警*/
         'vue-i18n': 'vue-i18n/dist/vue-i18n.cjs.js'
       }
@@ -78,7 +81,7 @@ export default defineConfig(({ mode }): object => {
       proxy: {
         '/api': {
           // “/api” 以及前置字符串会被替换为真正域名
-          target: config.VITE_BASE_URL, // 请求域名
+          target: config.VITE_SERVICE_URL, // 请求域名
           secure: false, // 请求是否为https
           changeOrigin: true, // 是否跨域
           rewrite: (path) => path.replace(/^\/api/, '')
@@ -86,9 +89,7 @@ export default defineConfig(({ mode }): object => {
       },
       host: '0.0.0.0',
       open: true, //在服务器启动时自动在浏览器中打开应用程序。当此值为字符串时，会被用作 URL 的路径名。
-      port: 7130,
-      // 是否开启 https
-      https: false
+      port: 7130
     }
   }
 })

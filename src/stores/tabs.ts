@@ -33,6 +33,12 @@ export const tabs = defineStore('tabs', {
       if (Object.keys(this.data).length === 0) {
         router.push('/home')
       }
+    },
+    resetState() {
+      // 将状态重置为初始状态
+      this.$reset()
+      //删除标签页
+      localStorage.removeItem('tabs')
     }
   },
   //开启数据持久化

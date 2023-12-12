@@ -32,7 +32,7 @@ export const networkIcon = ref()
 export const createAxios = (config?: AxiosRequestConfig): AxiosInstance => {
   const instance = axios.create({
     //请求头
-    // baseURL: import.meta.env.VITE_BASE_URL,
+    // baseURL: import.meta.env.VITE_SERVICE_URL,
     baseURL: '/api',
     //超时配置
     timeout: 10000,

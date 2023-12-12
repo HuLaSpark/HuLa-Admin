@@ -7,7 +7,7 @@ import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import { i18n } from '@/i18n'
 // import VueDragResize from 'vue-drag-resize'
 import drag from '@/directives/drag'
-import { consolePrinter } from '@/simple/consolePrinter.ts'
+import { consolePrinter } from '@/simple/consolePrinter'
 
 pinia.use(piniaPluginPersistedstate)
 const app = createApp(App)

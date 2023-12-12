@@ -72,7 +72,7 @@ const beforeUpload = (val: File) => {
 
 //等用户确定保存的时候再上传
 const onSuccess = async (resolve: any) => {
-  const BASE_URL = import.meta.env.VITE_BASE_URL
+  const VITE_SERVICE_URL = import.meta.env.VITE_SERVICE_URL
   const user = userStore()
   const token = user.getBearerToken
   // 将file.value转为Blob类型
@@ -83,7 +83,7 @@ const onSuccess = async (resolve: any) => {
   const headers = { 'Content-Type': 'form-data', Authorization: `${token}` }
   /*这里传入原始的用户名*/
   await axios
-    .post(BASE_URL + 'file/avatarUpload/' + originalUserName.value, formData, { headers })
+    .post(VITE_SERVICE_URL + 'file/avatarUpload/' + originalUserName.value, formData, { headers })
     .then((r) => {
       // ElMessage.success('上传头像成功')
       state.form.url = r.data.msg

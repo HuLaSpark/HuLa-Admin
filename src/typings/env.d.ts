@@ -23,8 +23,8 @@ interface ServiceEnvConfigWithProxyPattern extends ServiceEnvConfig {
 }
 
 interface ImportMetaEnv {
-  /** 项目基本地址 */
-  readonly VITE_BASE_URL: string
+  /** 后端项目地址 */
+  readonly VITE_SERVICE_URL: string
   /** 项目名称 */
   readonly VITE_APP_NAME: string
   /** 项目标题 */
@@ -35,6 +35,8 @@ interface ImportMetaEnv {
   readonly VITE_APP_ICP: string
   /** 项目描述 */
   readonly VITE_APP_DESC: string
+  /** 后端服务的环境类型 */
+  readonly VITE_SERVICE_ENV?: ServiceEnvType
   /**
    * 权限路由模式:
    * - static - 前端声明的静态
@@ -51,8 +53,6 @@ interface ImportMetaEnv {
    * - 例如：icon-local
    */
   readonly VITE_ICON_LOCAL_PREFIX: string
-  /** 后端服务的环境类型 */
-  readonly VITE_SERVICE_ENV?: ServiceEnvType
   /** 开启请求代理 */
   readonly VITE_HTTP_PROXY?: 'Y' | 'N'
   /** 是否开启打包文件大小结果分析 */

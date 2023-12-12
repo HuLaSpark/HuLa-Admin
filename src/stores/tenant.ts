@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+
 interface ITenant {
   tenant: {
     tenantName: string
@@ -21,6 +22,7 @@ export const tenant = defineStore('tenant', {
       this.tenant = JSON.parse(JSON.stringify(value))
     },
     deleteTenant() {
+      this.$reset()
       //删除localStorage中记住的信息
       localStorage.removeItem('tenant')
     }

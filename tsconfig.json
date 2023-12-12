@@ -15,6 +15,9 @@
       "@types/lodash-es"
     ],
 
+    //使用装饰器
+    "experimentalDecorators": true,
+
     /* Bundler mode */
     "moduleResolution": "Node",
     "allowImportingTsExtensions": true,

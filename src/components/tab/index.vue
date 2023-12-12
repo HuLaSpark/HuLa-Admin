@@ -1,6 +1,7 @@
 <template>
   <!--TODO 如果标签栏过多操过宽度后需要滚动条滚动到选中的标签页下  (nyh-2023-11-23 07:22:29)-->
   <!--TODO 使用TransitionGroup动画 (nyh-2023-12-02 08:02:32)-->
+  <!--TODO 建议根据用户id或者租户id进行存储（现在在登录的时候判断是否已经切换账号，切换就清空） (nyh-2023-12-12 11:51:24)-->
   <!--主页-->
   <div class="home-box" :class="{ 'home-bg': currentPath === '/home' }">
     <n-icon @click="router.push('/home')" size="24" :component="SmartHome" />
@@ -49,15 +50,17 @@
 </template>
 
 <script setup lang="ts">
-import { DotsVertical, SmartHome, X, BrowserX, LetterA, LetterO } from '@vicons/tabler'
+import * as vicons from '@vicons/tabler'
+import { BrowserX, DotsVertical, LetterA, LetterO, SmartHome, X } from '@vicons/tabler'
 import { mainStore } from '@/stores/main'
 import { storeToRefs } from 'pinia'
 import { tabs } from '@/stores/tabs'
 import router from '@/router/index'
-import * as vicons from '@vicons/tabler'
 import { NIcon } from 'naive-ui'
 import type { Component } from 'vue'
+import { i18n } from '@/i18n'
 
+const { t } = i18n.global
 const store = mainStore()
 const tabsStore = tabs()
 const { BGC, TEXT_COLOR, TAB_ACTIVE_BGC, HOVER_BGC } = storeToRefs(store)
@@ -72,18 +75,18 @@ const yRef = ref(0)
 const options = computed(() => {
   return [
     {
-      label: '关闭当前标签页',
+      label: t('close_tab'),
       key: 'closeCurrent',
       icon: renderIcon(BrowserX)
     },
     {
-      label: '关闭其他标签页',
+      label: t('close_other_tabs'),
       key: 'closeOther',
       icon: renderIcon(LetterO),
       disabled: tabsMenuDis.value
     },
     {
-      label: '关闭所有标签页',
+      label: t('close_all_tabs'),
       key: 'closeAll',
       icon: renderIcon(LetterA)
     }

@@ -169,5 +169,8 @@
   "keys_binding": "快捷键绑定",
   "theme": "主题模式",
   "request_failed": "请求失败",
-  "data_integrity": "资料完整度"
+  "data_integrity": "资料完整度",
+  "close_tab": "关闭标签页",
+  "close_other_tabs": "关闭其他标签页",
+  "close_all_tabs": "关闭所有标签页"
 }
