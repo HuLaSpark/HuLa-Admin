@@ -134,9 +134,10 @@ const handleSearch = useDebounceFn(() => {
     resultOptions.value = []
     return
   }
+  // 将输入框的值转为小写
+  const keywordLowerCase = keyword.value.toLocaleLowerCase().trim()
   // 定义一个递归函数来搜索子菜单并将匹配项添加到 resultOptions.value
-  const searchInChildren = (menu: any, keyword: string) => {
-    const keywordLowerCase = keyword.toLocaleLowerCase().trim()
+  const searchInChildren = (menu: any) => {
     /*只查询type为2的(页面)*/
     if (menu.name.toLocaleLowerCase().includes(keywordLowerCase) && menu.type === 2) {
       resultOptions.value.push(menu)
@@ -145,7 +146,7 @@ const handleSearch = useDebounceFn(() => {
     if (menu.children) {
       for (const child of menu.children) {
         if (child.type === 2) {
-          searchInChildren(child, keyword)
+          searchInChildren(child)
         }
       }
     }
@@ -153,7 +154,7 @@ const handleSearch = useDebounceFn(() => {
   // 清空 resultOptions.value，以便开始新的搜索
   resultOptions.value = []
   // 使用递归函数来搜索匹配的菜单项
-  menusStore.forEach((menu: string) => searchInChildren(menu, keyword.value))
+  menusStore.forEach((menu: string) => searchInChildren(menu))
   /*处理鼠标点击事件*/
   if (resultOptions.value.length > 0) {
     activePath.value = resultOptions.value[0].path
@@ -225,13 +226,15 @@ const handleEnter = async () => {
   await router.push(activePath.value)
   handleClose()
   const index = orderedArray.value.findIndex((item) => item.path === activePath.value)
+  // 把数组提出减少数组操作次数
+  const newItem = { path: activePath.value, name: activeName.value }
   if (index > -1) {
-    /*如果数据存在就先删除原本的数据*/
+    // 移动已存在的元素到数组开头，不需要两次数组操作
     orderedArray.value.splice(index, 1)
-    /*然后把数据在数组开头中添加*/
-    orderedArray.value.unshift({ path: activePath.value, name: activeName.value })
+    orderedArray.value.unshift(newItem)
   } else {
-    orderedArray.value.push({ path: activePath.value, name: activeName.value })
+    // 如果不存在，添加到数组末尾
+    orderedArray.value.push(newItem)
   }
   await searchStores.setSearchDB(toRaw(orderedArray.value))
 }
@@ -243,10 +246,12 @@ const Jump = (path: string) => {
     router.push(path)
   }, 500)
 }
-onKeyStroke('Escape', handleClose)
-onKeyStroke('Enter', handleEnter)
-onKeyStroke('ArrowUp', handleUp)
-onKeyStroke('ArrowDown', handleDown)
+onMounted(() => {
+  onKeyStroke('Escape', handleClose)
+  onKeyStroke('Enter', handleEnter)
+  onKeyStroke('ArrowUp', handleUp)
+  onKeyStroke('ArrowDown', handleDown)
+})
 </script>
 <style scoped>
 .not-found {

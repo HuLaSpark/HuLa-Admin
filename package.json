@@ -14,7 +14,7 @@
   },
   "scripts": {
     "dev": "vite --mode dev",
-    "pro": "vite --mode pro",
+    "prod": "vite --mode prod",
     "build:dev": "vite build --mode dev",
     "build:pro": "vite build --mode pro",
     "preview": "vite preview",

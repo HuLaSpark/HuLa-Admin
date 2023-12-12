@@ -169,5 +169,8 @@
   "keys_binding": "Keys Binding",
   "theme": "Theme Modal",
   "request_failed": "Request Failed",
-  "data_integrity": "Integrity"
+  "data_integrity": "Integrity",
+  "close_tab": "CloseTabs",
+  "close_other_tabs": "CloseOtherTabs",
+  "close_all_tabs": "CloseAllTabs"
 }

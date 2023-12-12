@@ -30,7 +30,7 @@
 </template>
 
 <script setup lang="ts">
-import { Settings, CircleCheck, AlertCircle } from '@vicons/tabler'
+import { AlertCircle, CircleCheck, Settings } from '@vicons/tabler'
 import { i18n } from '@/i18n'
 import Content from './content.vue'
 import { storeToRefs } from 'pinia'
@@ -84,12 +84,7 @@ const containsOnlyModifiers = (keys: string[]): boolean => {
   const modifierKeys = new Set(['Control', 'Shift', 'Alt', 'Meta', 'CapsLock'])
   // 检查第一个键是否是修饰键
   if (!modifierKeys.has(keys[0])) return true
-  for (const key of keys) {
-    if (!modifierKeys.has(key)) {
-      return false // 包含了非修饰键
-    }
-  }
-  return true // 只包含修饰键
+  return keys.every((key) => modifierKeys.has(key))
 }
 /*保存设置*/
 const save = (val: globalSetting, event: MouseEvent) => {

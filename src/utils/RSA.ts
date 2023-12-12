@@ -1,4 +1,4 @@
-import { KJUR, KEYUTIL, RSAKey } from 'jsrsasign'
+import { KEYUTIL } from 'jsrsasign'
 import JSEncrypt from 'jsencrypt'
 
 export class RSA {

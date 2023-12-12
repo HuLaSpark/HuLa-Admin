@@ -1,4 +1,4 @@
-import { pkgJson } from '@/common/model.ts'
+import { pkgJson } from '@/common/model'
 
 export const consolePrinter = () => {
   console.log(

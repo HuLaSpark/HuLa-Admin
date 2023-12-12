@@ -25,20 +25,17 @@ export const indexedDB = defineStore('indexedDB', {
      * @param key key
      */
     async getSearchDB(key: number) {
-      const res = []
-      for (let i = 0; i < key; i++) {
-        res.push(await this.searchDB.getItem(i.toString()))
-      }
-      return res
+      // 创建一个数组，包含从 0 到 key-1 的所有数字
+      const indexArray = [...Array(key).keys()]
+      // Map每个索引到数据库查询的Promise，并且使用Promise.all来等待所有的Promise完成
+      return await Promise.all(indexArray.map((i) => this.searchDB.getItem(i.toString())))
     },
     /**
      * 以key和value的形式来存储数据
      * @param array 数组
      */
-    async setSearchDB(array: any) {
-      for (let i = 0; i < array.length; i++) {
-        await this.searchDB.setItem(i.toString(), array[i])
-      }
+    async setSearchDB(array: any[]) {
+      await Promise.all(array.map((item, index) => this.searchDB.setItem(index.toString(), item)))
     },
     async getAboutUsDB(key: string) {
       return await this.aboutUsDB.getItem(key)
@@ -46,6 +43,5 @@ export const indexedDB = defineStore('indexedDB', {
     async setAboutUsDB(key: string, value: any) {
       await this.aboutUsDB.setItem(key, value)
     }
-  },
-  persist: true
+  }
 })

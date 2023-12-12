@@ -49,11 +49,14 @@ export const userStore = defineStore('localUserInfo', {
       this.loginInfo.sysUser = JSON.parse(JSON.stringify(user))
     },
     logout() {
+      // 将状态重置为初始状态
+      this.$reset()
       //删除localStorage中的用户信息
       localStorage.removeItem('localUserInfo')
-      router.push('/login')
-      //重置路由
-      resetRouter()
+      router.push('/login').then(() => {
+        //重置路由
+        resetRouter()
+      })
     }
   },
   //开启数据持久化

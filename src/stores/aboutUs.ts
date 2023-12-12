@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import type { IAboutUs } from '@/interface/IAboutUs'
 
+/*!aboutUs不使用当前方法来存储*/
 export const aboutUs = defineStore('aboutUs', {
   state: (): { data: IAboutUs } => ({
     data: {}
@@ -27,6 +28,7 @@ export const aboutUs = defineStore('aboutUs', {
       }
     },
     deleteAboutUs() {
+      this.$reset()
       localStorage.removeItem('aboutUs')
     }
   },

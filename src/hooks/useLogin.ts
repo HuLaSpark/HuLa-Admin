@@ -10,10 +10,12 @@ import { Loading } from 'notiflix'
 import { delay } from 'lodash-es'
 import { tenant } from '@/stores/tenant'
 import { RSA } from '@/utils/RSA'
+import { tabs } from '@/stores/tabs.ts'
 
 export const useLogin = () => {
   //定义初始化数据
   const userInfoStore = userStore()
+  const tabsStore = tabs()
   const rememberStore = remember()
   const tenantStore = tenant()
   const { t } = i18n.global
@@ -126,6 +128,7 @@ export const useLogin = () => {
         return false
       }
       userInfoStore.logout()
+      tabsStore.resetState()
       if (notifi) {
         window.$notification.success({
           title: res.msg,

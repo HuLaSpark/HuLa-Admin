@@ -18,6 +18,7 @@ export const remember = defineStore('remember', {
     },
     deleteRemember() {
       this.remember = {}
+      this.$reset()
       //删除localStorage中记住的信息
       localStorage.removeItem('remember')
     }

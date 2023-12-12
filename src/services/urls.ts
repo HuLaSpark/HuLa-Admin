@@ -1,6 +1,8 @@
 import { URLEnum } from '@/enums'
-// 本地配置到 .env.dev 里面修改。生产配置在 .env.pro 里面
-const prefix = import.meta.env.PROD ? import.meta.env.VITE_BASE_URL : ''
+
+const { PROD, VITE_SERVICE_URL } = import.meta.env
+// 本地配置到 .env.dev 里面修改。生产配置在 .env.prod 里面
+const prefix = PROD ? VITE_SERVICE_URL : ''
 
 export default {
   login: `${prefix + URLEnum.PASS}/login`,
