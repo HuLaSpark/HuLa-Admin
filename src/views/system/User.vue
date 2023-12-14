@@ -52,7 +52,7 @@
 import { useBase } from '@/hooks/useBase'
 import type { DataTableBaseColumn, DataTableFilterState } from 'naive-ui'
 import apis from '@/services/apis'
-import paging from '@/hooks/usePaging.ts'
+import paging from '@/hooks/usePaging'
 import { pageUser, Response } from '@/services/types'
 import { i18n } from '@/i18n'
 import { RotateClockwise2 } from '@vicons/tabler'
