@@ -1,19 +1,27 @@
-import { KEYUTIL } from 'jsrsasign'
 import JSEncrypt from 'jsencrypt'
 
 export class RSA {
-  /**
-   * 生成RSA公钥和私钥
-   * @param keySize 密钥长度
-   * @returns RSA公钥和私钥
-   */
-  public static generateRSAKey(keySize: number) {
-    const rsaKeypair = KEYUTIL.generateKeypair('RSA', keySize)
-    const pub = KEYUTIL.getPEM(rsaKeypair.pubKeyObj)
-    const prv = KEYUTIL.getPEM(rsaKeypair.prvKeyObj, 'PKCS8PRV')
-    console.log(pub)
-    console.log(prv)
-  }
+  // private static privateKey =
+  //   '-----BEGIN RSA PRIVATE KEY-----' +
+  //   'MIICXAIBAAKBgQCQeu3C0xTXqWiy4GWeYxOBpeDoOoarCUGy6A3u20khjSN7I6nT' +
+  //   'Qpe4J1QV+TWoGV6s8n88dbbBcT9Hyy39NiuOk0vol/E+LDL04VEZn8MN+61EW3aZ' +
+  //   '18fw04rzXnOD6snQwdnFx2ipmfDit8pnX9RdM6Q14wSRL/paQ6wcBhN9OwIDAQAB' +
+  //   'AoGARAsxCM1ChqMJZR0bnrGIkUmfF5/gppKQd4KkdTafRYbkC+1q4Mz/CUK0bjjV' +
+  //   'FVsFZKw8UiwaKxZ7uAMvoI4vipunkWifX4vn1s3XP6h/Ill4x+HkLNost5vyimIa' +
+  //   'CDuNz1gCilrNqsdQa0TneVPtJLUenrZNPqsXfUFY0Em0nIECQQDObNtP4zJr11Sm' +
+  //   'sLUP9mc8HAnP3igARgGIFK+BEogp8Lnq8quYahbZFeNmzE18ms1MGocQmfaLjQ4t' +
+  //   'lJZurXdBAkEAsy2nxHHOlFiEmo5/hRoFUmXuG9sS8fYWmou4KzVA8mOJXfdY+dp4' +
+  //   '3gqChxbh2UjVsqSh0TsP4tbhGdk8TLfxewJAdc9kv0xAa5HCazvwqkKLmp+57dux' +
+  //   'Yq6RkzOTEowcECumP/PtgRgTICRA21uAYbwLrQJ60Tu9nNmNHPBvho0TwQJBAJSn' +
+  //   '60nzdgXjztiAI1JlvUaYpM1dm8E9f5FnHDxU6XZwmJZqUdqxpJfrtlGn7Wcdo5ac' +
+  //   'OljiHJMB3i5Y6ktoTSMCQCqOCqsaCzVNAlfIWuw2C/XcZqsyodUqXYl9dS6Lu1+6' +
+  //   '9+SbUtThFmel7dwUnJ4xKPeOYUcOhdbhDu4rv/VJu+8=' +
+  //   '-----END RSA PRIVATE KEY-----'
+  // private static publicKey =
+  //   'MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCQeu3C0xTXqWiy4GWeYxOBpeDo' +
+  //   'OoarCUGy6A3u20khjSN7I6nTQpe4J1QV+TWoGV6s8n88dbbBcT9Hyy39NiuOk0vo' +
+  //   'l/E+LDL04VEZn8MN+61EW3aZ18fw04rzXnOD6snQwdnFx2ipmfDit8pnX9RdM6Q1' +
+  //   '4wSRL/paQ6wcBhN9OwIDAQAB'
 
   /**
    * 公钥加密
@@ -27,4 +35,23 @@ export class RSA {
     jsEncrypt.setPublicKey(pubKey)
     return jsEncrypt.encrypt(data)
   }
+
+  /**
+   * 获取公钥
+   */
+  // public static getPublicKey() {
+  //   return this.publicKey
+  // }
+
+  // /**
+  //  * 私钥解密
+  //  * @param data 待解密数据
+  //  */
+  // public static decryptByPrivateKey(data: string) {
+  //   const jsEncrypt = new JSEncrypt()
+  //   jsEncrypt.setPrivateKey(this.privateKey)
+  //   const decryptData = jsEncrypt.decrypt(data)
+  //   // 转换编码为utf-8
+  //   console.log(decryptData.toString())
+  // }
 }

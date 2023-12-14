@@ -67,9 +67,9 @@
 <script async setup lang="ts">
 import { i18n } from '@/i18n'
 import { useLogin } from '@/hooks/useLogin'
-import check from '@/hooks/useCheck'
+import check from '@/hooks/useCheck.ts'
 import Modal from '@/components/modal/index.vue'
-import useModal from '@/hooks/useModal'
+import useModal from '@/hooks/useModal.ts'
 import { animation } from '@/components/modal/type'
 import CodeInput from '@/components/codeinput/index.vue'
 import CountDown from '@/components/countdown/index.vue'

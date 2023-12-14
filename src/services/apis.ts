@@ -1,6 +1,6 @@
 import { createAxios } from '@/services/request'
 import urls from '@/services/urls'
-import type { Response, UpdateUser, User, parameter, Renew, login, BatchDelete } from '@/services/types'
+import type { BatchDelete, login, parameter, Response, UpdateUser, User } from '@/services/types'
 
 const request = createAxios()
 
@@ -18,8 +18,10 @@ export default {
   getPublicKey: (): Promise<Response> => POST(urls.getPublicKey),
   /*获取租户列表*/
   getTenantList: (): Promise<Response> => GET(urls.tenantList),
-  /*手动续签 请求*/
-  renew: (user: Renew): Promise<Response> => POST(urls.renew, user),
+
+  /*  ====================用户管理==================== */
+  /*根据用户名查询*/
+  withNameQuery: (userName: Pick<User, 'userName'>): Promise<Response> => GET(urls.user, userName),
   /*新增 用户*/
   addUser: (form: User): Promise<Response> => POST(urls.user, form),
   /*删除单个 用户*/
@@ -31,6 +33,8 @@ export default {
   editUser: (form: UpdateUser): Promise<Response> => PUT(urls.user, form),
   /*用户分页 请求*/
   userPage: (params: parameter): Promise<Response> => GET(urls.user + '/page', { params }),
+
+  /*  ====================角色管理==================== */
   /*新增 角色*/
   addRole: (form: any): Promise<Response> => POST(urls.role, form),
   /*删除单个 角色*/

@@ -1,8 +1,7 @@
-import paging from '@/hooks/usePaging'
-import typeState from '@/hooks/useState'
+import paging from '@/hooks/usePaging.ts'
+import typeState from '@/hooks/useState.ts'
 import { nextTick, ref } from 'vue'
-import { kickOutUser, OnlineUserPage } from '@/api/online'
-import { banUser, unravelUser } from '@/api/online'
+import { banUser, kickOutUser, OnlineUserPage, unravelUser } from '@/api/online'
 
 export const useOnline = () => {
   /*解构分页参数*/

@@ -57,7 +57,7 @@ export default defineConfig(({ mode }): object => {
         verbose: true, // 默认即可
         disable: false, //是否禁用压缩(不禁用)
         deleteOriginFile: false, //删除源文件
-        threshold: 10240, //压缩前最小文件大小
+        threshold: 512000, //压缩前最小文件大小,单位字节（byte） b
         algorithm: 'gzip', // 指定使用Brotli压缩
         ext: '.gz' // 指定压缩后的文件扩展名为".br"
       })

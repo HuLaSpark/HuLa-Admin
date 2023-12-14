@@ -18,8 +18,7 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
 import { mainStore } from '@/stores/main'
-import { animation } from '@/components/modal/type'
-import useState from '@/hooks/useState'
+import useState from '@/hooks/useState.ts'
 import { i18n } from '@/i18n'
 import { useLogin } from '@/hooks/useLogin'
 
