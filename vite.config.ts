@@ -8,15 +8,14 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import { viteDefine } from './build/config/define'
 import { getRootPath, getSrcPath } from './build/config/getPath'
-import pkg from './package.json'
+import { atStartup } from './build/config/console'
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }): object => {
   // 获取当前环境的配置,如何设置第三个参数则加载所有变量，而不是以“VITE_”前缀的变量
   const config = loadEnv(mode, process.cwd())
-  console.log(`🥝 ${'\x1b[32m'}${'\x1b[1m'} HuLa-vue3 ${'\x1b[0m'}${'\x1b[90m'}${pkg.version}${'\x1b[0m'}`)
-  console.log('项目地址: ' + 'https://gitee.com/nongyehong')
   return {
+    logLevel: 'info', // 日志级别
     resolve: {
       alias: {
         // 配置路径别名@
@@ -34,6 +33,7 @@ export default defineConfig(({ mode }): object => {
     },
     define: viteDefine,
     plugins: [
+      atStartup(config, mode),
       /**
        * !实验性功能
        * 开启defineModel
@@ -56,21 +56,28 @@ export default defineConfig(({ mode }): object => {
       viteCompression({
         verbose: true, // 默认即可
         disable: false, //是否禁用压缩(不禁用)
-        deleteOriginFile: false, //删除源文件
-        threshold: 512000, //压缩前最小文件大小,单位字节（byte） b
+        deleteOriginFile: true, //删除源文件
+        threshold: 2000, // 设置只有超过 2k 的文件才执行压缩
         algorithm: 'gzip', // 指定使用Brotli压缩
         ext: '.gz' // 指定压缩后的文件扩展名为".br"
       })
     ],
     build: {
       minify: 'terser',
-      terserOptions: {
+      // 生成静态资源的存放路径
+      assetsDir: 'static/img/',
+      // chunk 大小警告的限制(kb)
+      chunkSizeWarningLimit: 1200,
+      rollupOptions: {
         compress: {
           /*生产环境移除console.log和debugger*/
           drop_console: true,
           drop_debugger: true
         },
         output: {
+          chunkFileNames: 'static/js/[name]-[hash].js',
+          entryFileNames: 'static/js/[name]-[hash].js',
+          assetFileNames: 'static/[ext]/[name]-[hash].[ext]',
           comments: false // 移除注释
         }
       }
