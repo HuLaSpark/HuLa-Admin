@@ -1,5 +1,5 @@
-import paging from '@/hooks/usePaging'
-import typeState from '@/hooks/useState'
+import paging from '@/hooks/usePaging.ts'
+import typeState from '@/hooks/useState.ts'
 import { ButtonType, parameter, Response, User } from '@/services/types'
 import { RCodeEnum } from '@/enums'
 import { delay, isEqual } from 'lodash-es'

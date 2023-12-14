@@ -1,5 +1,5 @@
 import { userStore } from '@/stores/user'
-import useState from '@/hooks/useState'
+import useState from '@/hooks/useState.ts'
 import { i18n } from '@/i18n'
 import router from '@/router'
 import { NForm } from 'naive-ui'

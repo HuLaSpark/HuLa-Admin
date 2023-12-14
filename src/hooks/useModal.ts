@@ -1,7 +1,7 @@
 /*处理取消模态框关闭*/
-import { animation } from '@/components/modal/type'
+import { animation } from '@/components/modal/type.ts'
 import { nextTick } from 'vue'
-import typeState from '@/hooks/useState'
+import typeState from '@/hooks/useState.ts'
 
 /*解构状态类型参数*/
 const { showModal } = typeState

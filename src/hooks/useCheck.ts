@@ -1,11 +1,9 @@
-import { WithNameQuery } from '@/api/user'
-import typeState from '@/hooks/useState'
+import typeState from '@/hooks/useState.ts'
 import { ref } from 'vue'
 import { i18n } from '@/i18n'
-import { RegExp } from '@/utils/RegExp'
+import { RegExp } from '@/utils/RegExp.ts'
 
-const { AddOrEdit, tagType1, tagType2, tagType3, passwordComplexity, complexityShow, loadingPaw, ValidationStatus } =
-  typeState
+const { tagType1, tagType2, tagType3, passwordComplexity, complexityShow, loadingPaw, ValidationStatus } = typeState
 const butShow = ref<boolean>()
 const { t } = i18n.global
 
@@ -48,31 +46,6 @@ const validatePassword = (_rule: any, value: any, callback: any) => {
         loadingPaw.value = false
       }
     }, 1000)
-  }
-}
-
-//创建时候校验数据方法
-const validateCreateUsername = (_rule: any, value: any, callback: any) => {
-  if (AddOrEdit.value === 'Edit') {
-    if (value === '' || value === undefined) {
-      callback(new Error(t('input_username')))
-    } else {
-      callback()
-    }
-  } else {
-    if (value === '' || value === undefined) {
-      callback(new Error(t('input_username')))
-    } else {
-      WithNameQuery(value).then((res) => {
-        setTimeout(() => {
-          if (res.code === '00000') {
-            callback()
-          } else {
-            callback(new Error(t('username_exist')))
-          }
-        }, 1000)
-      })
-    }
   }
 }
 // TODO 这些校验还需要解决一些bug
@@ -163,7 +136,6 @@ export default () => ({
   butShow,
   validateLoginUsername,
   validatePassword,
-  validateCreateUsername,
   validateRenewPassword,
   validateIsNull,
   validateCreatePassword,

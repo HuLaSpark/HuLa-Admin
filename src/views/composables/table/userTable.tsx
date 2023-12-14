@@ -22,7 +22,7 @@ import { useAuth } from '@/hooks/useAuth'
 import { handRelativeTime } from '@/utils/Day'
 import { useBase } from '@/hooks/useBase'
 import apis from '@/services/apis'
-import paging from '@/hooks/usePaging'
+import paging from '@/hooks/usePaging.ts'
 import UserVar from '@/views/composables/drawer/userDrawer/userVar'
 
 /**

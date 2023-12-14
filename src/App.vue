@@ -4,7 +4,6 @@
       <n-notification-provider :max="3">
         <n-message-provider :max="6">
           <router-view />
-          <Verify />
         </n-message-provider>
       </n-notification-provider>
     </div>
@@ -14,9 +13,7 @@
 <script setup lang="ts">
 import { mainStore } from '@/stores/main'
 import { storeToRefs } from 'pinia'
-import { darkTheme } from 'naive-ui'
-import { zhCN, dateZhCN } from 'naive-ui'
-import Verify from '@/components/modal/timeout/verifyModal.vue' /*导入用户超时未操作是的验证模态框*/
+import { darkTheme, dateZhCN, zhCN } from 'naive-ui'
 
 const store = mainStore()
 const NLanguage = ref(zhCN)

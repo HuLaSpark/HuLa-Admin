@@ -1,6 +1,6 @@
 import useUser from '@/hooks/useSystem/useUser'
 import useRole from '@/hooks/useSystem/useRole'
-import typeState from '@/hooks/useState'
+import typeState from '@/hooks/useState.ts'
 import { computed, nextTick } from 'vue'
 import { i18n } from '@/i18n'
 import useInfo from '@/hooks/useInfo'
