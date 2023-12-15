@@ -9,6 +9,7 @@ import vueJsx from '@vitejs/plugin-vue-jsx'
 import { viteDefine } from './build/config/define'
 import { getRootPath, getSrcPath } from './build/config/getPath'
 import { atStartup } from './build/config/console'
+import { terser } from 'rollup-plugin-terser'
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }): object => {
@@ -58,8 +59,18 @@ export default defineConfig(({ mode }): object => {
         disable: false, //是否禁用压缩(不禁用)
         deleteOriginFile: true, //删除源文件
         threshold: 2000, // 设置只有超过 2k 的文件才执行压缩
-        algorithm: 'gzip', // 指定使用Brotli压缩
-        ext: '.gz' // 指定压缩后的文件扩展名为".br"
+        algorithm: 'gzip', // 指定使用gzip压缩
+        ext: '.gz' // 指定压缩后的文件扩展名为".gz"
+      }),
+      /* 压缩代码 */
+      terser({
+        format: {
+          comments: false // 移除所有注释
+        },
+        compress: {
+          drop_console: true, // 移除 console.log
+          drop_debugger: true // 移除 debugger
+        }
       })
     ],
     build: {
@@ -69,16 +80,10 @@ export default defineConfig(({ mode }): object => {
       // chunk 大小警告的限制(kb)
       chunkSizeWarningLimit: 1200,
       rollupOptions: {
-        compress: {
-          /*生产环境移除console.log和debugger*/
-          drop_console: true,
-          drop_debugger: true
-        },
         output: {
           chunkFileNames: 'static/js/[name]-[hash].js',
           entryFileNames: 'static/js/[name]-[hash].js',
-          assetFileNames: 'static/[ext]/[name]-[hash].[ext]',
-          comments: false // 移除注释
+          assetFileNames: 'static/[ext]/[name]-[hash].[ext]'
         }
       }
     },
