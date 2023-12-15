@@ -9,7 +9,7 @@ import vueJsx from '@vitejs/plugin-vue-jsx'
 import { viteDefine } from './build/config/define'
 import { getRootPath, getSrcPath } from './build/config/getPath'
 import { atStartup } from './build/config/console'
-import { terser } from 'rollup-plugin-terser'
+import terser from '@rollup/plugin-terser'
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }): object => {
