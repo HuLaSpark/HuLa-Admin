@@ -2,11 +2,6 @@
   <!-- 头部操作项 -->
   <HeaderGroup />
 
-  <!-- logo -->
-  <!--	<div class="login-logo">-->
-  <!--		<img src="/vue.svg" alt="" />-->
-  <!--	</div>-->
-
   <div style="display: flex; justify-content: center; align-items: center">
     <i class="products-icon is-enter"></i>
   </div>

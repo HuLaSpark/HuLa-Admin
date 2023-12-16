@@ -1,3 +1,31 @@
+## <small>1.1.5-beta (2023-12-16)</small>
+
+* :bug: fix(custom): 修复全局请求配置 ([6c56610](https://gitee.com/nongyehong/HuLa-vue3/commits/6c56610))
+* :bug: fix(custom): 修复vite5版本导致的支持ESM的问题 ([c493bb3](https://gitee.com/nongyehong/HuLa-vue3/commits/c493bb3))
+* :construction_worker: ci(custom): 忽略自动导入的文件 ([70a1685](https://gitee.com/nongyehong/HuLa-vue3/commits/70a1685))
+* :construction_worker: ci(custom): 移除auto-imports.d.ts和components.d.ts文件 ([91c2ead](https://gitee.com/nongyehong/HuLa-vue3/commits/91c2ead))
+* :lipstick: style(custom): tabs样式更改，其余样式美化 ([798169f](https://gitee.com/nongyehong/HuLa-vue3/commits/798169f))
+* :new: version(custom): 发布v1.1.5-beta版本 ([2ff3ef7](https://gitee.com/nongyehong/HuLa-vue3/commits/2ff3ef7))
+* :package: build(custom): 剔除没有用的文件 ([c53ddbb](https://gitee.com/nongyehong/HuLa-vue3/commits/c53ddbb))
+* :package: build(custom): 优化打包配置 ([cda32f3](https://gitee.com/nongyehong/HuLa-vue3/commits/cda32f3))
+* :rocket: chore(custom): 剔除rollup-plugin-terser依赖，使用@rollup/plugin-terser替换 ([bd1fe45](https://gitee.com/nongyehong/HuLa-vue3/commits/bd1fe45))
+* :rocket: chore(custom): 提升打包速度和压缩率 ([890acf3](https://gitee.com/nongyehong/HuLa-vue3/commits/890acf3))
+* :rocket: chore(custom): 修改lint工具 ([ee1e056](https://gitee.com/nongyehong/HuLa-vue3/commits/ee1e056))
+* :sparkles: feat(custom): 使用jsrsasign实现RSA非对称加密第一版 ([fb802bd](https://gitee.com/nongyehong/HuLa-vue3/commits/fb802bd))
+* :zap: perf: 优化提交检测 ([6d87c41](https://gitee.com/nongyehong/HuLa-vue3/commits/6d87c41))
+* :zap: perf(custom): 更新依赖版本 ([891ed05](https://gitee.com/nongyehong/HuLa-vue3/commits/891ed05))
+* :zap: perf(custom): 升级vite5版本 ([7e5686d](https://gitee.com/nongyehong/HuLa-vue3/commits/7e5686d))
+* :zap: perf(custom): 使用jsencrypt来完善RSA加密 ([09aa51e](https://gitee.com/nongyehong/HuLa-vue3/commits/09aa51e))
+* :zap: perf(custom): 完善项目配置文件，优化pinia持久化问题 ([c2557ea](https://gitee.com/nongyehong/HuLa-vue3/commits/c2557ea))
+* :zap: perf(custom): 修复新增页面存留问题，完善其他功能 ([b382b49](https://gitee.com/nongyehong/HuLa-vue3/commits/b382b49))
+* :zap: perf(custom): 修复RSA非对称加密使用依赖库导致的问题 ([9dcafd2](https://gitee.com/nongyehong/HuLa-vue3/commits/9dcafd2))
+* :zap: perf(custom): 优化部分页面逻辑，新增tabs右键菜单功能 ([f99e51e](https://gitee.com/nongyehong/HuLa-vue3/commits/f99e51e))
+* :zap: perf(custom): 优化配置文件问题 ([8412e0f](https://gitee.com/nongyehong/HuLa-vue3/commits/8412e0f))
+* :zap: perf(custom): 优化项目配置功能 ([a7e1860](https://gitee.com/nongyehong/HuLa-vue3/commits/a7e1860))
+* :zap: perf(custom): instanceType获取组件类型的实例 ([5309327](https://gitee.com/nongyehong/HuLa-vue3/commits/5309327))
+
+
+
 ## 1.1.0-beta (2023-11-25)
 
 * :bug: fix(custom): 适配不同分辨率第一版 ([ecbca69](https://gitee.com/nongyehong/HuLa-vue3/commits/ecbca69))
