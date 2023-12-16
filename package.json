@@ -16,8 +16,7 @@
     "*.{js,jsx,vue,ts,tsx}": [
       "oxlint --fix",
       "prettier --config .prettierrc --write",
-      "eslint --fix",
-      "git add"
+      "eslint --fix"
     ]
   },
   "scripts": {
