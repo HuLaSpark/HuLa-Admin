@@ -1,0 +1,93 @@
+@mixin header($calc-width: 110px) {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  width: calc(100vw - $calc-width);
+  border-radius: 10px;
+  margin: 10px 10px 5px 10px;
+}
+@mixin operation-list-box() {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  cursor: pointer;
+}
+.header-unfold {
+  @include header;
+  .operation-list-box {
+    @include operation-list-box;
+    &:hover {
+      .n-icon {
+        animation: twinkle 0.3s ease-in-out;
+      }
+      .n-badge {
+        animation: twinkle-badge 0.3s ease-in-out;
+      }
+      .n-avatar {
+        animation: twinkle 0.3s ease-in-out;
+      }
+    }
+  }
+}
+.header-shrink {
+  @include header(240px);
+  .operation-list-box {
+    @include operation-list-box;
+    &:hover {
+      .n-icon {
+        animation: twinkle 0.3s ease-in-out;
+      }
+      .n-badge {
+        animation: twinkle-badge 0.3s ease-in-out;
+      }
+      .n-avatar {
+        animation: twinkle 0.3s ease-in-out;
+      }
+    }
+  }
+}
+.operation-list {
+  border-radius: 10px;
+  height: 55px;
+  line-height: 55px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 15px 0 15px;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+@keyframes twinkle {
+  0% {
+    transform: scale(0);
+  }
+  80% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes twinkle-badge {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(0.9);
+  }
+}
+/*全局搜索框样式*/
+.search {
+  background: v-bind(BGC_OTHER);
+  cursor: pointer;
+  padding: 5px 10px 5px 10px;
+  border-radius: 8px;
+  border: 1px transparent solid; /* 设置一个透明的边框 */
+  transition: border-color 0.3s ease; /* 过渡效果应用于颜色而不是边框宽度 */
+  &:hover {
+    border: 1px rgb(214, 211, 209) solid;
+    .n-icon {
+      animation: twinkle 0.3s ease-in-out;
+    }
+  }
+}
+/*end*/

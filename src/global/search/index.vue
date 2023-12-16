@@ -1,18 +1,16 @@
 <template>
-  <div class="operation-list-box">
-    <n-tooltip trigger="hover" style="padding: 5px 8px 5px 8px">
-      <template #trigger>
-        <div @click="showSearch" class="search-input">
-          <n-icon :size="24" :component="Search" />
-          <span>{{ t('search') }}</span>
-          <n-tag style="border-radius: 6px" :bordered="false" size="small">
-            {{ data.tags['search'].item.map((tag) => tag.charAt(0).toUpperCase() + tag.slice(1)).join('+') }}
-          </n-tag>
-        </div>
-      </template>
-      {{ t('global_search') }}
-    </n-tooltip>
-  </div>
+  <n-tooltip trigger="hover" style="padding: 5px 8px 5px 8px">
+    <template #trigger>
+      <div @click="showSearch" class="search-input">
+        <n-icon :size="24" :component="Search" />
+        <span>{{ t('search') }}</span>
+        <n-tag style="border-radius: 6px" :bordered="false" size="small">
+          {{ data.tags['search'].item.map((tag) => tag.charAt(0).toUpperCase() + tag.slice(1)).join('+') }}
+        </n-tag>
+      </div>
+    </template>
+    {{ t('global_search') }}
+  </n-tooltip>
   <!--全局弹框-->
   <search-modal v-model:value="show" />
 </template>
@@ -102,7 +100,7 @@ document.addEventListener('keydown', (event) => {
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/css/layout-header.css';
+@import '@/assets/scss/layout-header.scss';
 .search-input {
   display: flex;
   align-items: center;

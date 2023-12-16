@@ -115,8 +115,8 @@ onMounted(() => {
 })
 </script>
 
-<style scoped>
-@import '@/assets/css/barchar.css';
+<style lang="scss" scoped>
+@import '@/assets/scss/barchar.scss';
 
 .barchart {
   background: v-bind(BGC);

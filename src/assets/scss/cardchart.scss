@@ -1,0 +1,27 @@
+.weekData {
+  width: 350px;
+  height: 150px;
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  p {
+    font-weight: bold;
+    font-size: 25px;
+  }
+  span {
+    font-weight: bold;
+  }
+  .icon {
+    width: 1em;
+    height: 1em;
+    vertical-align: -0.2em;
+    font-size: 20px;
+  }
+  .tag-icon {
+    width: 1em;
+    height: 1em;
+    vertical-align: -0.2em;
+    font-size: 14px;
+  }
+}

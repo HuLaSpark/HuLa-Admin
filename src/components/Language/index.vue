@@ -1,46 +1,43 @@
 <template>
-  <div class="operation-list-box">
-    <n-tooltip trigger="hover" style="padding: 5px 8px 5px 8px">
-      <template #trigger>
-        <n-popover trigger="click">
-          <template #trigger>
-            <n-icon class="language" v-if="EYE_THEME" :size="24" :color="TEXT_COLOR"><Language /></n-icon>
-            <n-icon class="language" v-else :size="24"><Language /></n-icon>
-          </template>
-          <n-space vertical class="n-button-hover">
-            <n-text depth="3">
-              {{ i18nStore.locale === 'zh-CN' ? '简体中文' : 'English' }}
-            </n-text>
-            <n-button
-              :loading="loading"
-              style="font-weight: bold"
-              v-if="i18nStore.locale === 'en-US'"
-              @click="chineseSwitch"
-              quaternary>
-              <span>简体中文</span>
-              <n-icon color="#ccc"><ArrowUpRight /></n-icon>
-            </n-button>
-            <n-button :loading="loading" style="font-weight: bold" v-else @click="englishSwitch" quaternary>
-              <span>English</span>
-              <n-icon color="#ccc"><ArrowUpRight /></n-icon>
-            </n-button>
-          </n-space>
-        </n-popover>
-      </template>
-      {{ t('switch') }}
-    </n-tooltip>
-  </div>
+  <n-tooltip trigger="hover" style="padding: 5px 8px 5px 8px">
+    <template #trigger>
+      <n-popover trigger="click">
+        <template #trigger>
+          <n-icon class="language" v-if="EYE_THEME" :size="24" :color="TEXT_COLOR"><Language /></n-icon>
+          <n-icon class="language" v-else :size="24"><Language /></n-icon>
+        </template>
+        <n-space vertical class="n-button-hover">
+          <n-text depth="3">
+            {{ i18nStore.locale === 'zh-CN' ? '简体中文' : 'English' }}
+          </n-text>
+          <n-button
+            :loading="loading"
+            style="font-weight: bold"
+            v-if="i18nStore.locale === 'en-US'"
+            @click="chineseSwitch"
+            quaternary>
+            <span>简体中文</span>
+            <n-icon color="#ccc"><ArrowUpRight /></n-icon>
+          </n-button>
+          <n-button :loading="loading" style="font-weight: bold" v-else @click="englishSwitch" quaternary>
+            <span>English</span>
+            <n-icon color="#ccc"><ArrowUpRight /></n-icon>
+          </n-button>
+        </n-space>
+      </n-popover>
+    </template>
+    {{ t('switch') }}
+  </n-tooltip>
 </template>
 
 <script setup lang="ts">
 import { language } from '@/stores/i18n'
 import { i18n } from '@/i18n'
-import { Language } from '@vicons/tabler'
+import { ArrowUpRight, Language } from '@vicons/tabler'
 import { mainStore } from '@/stores/main'
 import { storeToRefs } from 'pinia'
-import { ArrowUpRight } from '@vicons/tabler'
 import { delay } from 'lodash-es'
-import { zhCN, dateZhCN } from 'naive-ui'
+import { dateZhCN, zhCN } from 'naive-ui'
 
 /*获取App中的provide传来的naive-ui国际化配置*/
 const NLanguage = ref(inject('NLanguage'))
@@ -74,19 +71,19 @@ const englishSwitch = () => {
 }
 </script>
 
-<style scoped>
-@import '@/assets/css/layout-header.css';
+<style lang="scss" scoped>
+@import '@/assets/scss/layout-header.scss';
 .n-button-hover {
   font-weight: bold;
-}
-.n-button-hover .n-button:hover {
-  color: #bc3f4a;
-}
-.n-button-hover .n-button:hover span {
-  animation: twinkle 0.3s ease-in-out;
-}
-.n-button-hover .n-text {
-  margin-left: 13px;
+  .n-button:hover {
+    color: #bc3f4a;
+    span {
+      animation: twinkle 0.3s ease-in-out;
+    }
+  }
+  .n-text {
+    margin-left: 13px;
+  }
 }
 @keyframes twinkle {
   0% {
