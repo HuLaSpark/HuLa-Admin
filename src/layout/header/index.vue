@@ -5,7 +5,7 @@
 
     <div class="operation-list">
       <!--全局搜索-->
-      <div class="search">
+      <div class="search operation-list-box">
         <GlobalSearch />
       </div>
       <n-divider vertical />
@@ -30,7 +30,9 @@
       </div>
       <n-divider vertical />
       <!--切换语言组件-->
-      <Language />
+      <div class="operation-list-box">
+        <Language />
+      </div>
       <n-divider vertical />
       <!--终端-->
       <div class="operation-list-box">
@@ -171,7 +173,9 @@
       </div>
       <n-divider vertical />
       <!-- 设置组件 -->
-      <Settings />
+      <div class="operation-list-box">
+        <Settings />
+      </div>
     </div>
   </div>
   <!--终端弹框-->
@@ -266,8 +270,8 @@ const userExit = () => {
 }
 </script>
 
-<style scoped>
-@import '@/assets/css/layout-header.css';
+<style lang="scss" scoped>
+@import '@/assets/scss/layout-header.scss';
 :deep(.n-tabs .n-tabs-rail .n-tabs-tab-wrapper .n-tabs-tab.n-tabs-tab--active) {
   color: #189f57;
 }
@@ -279,9 +283,9 @@ const userExit = () => {
   display: flex;
   align-items: center;
   gap: 10px;
-}
-.info-content span {
-  font-weight: bold;
+  span {
+    font-weight: bold;
+  }
 }
 .info-tag {
   display: flex;

@@ -1,12 +1,10 @@
 <template>
-  <div class="operation-list-box">
-    <n-tooltip trigger="hover" style="padding: 5px 8px 5px 8px">
-      <template #trigger>
-        <n-icon :size="24" @click="showDrawer"><Settings /></n-icon>
-      </template>
-      {{ t('settings') }}
-    </n-tooltip>
-  </div>
+  <n-tooltip trigger="hover" style="padding: 5px 8px 5px 8px">
+    <template #trigger>
+      <n-icon :size="24" @click="showDrawer"><Settings /></n-icon>
+    </template>
+    {{ t('settings') }}
+  </n-tooltip>
 
   <n-drawer style="border-radius: 10px 0 0 10px" v-model:show="active" :width="350">
     <n-drawer-content :title="t('settings')" closable :native-scrollbar="false">
@@ -164,6 +162,6 @@ const save = (val: globalSetting, event: MouseEvent) => {
 </script>
 
 <style lang="scss">
-@import '@/assets/css/layout-header.css';
-@import '@/assets/scss/toggle-theme';
+@import '@/assets/scss/layout-header.scss';
+@import '@/assets/scss/toggle-theme.scss';
 </style>

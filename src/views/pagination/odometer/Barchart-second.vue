@@ -7,6 +7,7 @@ import { onMounted, watch } from 'vue'
 import * as echarts from 'echarts'
 import { mainStore } from '@/stores/main'
 import { storeToRefs } from 'pinia'
+
 type EChartsOption = echarts.EChartsOption
 
 const color = 'rgb(201,196,196)'
@@ -114,8 +115,8 @@ onMounted(() => {
 })
 </script>
 
-<style scoped>
-@import '@/assets/css/barchar.css';
+<style lang="scss" scoped>
+@import '@/assets/scss/barchar.scss';
 .barchart {
   background: v-bind(BGC);
 }
