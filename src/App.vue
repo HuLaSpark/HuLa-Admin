@@ -2,7 +2,7 @@
   <n-config-provider :theme="theme" :locale="NLanguage" :date-locale="NDataLanguage">
     <div id="app">
       <n-notification-provider :max="3">
-        <n-message-provider :max="6">
+        <n-message-provider :max="3">
           <router-view />
         </n-message-provider>
       </n-notification-provider>

@@ -5,6 +5,7 @@
     "module": "ESNext",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
     "lib": ["ESNext", "DOM"],
     "skipLibCheck": true,
     "types": [
