@@ -47,13 +47,13 @@
 
 <script setup lang="tsx">
 import type { MenuOption } from 'naive-ui'
-import { NIcon, darkTheme } from 'naive-ui'
+import { darkTheme, NIcon } from 'naive-ui'
 import { storeToRefs } from 'pinia'
 import { mainStore } from '@/stores/main'
 import { userStore } from '@/stores/user'
+import * as vicons from '@vicons/tabler'
 import { ArrowBigLeftLines, ArrowBigRightLines } from '@vicons/tabler'
 import { i18n } from '@/i18n'
-import * as vicons from '@vicons/tabler'
 import { RouterLink, useRoute } from 'vue-router'
 import { Menu } from '@/services/types'
 
@@ -172,9 +172,6 @@ const menuOptions: MenuOption[] = menus
 }
 :deep(.n-menu .n-menu-item-content::before) {
   border-radius: 4px;
-}
-:deep(.n-menu .n-menu-item-content:hover::before) {
-  border-left: 4px solid #189f57;
 }
 :deep(.n-menu .n-menu-item-content:hover .n-menu-item-content-header),
 :deep(.n-menu .n-menu-item-content:hover .n-menu-item-content__arrow) {
