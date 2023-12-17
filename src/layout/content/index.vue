@@ -12,12 +12,8 @@
     </div>
 
     <div v-if="$route.meta.pagination" v-show="show">
-      <div v-if="$route.path === '/odometer'" class="odometer">
-        <Odometer />
-      </div>
-
-      <div v-else class="animate__animated animate__fadeInRight">
-        <n-scrollbar style="max-height: calc(100vh - 118px)">
+      <div class="animate__animated animate__fadeInRight">
+        <n-scrollbar style="max-height: calc(100vh - 118px); min-height: calc(100vh - 100px)">
           <div class="pagination">
             <router-view />
           </div>
@@ -28,7 +24,6 @@
 </template>
 
 <script setup lang="ts">
-import Odometer from '@/views/system/Odometer.vue'
 import { mainStore } from '@/stores/main'
 import { storeToRefs } from 'pinia'
 
@@ -53,13 +48,6 @@ onMounted(() => {
   border-radius: 10px;
   min-height: calc(100vh - 150px);
 }
-
-.odometer {
-  flex: 1;
-  padding: 10px 0 15px 10px;
-  background: v-bind(BGC_OTHER);
-}
-
 .pagination {
   flex: 1;
   padding: 10px 10px 15px 10px;

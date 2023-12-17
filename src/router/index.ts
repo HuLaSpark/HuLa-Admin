@@ -4,7 +4,7 @@ import type { MenuItem } from '@/interface/IRouter'
 import { noPermissionPaths, paginationPage } from './options.ts'
 import { tabs } from '@/stores/tabs'
 
-// const modules = import.meta.glob('../views/system/*.vue')
+// const modules = import.meta.glob('../views/page/*.vue')
 const { VITE_APP_TITLE, VITE_TITLE_SUFFIX, BASE_URL } = import.meta.env
 const routes: Array<RouteRecordRaw> = [
   {
@@ -19,10 +19,10 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: '/',
-    name: 'system',
+    name: 'page',
     component: () => import('@/layout/index.vue'),
-    //斜杠重定向路由到/odometer
-    redirect: '/odometer',
+    //斜杠重定向路由到/home
+    redirect: '/home',
     children: []
   }
 ]
@@ -49,11 +49,12 @@ export const setRoutes = (menus?: MenuItem[]) => {
      */
     const addDynamicRoute = (routeItem: MenuItem) => {
       if (routeItem.page) {
-        router.addRoute('system', {
+        /*添加views文件夹中page文件下面的全部.vue文件*/
+        router.addRoute('page', {
           path: routeItem.path,
           name: routeItem.page,
           meta: { title: routeItem.name, icon: routeItem.icon, requiresAuth: true, dynamicAdded: true },
-          component: () => import(`@/views/system/${routeItem.page}.vue`)
+          component: () => import(`@/views/page/${routeItem.page}.vue`)
         })
       }
     }
