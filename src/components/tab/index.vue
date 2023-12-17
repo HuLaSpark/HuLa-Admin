@@ -186,16 +186,16 @@ const removeTabs = (path: string) => {
   tabsStore.removeTab(path)
 }
 
-onMounted(() => {
-  /*初始化的时候判断data是否为空*/
-  if (Object.keys(data.value).length === 0) {
-    // TODO 这了为空的时候应该查询localStorage中缓存的菜单项目并且是全部权限都可查看的菜单 (nyh-2023-11-25 08:09:06)
-    // TODO 如果没有标签页的时候暂时先固定展示仪表板，因为路由重定向有问题没有解决 (nyh-2023-12-07 02:47:54)
-    tabsStore.addTab({
-      data: { icon: 'DeviceAnalytics', path: 'odometer', title: '仪表板' } as any
-    })
-  }
-})
+// onMounted(() => {
+//   /*初始化的时候判断data是否为空*/
+//   if (Object.keys(data.value).length === 0) {
+//     // TODO 这了为空的时候应该查询localStorage中缓存的菜单项目并且是全部权限都可查看的菜单 (nyh-2023-11-25 08:09:06)
+//     // TODO 如果没有标签页的时候暂时先固定展示仪表板，因为路由重定向有问题没有解决 (nyh-2023-12-07 02:47:54)
+//     // tabsStore.addTab({
+//     //   data: { icon: 'DeviceAnalytics', path: 'odometer', title: '仪表板' } as any
+//     // })
+//   }
+// })
 </script>
 
 <style lang="scss" scoped>
