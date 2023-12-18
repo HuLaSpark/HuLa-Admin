@@ -129,7 +129,8 @@ const menuOptions: MenuOption[] = menus
 .aside-head {
   display: flex;
   justify-content: center;
-  padding: 10px 10px 0 10px;
+  align-items: center;
+  padding: 5px 10px 5px 10px;
 }
 .aside-menu {
   background: v-bind(ASIDE_BGC);
@@ -155,7 +156,7 @@ const menuOptions: MenuOption[] = menus
   height: 30px;
   margin: 1em;
   cursor: pointer;
-  filter: drop-shadow(0 0 1em #189f57);
+  filter: drop-shadow(0 0 0.8em #189f57);
 }
 .aside-head #unfold-img {
   width: 28px;
