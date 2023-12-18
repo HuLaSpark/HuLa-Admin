@@ -226,6 +226,7 @@ const removeTabs = (path: string) => {
   border-radius: 6px;
   padding: 8px 6px 8px 10px;
   background: v-bind(BGC);
+  font-size: 14px;
   color: v-bind(TEXT_COLOR);
   border: 1px solid rgba(60, 60, 60, 0.1);
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
