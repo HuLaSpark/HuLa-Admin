@@ -1,5 +1,5 @@
 <template>
-  <n-space vertical>
+  <n-space vertical class="container">
     <!--自定义警告-->
     <AlertIze
       img-url="./src/assets/svg/warning.svg"
@@ -13,43 +13,47 @@
     <n-divider title-placement="center">
       <span>{{ t('theme') }}</span>
     </n-divider>
-    <!--护眼模式-->
-    <n-space justify="space-between" align="center">
-      <p>{{ t('eye_shield') }}</p>
-      <n-switch
-        :rubber-band="false"
-        :value="olForm.theme['eye'].status"
-        :loading="EyeLoading"
-        @update:value="switchEyeTheme">
-        <template #checked-icon>
-          <n-icon><Moon /></n-icon>
-        </template>
-        <template #unchecked-icon>
-          <n-icon><Sun /></n-icon>
-        </template>
-        <template #checked>{{ t('dark_color') }}</template>
-        <template #unchecked>{{ t('light_color') }}</template>
-      </n-switch>
+
+    <n-space vertical :size="20">
+      <!--护眼模式-->
+      <n-space justify="space-between" align="center">
+        <p>{{ t('eye_shield') }}</p>
+        <n-switch
+          :rubber-band="false"
+          :value="olForm.theme['eye'].status"
+          :loading="EyeLoading"
+          @update:value="switchEyeTheme">
+          <template #checked-icon>
+            <n-icon><Moon /></n-icon>
+          </template>
+          <template #unchecked-icon>
+            <n-icon><Sun /></n-icon>
+          </template>
+          <template #checked>{{ t('dark_color') }}</template>
+          <template #unchecked>{{ t('light_color') }}</template>
+        </n-switch>
+      </n-space>
+      <!--侧边栏深色-->
+      <n-space justify="space-between" align="center">
+        <p>侧边栏深色</p>
+        <n-switch
+          :disabled="themeDisabled"
+          :rubber-band="false"
+          :value="olForm.theme['aside'].status"
+          :loading="AsideLoading"
+          @update:value="switchAsideTheme">
+          <template #checked-icon>
+            <n-icon><Check /></n-icon>
+          </template>
+          <template #unchecked-icon>
+            <n-icon><X /></n-icon>
+          </template>
+          <template #checked>开启</template>
+          <template #unchecked>关闭</template>
+        </n-switch>
+      </n-space>
     </n-space>
-    <!--侧边栏深色-->
-    <n-space justify="space-between" align="center">
-      <p>侧边栏深色</p>
-      <n-switch
-        :disabled="themeDisabled"
-        :rubber-band="false"
-        :value="olForm.theme['aside'].status"
-        :loading="AsideLoading"
-        @update:value="switchAsideTheme">
-        <template #checked-icon>
-          <n-icon><Check /></n-icon>
-        </template>
-        <template #unchecked-icon>
-          <n-icon><X /></n-icon>
-        </template>
-        <template #checked>开启</template>
-        <template #unchecked>关闭</template>
-      </n-switch>
-    </n-space>
+
     <n-config-provider :theme="theme">
       <!--!小型预览主题布局-->
       <n-card class="example-box" :hoverable="true">
@@ -101,7 +105,7 @@
 </template>
 
 <script setup lang="ts">
-import { Moon, Sun, Check, X, KeyboardHide, Help } from '@vicons/tabler'
+import { Check, Help, KeyboardHide, Moon, Sun, X } from '@vicons/tabler'
 import { i18n } from '@/i18n'
 import { mainStore } from '@/stores/main'
 import { storeToRefs } from 'pinia'
@@ -324,6 +328,9 @@ const renderTag = (tag: string, index: number) => {
 </script>
 
 <style lang="scss" scoped>
+.container {
+  font-size: 14px;
+}
 .example-box {
   height: 160px;
   border-radius: 10px;

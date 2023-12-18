@@ -3,7 +3,7 @@
     <n-text depth="3">{{ version }}</n-text>
     <n-icon color="#ccc"><ArrowUpRight /></n-icon>
     <n-divider vertical />
-    <div style="display: flex">
+    <div style="display: flex; cursor: pointer">
       <!--切换语言组件-->
       <Language />
     </div>

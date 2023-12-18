@@ -39,6 +39,7 @@ const alertOff = () => {
 <style scoped>
 .alert {
   width: 100%;
+  font-size: 14px;
   height: fit-content;
   background: #fcf5eb;
   box-sizing: border-box;
