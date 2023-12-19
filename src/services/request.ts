@@ -5,34 +5,13 @@ import { RCodeEnum } from '@/enums'
 import { Report } from 'notiflix'
 import { useLogin } from '@/hooks/useLogin'
 
-//加载配置
-// let loadingInstance: any,
-//     requestNum: number = 0,
-//     loading: boolean = true;
-
-// //加载动画
-// const addLoading = () => {
-//     // 防止重复弹出
-//     requestNum++;
-//     if (requestNum == 1) {
-//         loadingInstance = ElLoading.service({ fullscreen: true });
-//     }
-// }
-
-// 关闭 加载动画
-// const cancelLoading = () => {
-//     requestNum--;
-//     // 关闭 加载动画
-//     if (requestNum === 0) loadingInstance?.close();
-// }
-
 /*用户状态图标*/
 export const networkIcon = ref()
 //请求配置
 export const createAxios = (config?: AxiosRequestConfig): AxiosInstance => {
   const instance = axios.create({
     //请求头
-    // baseURL: import.meta.env.VITE_SERVICE_URL,
+    // baseURL: import.meta.env.VITE_BASE_URL,
     baseURL: '/api',
     //超时配置
     timeout: 10000,
@@ -45,10 +24,6 @@ export const createAxios = (config?: AxiosRequestConfig): AxiosInstance => {
   // 添加请求拦截器
   instance.interceptors.request.use(
     function (config: any) {
-      // console.log("请求拦截器config:", config);
-      // //加载动画
-      // if (loading) addLoading();
-
       //判断是否有token 根据自己的需求判断
       const token = userStore().getBearerToken
       if (token != undefined) {
@@ -72,9 +47,6 @@ export const createAxios = (config?: AxiosRequestConfig): AxiosInstance => {
   // 添加响应拦截器
   instance.interceptors.response.use(
     (response) => {
-      // console.log("响应拦截器response:", response);
-      // 关闭加载 动画
-      // if (loading) cancelLoading();
       //返回参数
       let res = response.data
       // 如果是返回的文件
@@ -89,19 +61,6 @@ export const createAxios = (config?: AxiosRequestConfig): AxiosInstance => {
       if (res.code === RCodeEnum.UNAUTHORIZED) {
         window.$message.error(res.msg)
       }
-      // TODO 暂时除去手动续签的方法和校验验证码 (nyh-2023-11-24 23:36:03)
-      // /*判断响应体中的错误码，如果是STATE_EXCEPTION则是登录时间内长时间不操作需要验证登录，如果是RENEW_PAW_ERROR是续签时候密码错误*/
-      // if (res.code === RCodeEnum.STATE_EXCEPTION) {
-      //   /*传入错误信息*/
-      //   /*window.$message.error(res.msg)*/
-      //   Report.warning(res.msg, res.code, '怎么办?', () => {
-      //     handleVerify(res.msg)
-      //   })
-      // }
-      // /*如果密码错误返回错误信息*/
-      // if (res.code === RCodeEnum.RENEW_PAW_ERROR) {
-      //   handleVerify(res.msg)
-      // }
       //判断响应体中的错误码，如果是U00006则需要重新登录
       if (res.code === RCodeEnum.STATE_EXCEPTION) {
         nextTick(() => {
@@ -120,8 +79,6 @@ export const createAxios = (config?: AxiosRequestConfig): AxiosInstance => {
       return res
     },
     (error) => {
-      // 关闭加载 动画
-      // if (loading) cancelLoading();
       /***** 接收到异常响应的处理开始 *****/
       if (error && error.response) {
         // 1.公共错误处理

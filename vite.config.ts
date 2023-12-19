@@ -1,4 +1,4 @@
-import { defineConfig, loadEnv } from 'vite'
+import { ConfigEnv, defineConfig, loadEnv, UserConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import AutoImport from 'unplugin-auto-import/vite' //自动导入
 import Components from 'unplugin-vue-components/vite' //组件注册
@@ -12,11 +12,10 @@ import { atStartup } from './build/config/console'
 import terser from '@rollup/plugin-terser'
 
 // https://vitejs.dev/config/
-export default defineConfig(({ mode }): object => {
+export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
   // 获取当前环境的配置,如何设置第三个参数则加载所有变量，而不是以“VITE_”前缀的变量
   const config = loadEnv(mode, process.cwd())
   return {
-    logLevel: 'info', // 日志级别
     resolve: {
       alias: {
         // 配置路径别名@
@@ -26,11 +25,6 @@ export default defineConfig(({ mode }): object => {
         /*加入路径别名,解决控制台i18n报警*/
         'vue-i18n': 'vue-i18n/dist/vue-i18n.cjs.js'
       }
-    },
-    //vitest配置jsdom环境
-    test: {
-      // 启用类似 jest 的全局测试 API
-      globals: true
     },
     define: viteDefine,
     plugins: [
@@ -94,11 +88,11 @@ export default defineConfig(({ mode }): object => {
         '/api': {
           // “/api” 以及前置字符串会被替换为真正域名
           target: config.VITE_SERVICE_URL, // 请求域名
-          secure: false, // 请求是否为https
           changeOrigin: true, // 是否跨域
           rewrite: (path) => path.replace(/^\/api/, '')
         }
       },
+      hmr: true, // 热更新
       host: '0.0.0.0',
       open: true, //在服务器启动时自动在浏览器中打开应用程序。当此值为字符串时，会被用作 URL 的路径名。
       port: 7130

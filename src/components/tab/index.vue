@@ -222,20 +222,26 @@ const removeTabs = (path: string) => {
   position: relative;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   border-radius: 6px;
-  padding: 8px 6px 8px 10px;
+  padding: 8px 16px 8px 18px;
   background: v-bind(BGC);
   font-size: 14px;
   color: v-bind(TEXT_COLOR);
   border: 1px solid rgba(60, 60, 60, 0.1);
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-  gap: 10px;
+  transition: padding 0.3s ease-in-out;
+  gap: 5px;
   &:hover {
+    padding-right: 22px;
+    padding-left: 12px;
     cursor: pointer;
     color: #189f57;
     .tab-icon {
       animation: twinkle 0.3s ease-in-out;
+    }
+    .del {
+      opacity: 1;
     }
   }
   .tabs-left {
@@ -247,6 +253,9 @@ const removeTabs = (path: string) => {
     width: 4px;
   }
   .del {
+    position: absolute;
+    right: 5px;
+    opacity: 0;
     color: v-bind(TEXT_COLOR);
     border-radius: 50px;
     transition: 0.5s;
@@ -257,8 +266,13 @@ const removeTabs = (path: string) => {
 }
 /*当前选中页面样式*/
 .active-tab {
+  padding-right: 22px;
+  padding-left: 12px;
   color: #189f57;
   background: v-bind(TAB_ACTIVE_BGC);
+  .del {
+    opacity: 1;
+  }
 }
 /*主页选中的样式*/
 .home-bg {

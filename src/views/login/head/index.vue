@@ -35,7 +35,7 @@ import { mainStore } from '@/stores/main'
 import { i18n } from '@/i18n'
 import { useLogin } from '@/hooks/useLogin'
 import { ArrowUpRight, BrandGit, Moon, Sun } from '@vicons/tabler'
-import Language from '@/components/Language/index.vue'
+import Language from '@/components/language/index.vue'
 import { delay } from 'lodash-es'
 import { pkgJson } from '@/common/model.ts'
 

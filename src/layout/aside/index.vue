@@ -169,10 +169,10 @@ const menuOptions: MenuOption[] = menus
   font-weight: bold;
 }
 :deep(.n-menu .n-menu-item-content.n-menu-item-content--selected::before) {
-  border-left: 4px solid #189f57;
+  border-left: 6px solid #189f57;
 }
 :deep(.n-menu .n-menu-item-content::before) {
-  border-radius: 4px;
+  border-radius: 6px;
 }
 :deep(.n-menu .n-menu-item-content:hover .n-menu-item-content-header),
 :deep(.n-menu .n-menu-item-content:hover .n-menu-item-content__arrow) {
