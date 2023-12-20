@@ -27,7 +27,7 @@ import { delay } from 'lodash-es'
 import { globalSetting } from '@/services/types'
 
 defineOptions({ name: 'GlobalSearch' })
-
+// TODO defineAsyncComponent异步组件会导致动画失效 (nyh-2023-12-20 23:15:17)
 const { t } = i18n.global
 const show = ref(false)
 const shiftCount = ref(0)

@@ -42,10 +42,10 @@
   </n-space>
 
   <!--抽屉-->
-  <userDrawer />
+  <UserDrawer />
 
   <!--添加弹出框-->
-  <userModal :title="title" />
+  <UserModal :title="title" />
 </template>
 
 <script setup lang="ts">
