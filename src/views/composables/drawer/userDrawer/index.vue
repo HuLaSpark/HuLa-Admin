@@ -52,14 +52,14 @@
           <n-space align="center">
             <span>创建于：</span>
             <n-tag :bordered="false" style="border-radius: 10px" type="primary">
-              {{ handRelativeTime(contentData.createTime) }}
+              {{ handRelativeTime(contentData['createTime']) }}
             </n-tag>
           </n-space>
 
           <n-space align="center">
             <span>最后一次活动：</span>
             <n-tag :bordered="false" style="border-radius: 10px" type="info">
-              {{ handRelativeTime(contentData.updateTime) }}
+              {{ handRelativeTime(contentData['updateTime']) }}
             </n-tag>
           </n-space>
         </n-space>
@@ -95,7 +95,7 @@
   </Teleport>
 </template>
 
-<script setup lang="tsx">
+<script setup lang="ts">
 import { NForm, NIcon, NTag } from 'naive-ui'
 import { i18n } from '@/i18n'
 import Modal from '@/components/modal/index.vue'
@@ -184,24 +184,13 @@ const cancel = () => {
 /*在组件卸载之前执行把抽屉关闭(因为编辑抽屉不是全屏所以可以切换页面)*/
 onBeforeUnmount(() => {
   showDrawer.value = false
-  // router.beforeEach((to: any, from: any, next: any) => {
-  //   if (showDrawer.value) {
-  //     showModal.value = true
-  //     if (showModal.value) {
-  //       console.log(11111)
-  //       next()
-  //     } else {
-  //       next(false)
-  //     }
-  //   } else {
-  //     showDrawer.value = false
-  //     next()
-  //   }
-  // })
 })
 </script>
 
 <style scoped>
+span {
+  font-size: 14px;
+}
 /*上传框样式*/
 :deep(.n-upload-file-list .n-upload-file.n-upload-file--image-card-type),
 :deep(.n-upload-trigger.n-upload-trigger--image-card .n-upload-dragger) {
@@ -217,7 +206,9 @@ onBeforeUnmount(() => {
 }
 :deep(.slide-left-enter-active),
 :deep(.slide-left-leave-active) {
-  transition: transform 0.3s ease, opacity 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    opacity 0.3s ease;
 }
 
 :deep(.slide-left-enter-from),

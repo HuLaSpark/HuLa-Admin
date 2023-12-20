@@ -1,4 +1,4 @@
-import { ConfigEnv, defineConfig, loadEnv, UserConfig } from 'vite'
+import { ConfigEnv, defineConfig, loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import AutoImport from 'unplugin-auto-import/vite' //自动导入
 import Components from 'unplugin-vue-components/vite' //组件注册
@@ -12,7 +12,7 @@ import { atStartup } from './build/config/console'
 import terser from '@rollup/plugin-terser'
 
 // https://vitejs.dev/config/
-export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
+export default defineConfig(({ mode }: ConfigEnv) => {
   // 获取当前环境的配置,如何设置第三个参数则加载所有变量，而不是以“VITE_”前缀的变量
   const config = loadEnv(mode, process.cwd())
   return {
@@ -69,8 +69,6 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
     ],
     build: {
       minify: 'terser',
-      // 生成静态资源的存放路径
-      assetsDir: 'static/img/',
       // chunk 大小警告的限制(kb)
       chunkSizeWarningLimit: 1200,
       rollupOptions: {
