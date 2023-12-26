@@ -4,8 +4,8 @@
       <div @click="showSearch" class="search-input">
         <n-icon :size="24" :component="Search" />
         <span>{{ t('search') }}</span>
-        <n-tag style="border-radius: 6px" :bordered="false" size="small">
-          {{ data.tags['search'].item.map((tag) => tag.charAt(0).toUpperCase() + tag.slice(1)).join('+') }}
+        <n-tag v-if="tips" style="border-radius: 6px" :bordered="false" size="small">
+          {{ tips }}
         </n-tag>
       </div>
     </template>
@@ -47,6 +47,10 @@ if (Object.keys(data.value).length === 0) {
 }
 /*获取缓存中的tags对象中的search*/
 const key = ref(data.value.tags['search'])
+/* 计算出快捷键的值有哪些 */
+const tips = computed(() =>
+  data.value.tags['search'].item.map((tag) => tag.charAt(0).toUpperCase() + tag.slice(1)).join('+')
+)
 /*监听兄弟组件配置是否更新*/
 Mitt.on('search', (event: any) => {
   key.value = event
@@ -100,7 +104,7 @@ document.addEventListener('keydown', (event) => {
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/layout-header.scss';
+@import '@/styles/scss/layout-header.scss';
 .search-input {
   display: flex;
   align-items: center;

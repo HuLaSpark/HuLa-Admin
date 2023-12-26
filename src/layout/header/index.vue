@@ -271,7 +271,7 @@ const userExit = () => {
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/layout-header.scss';
+@import '@/styles/scss/layout-header.scss';
 :deep(.n-tabs .n-tabs-rail .n-tabs-tab-wrapper .n-tabs-tab.n-tabs-tab--active) {
   color: #189f57;
 }
