@@ -75,5 +75,5 @@ const handleTo = () => {
 }
 </script>
 <style lang="scss" scoped>
-@import '@/assets/scss/global-search';
+@import '@/styles/scss/global-search';
 </style>

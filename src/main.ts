@@ -1,6 +1,6 @@
 import { createApp } from 'vue'
 import 'animate.css'
-import '@/assets/reset.css'
+import '@/styles/reset.css'
 import App from '@/App.vue'
 import router from '@/router'
 import { pinia } from '@/stores'

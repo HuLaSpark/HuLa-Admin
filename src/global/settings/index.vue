@@ -162,6 +162,6 @@ const save = (val: globalSetting, event: MouseEvent) => {
 </script>
 
 <style lang="scss">
-@import '@/assets/scss/layout-header.scss';
-@import '@/assets/scss/toggle-theme.scss';
+@import '@/styles/scss/layout-header.scss';
+@import '@/styles/scss/toggle-theme.scss';
 </style>

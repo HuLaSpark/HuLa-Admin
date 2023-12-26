@@ -29,7 +29,7 @@ watchEffect(() => {
 </script>
 
 <style lang="scss">
-@import '@/assets/scss/global-app';
+@import '@/styles/scss/global-app';
 #app {
   background-color: v-bind(LOGIN_BGC);
 }

@@ -108,6 +108,6 @@ const linkOpen = (val: any) => {
 </script>
 
 <style lang="scss">
-@import '@/assets/scss/login';
-@import '@/assets/scss/toggle-theme';
+@import '@/styles/scss/login';
+@import '@/styles/scss/toggle-theme';
 </style>

@@ -94,7 +94,7 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/cardchart.scss';
+@import '@/styles/scss/cardchart.scss';
 .weekData {
   background: v-bind(BGC);
   span {
