@@ -10,6 +10,7 @@ import { viteDefine } from './build/config/define'
 import { getRootPath, getSrcPath } from './build/config/getPath'
 import { atStartup } from './build/config/console'
 import terser from '@rollup/plugin-terser'
+import { visualizer } from 'rollup-plugin-visualizer'
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }: ConfigEnv) => {
@@ -35,6 +36,12 @@ export default defineConfig(({ mode }: ConfigEnv) => {
        * 开启defineProps解构语法
        * */
       vue({ script: { propsDestructure: true, defineModel: true } }),
+      visualizer({
+        open: true, //注意这里要设置为true，否则无效
+        filename: 'analyse.html', //分析图生成的文件名
+        gzipSize: true, // 收集 gzip 大小并将其显示
+        brotliSize: true // 收集 brotli 大小并将其显示
+      }), // 打包分析
       vueDevTools(), // 开发工具
       vueJsx(), // 开启jsx功能
       AutoImport({
@@ -44,8 +51,9 @@ export default defineConfig(({ mode }: ConfigEnv) => {
       /*自动导入组件，但是不会自动导入jsx和tsx*/
       Components({
         dirs: ['src/components', 'src/views/composables'], // 设置需要扫描的目录
-        resolvers: [NaiveUiResolver()],
-        dts: 'src/typings/components.d.ts'
+        extensions: ['vue'], // 文件类型
+        resolvers: [NaiveUiResolver()], // ui库解析器，也可以自定义，需要安装相关UI库
+        dts: 'src/typings/components.d.ts' // 输出文件，里面都是一些import的组件键值对
       }),
       /*开启gzip模式*/
       viteCompression({
@@ -68,14 +76,21 @@ export default defineConfig(({ mode }: ConfigEnv) => {
       })
     ],
     build: {
-      minify: 'terser',
+      cssCodeSplit: true, // 启用 CSS 代码拆分
+      minify: 'terser', // 指定使用哪种混淆器
       // chunk 大小警告的限制(kb)
       chunkSizeWarningLimit: 1200,
       rollupOptions: {
         output: {
           chunkFileNames: 'static/js/[name]-[hash].js',
           entryFileNames: 'static/js/[name]-[hash].js',
-          assetFileNames: 'static/[ext]/[name]-[hash].[ext]'
+          assetFileNames: 'static/[ext]/[name]-[hash].[ext]',
+          // 最小化拆分包
+          manualChunks(id) {
+            if (id.includes('node_modules')) {
+              return id.toString().split('node_modules/')[1].split('/')[0].toString()
+            }
+          }
         }
       }
     },
@@ -90,6 +105,7 @@ export default defineConfig(({ mode }: ConfigEnv) => {
           rewrite: (path) => path.replace(/^\/api/, '')
         }
       },
+      cors: true, // 配置 CORS
       hmr: true, // 热更新
       host: '0.0.0.0',
       open: true, //在服务器启动时自动在浏览器中打开应用程序。当此值为字符串时，会被用作 URL 的路径名。

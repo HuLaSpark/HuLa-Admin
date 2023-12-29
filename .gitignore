@@ -26,3 +26,6 @@ dist-ssr
 # 忽略自动导入的文件
 /src/typings/auto-imports.d.ts
 /src/typings/components.d.ts
+
+# 忽略分析包文件
+/analyse.html
