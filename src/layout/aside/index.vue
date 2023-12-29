@@ -68,9 +68,9 @@ const menus = menuStore.getMenus
 const { BGC, ASIDE_TEXT_COLOR, ASIDE_BGC, ASIDE_COLOR } = storeToRefs(store)
 
 /*使用全局搜索的时候传入值后自动展开目录菜单项*/
-watchEffect(() => {
-  menuInstRef.value?.showOption(activeKey.value)
-})
+// watchEffect(() => {
+//   menuInstRef.value?.showOption(activeKey.value)
+// })
 
 /*当url变化的时候侧边栏选项跟着变化*/
 watch(
@@ -78,6 +78,7 @@ watch(
   (newPath) => {
     // 在路径变化时更新 activeKey
     activeKey.value = newPath.split('/')[1]
+    menuInstRef.value?.showOption(activeKey.value)
   }
 )
 
