@@ -2,16 +2,41 @@
   "name": "hula-vue3",
   "private": true,
   "version": "v1.1.5-beta",
-  "packageManager": "pnpm@8.11.0",
+  "packageManager": "pnpm@8.14.1",
   "type": "module",
   "engines": {
-    "node": "18.x || 20.x"
+    "node": "18.x || 20.x",
+    "pnpm": ">=8.11.0"
+  },
+  "author": {
+    "name": "nongyehong",
+    "email": "2439646234@qq.com",
+    "url": "https://xxxx/xxx"
   },
   "lint-staged": {
-    "*.{js,jsx,vue,ts,tsx}": [
+    "*.{js,jsx,ts,tsx}": [
       "oxlint --fix",
       "prettier --config .prettierrc --write",
       "eslint src"
+    ],
+    "*.vue": [
+      "oxlint --fix",
+      "prettier --write",
+      "eslint --fix",
+      "stylelint --fix"
+    ],
+    "package.json": [
+      "prettier --write"
+    ],
+    "{!(package)*.json,*.code-snippets,.!(browserslist)*rc}": [
+      "prettier --write--parser json"
+    ],
+    "*.{scss,less,styl,html}": [
+      "prettier --write",
+      "stylelint --fix"
+    ],
+    "*.md": [
+      "prettier --write"
     ]
   },
   "scripts": {
