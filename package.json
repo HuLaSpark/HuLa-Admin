@@ -5,8 +5,8 @@
   "packageManager": "pnpm@8.14.1",
   "type": "module",
   "engines": {
-    "node": "18.x || 20.x",
-    "pnpm": ">=8.11.0"
+    "node": ">=18.12.0",
+    "pnpm": ">=8.10.0"
   },
   "author": {
     "name": "nongyehong",
@@ -14,15 +14,10 @@
     "url": "https://xxxx/xxx"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx}": [
-      "oxlint --fix",
+    "*.{js,jsx,vue,ts,tsx}": [
+      "oxlint src",
       "prettier --config .prettierrc --write",
       "eslint src"
-    ],
-    "*.vue": [
-      "oxlint --fix",
-      "prettier --write",
-      "eslint --fix"
     ]
   },
   "scripts": {
@@ -117,7 +112,7 @@
     "typescript": "5.3.3",
     "unplugin-auto-import": "^0.17.2",
     "unplugin-vue-components": "^0.26.0",
-    "vite": "5.0.12",
+    "vite": "5.0.10",
     "vite-plugin-compression": "^0.5.1",
     "vite-plugin-vue-devtools": "^7.0.11",
     "vitest": "^0.32.4",
