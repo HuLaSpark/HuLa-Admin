@@ -20,11 +20,21 @@ export type Response = {
 }
 /*菜单*/
 export type Menu = {
+  /** 路由路径，根 Home 一般为 'home' */
   path: null | string
-  page: string
+  /** 对应前端路由 name，可为空（仅作为分组的菜单） */
+  page?: string
+  /** 菜单展示名称 */
   name: string
-  id: number
-  icon: string
+  /** 菜单/路由唯一标识 */
+  id?: string
+  /** 图标名称（可选） */
+  icon?: string
+  /** 是否在菜单中隐藏 */
+  hideMenu?: boolean
+  /** 是否在菜单中隐藏子菜单 */
+  hideChildrenInMenu?: boolean
+  /** 子菜单 */
   children?: Menu[]
 }
 /*分页搜索*/
@@ -39,7 +49,7 @@ export type login = {
 }
 /*用户*/
 export type User = {
-  id: number
+  id: string
   uid: string
   userName: string
   password: string
@@ -53,7 +63,7 @@ export type User = {
 }
 /*分页用户*/
 export type pageUser = {
-  id: number
+  id: string
   uid: string
   userName: string
   nickName: string
@@ -69,7 +79,7 @@ export type pageUser = {
 }
 /*更新用户*/
 export type UpdateUser = {
-  id: number
+  id: string
   userName: string
   role: string
   status: number
@@ -87,7 +97,7 @@ export type Renew = {
 }
 /*角色*/
 export type Role = {
-  id: number
+  id: string
   name: string
   flag: string
 }

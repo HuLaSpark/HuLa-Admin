@@ -15,34 +15,12 @@
     <!-- 登录表单 -->
     <n-card class="form">
       <n-form ref="formRef" :show-require-mark="false" :rules="rules as any" :model="ruleForm">
-        <!--租户选中框-->
-        <n-form-item path="tenantName" :label="t('tenant')" label-style="font-size: 14px;color: #cccccc">
-          <n-select
-            v-model:value="ruleForm.tenantName"
-            v-model:show="showSelect"
-            :placeholder="t('select')"
-            :loading="loadingSelect"
-            @focus="handleShowSelect"
-            :render-label="renderLabel"
-            :render-tag="renderSingleSelectTag"
-            @updateValue="handleUpdateValue"
-            clearable
-            remote
-            :options="selectData">
-            <template #arrow>
-              <transition name="slide-left">
-                <Cloud v-if="showSelect" />
-                <BuildingSkyscraper v-else />
-              </transition>
-            </template>
-          </n-select>
-        </n-form-item>
         <!--用户名输入框-->
         <n-form-item path="userName" :label="t('un_or_el')" label-style="font-size: 14px;color: #cccccc">
           <n-input
             clearable
             :allow-input="Common.noSideSpace"
-            @keydown.enter="SignIn(formRef)"
+            @keydown.enter="handleLogin"
             v-model:value="ruleForm.userName"
             style="border-radius: 8px"
             :placeholder="t('input_username_email')">
@@ -70,8 +48,8 @@
             type="password"
             clearable
             :allow-input="Common.noSideSpace"
-            :loading="loadingPaw"
-            @keydown.enter="SignIn(formRef)"
+            :loading="signInLoading"
+            @keydown.enter="handleLogin"
             v-model:value="ruleForm.password"
             style="border-radius: 8px"
             :placeholder="t('input_paw')">
@@ -89,7 +67,7 @@
         </n-checkbox>
 
         <n-button
-          @click="SignIn(formRef)"
+          @click="handleLogin"
           :disabled="disabled"
           :loading="signInLoading"
           type="primary"
@@ -153,7 +131,7 @@
           </template>
         </n-popover>
       </div>
-      <p>Copyright © 2023-2024 HuLa.All Rights Reserved.</p>
+      <p>Copyright © 2025-2026 HuLa.All Rights Reserved.</p>
     </div>
   </div>
 </template>
@@ -168,11 +146,9 @@ import { storeToRefs } from 'pinia'
 import check from '@/hooks/useCheck.ts'
 import { useLogin } from '@/hooks/useLogin'
 import { animation } from '@/components/modal/type'
-import { BuildingSkyscraper, Cloud, Lock, User } from '@vicons/tabler'
+import { Lock, User } from '@vicons/tabler'
 import { AlertIze } from '@/customize'
-import { delay } from 'lodash-es'
-import apis from '@/services/apis'
-import { NAvatar, NForm, NText, SelectGroupOption, SelectOption, SelectRenderLabel, SelectRenderTag } from 'naive-ui'
+import { NForm } from 'naive-ui'
 import { Common } from '@/utils/Common'
 
 const { t } = i18n.global
@@ -180,108 +156,11 @@ const store = mainStore()
 const rememberStore = remember()
 const tenantStore = tenant()
 
-const showSelect = ref()
-const loadingSelect = ref(false)
-const selectData = ref<Array<SelectOption | SelectGroupOption>>([])
-/*选中租户之后就存入localStorage*/
-const handleUpdateValue = (_value: string, option: SelectOption) => {
-  if (option) {
-    const data = { label: option.label, value: option.value }
-    tenantStore.setTenant(data)
-  }
-}
-const renderSingleSelectTag: SelectRenderTag = ({ option }) => {
-  return h(
-    'div',
-    {
-      style: {
-        display: 'flex',
-        alignItems: 'center'
-      }
-    },
-    [
-      h(NAvatar, {
-        src: 'https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg',
-        round: true,
-        size: 24,
-        style: {
-          marginRight: '12px'
-        }
-      }),
-      option.label as string
-    ]
-  )
-}
-const renderLabel: SelectRenderLabel = (option) => {
-  return h(
-    'div',
-    {
-      style: {
-        display: 'flex',
-        alignItems: 'center'
-      }
-    },
-    [
-      h(NAvatar, {
-        src: 'https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg',
-        round: true,
-        lazy: true
-      }),
-      h(
-        'div',
-        {
-          style: {
-            marginLeft: '12px',
-            padding: '4px 0'
-          }
-        },
-        [
-          h('div', null, [option.label as string]),
-          h(
-            NText,
-            { depth: 3, tag: 'div', style: { fontSize: '11px', transform: 'scale(1)' } },
-            {
-              default: () => option.address
-            }
-          )
-        ]
-      )
-    ]
-  )
-}
+// 注入登录成功回调
+const onLoginSuccess = inject<() => Promise<void>>('onLoginSuccess')
 
-type Itenant = {
-  companyName: string
-  tenantId: string
-  address: string
-  packageId: string
-  status: '0' | '1'
-  expireTime: string
-}
-/*点击选中框后进行异步查询选项框内容*/
-const handleShowSelect = () => {
-  if (selectData.value.length > 0) return
-  loadingSelect.value = true
-  delay(() => {
-    apis.getTenantList().then((r: any) => {
-      // 使用一个 Map 来存储 group 的数据，以 flag 作为键
-      const groupMap = new Array<{ label: string; value: string; address?: string; disabled?: boolean }>()
-      // 遍历角色数据并更新 groupMap
-      r.data.forEach((value: Itenant) => {
-        // 找到对应的组，将数据添加到 children 中
-        groupMap.push({
-          label: value.companyName,
-          value: value.tenantId,
-          address: value.address,
-          disabled: value.status === '1'
-        })
-      })
-      selectData.value = Array.from(groupMap.values())
-      loadingSelect.value = false
-    })
-  }, 300)
-}
-const { loadingPaw, ValidationStatus } = typeState
+// 租户选择应该在登录后进行，用于切换不同的租户环境
+const { ValidationStatus } = typeState
 const { TEXT_COLOR } = storeToRefs(store)
 const {
   signInLoading,
@@ -301,14 +180,7 @@ const { validateLoginUsername, validatePassword } = check()
 
 const rules = reactive({
   userName: { required: true, asyncValidator: validateLoginUsername, trigger: 'blur' },
-  password: { required: true, asyncValidator: validatePassword, trigger: 'blur' },
-  tenantName: {
-    required: true,
-    renderMessage: () => {
-      return t('choose')
-    },
-    trigger: ['blur', 'change']
-  }
+  password: { required: true, asyncValidator: validatePassword, trigger: 'blur' }
 })
 
 const linkList = reactive<any>({
@@ -342,8 +214,9 @@ const changePawBox = () => {
 
 /*获取用户是否点击了记住*/
 const handleRemember = () => {
-  if (rememberStore.getRemember) {
-    const { userName, password, rememberMe } = rememberStore.getRemember
+  const rememberData = rememberStore.getRemember
+  if (rememberData && rememberData.userName) {
+    const { userName, password, rememberMe } = rememberData
     ruleForm.userName = userName
     ruleForm.password = password
     rememberOption.value = rememberMe
@@ -355,6 +228,17 @@ const handleTenant = () => {
     const { value, label } = tenantStore.getTenant
     ruleForm.tenantName = label
     ruleForm.tenantId = value
+  }
+}
+
+/*处理登录*/
+const handleLogin = async () => {
+  const result = await SignIn(formRef.value)
+  if (result && result.success && result.needSelectTenant) {
+    // 登录成功，需要选择租户
+    if (onLoginSuccess) {
+      await onLoginSuccess()
+    }
   }
 }
 

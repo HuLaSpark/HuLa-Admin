@@ -12,6 +12,9 @@ import { Common } from '@/utils/Common'
 
 pinia.use(piniaPluginPersistedstate)
 const app = createApp(App)
+
+window.$router = router
+
 /*使用链式调用挂载*/
 app.use(pinia).use(router).use(i18n).directive('drag', drag).mount('#app')
 // app.component('vue-drag-resize', VueDragResize)

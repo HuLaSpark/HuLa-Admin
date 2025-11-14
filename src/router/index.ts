@@ -4,7 +4,18 @@ import type { MenuItem } from '@/interface/IRouter'
 import { noPermissionPaths, paginationPage } from './options.ts'
 import { tabs } from '@/stores/tabs'
 
-// const modules = import.meta.glob('../views/page/*.vue')
+// 动态导入 views/page 目录下的所有页面组件
+const modules = import.meta.glob('../views/page/*.vue') as Record<string, () => Promise<any>>
+// 可用页面名称集合，例如 Home、User、Role 等
+const availablePages = new Set(
+  Object.keys(modules)
+    .map((key) => {
+      const match = key.match(/\/([^/]+)\.vue$/)
+      return match ? match[1] : ''
+    })
+    .filter(Boolean)
+)
+
 const { VITE_APP_TITLE, VITE_TITLE_SUFFIX, BASE_URL } = import.meta.env
 const routes: Array<RouteRecordRaw> = [
   {
@@ -44,17 +55,36 @@ export const setRoutes = (menus?: MenuItem[]) => {
   }
   if (menus?.length) {
     /**
-     * 动态添加路由
+     * 根据菜单数据动态添加路由
      * @param routeItem
      */
     const addDynamicRoute = (routeItem: MenuItem) => {
-      if (routeItem.page) {
-        /*添加views文件夹中page文件下面的全部.vue文件*/
+      if (routeItem.page && routeItem.path) {
+        // 仅为当前项目中真实存在的页面添加路由，避免导入不存在的 .vue 文件
+        if (!availablePages.has(routeItem.page)) {
+          console.warn(`[router] 页面组件不存在，已忽略路由：${routeItem.page}`)
+          return
+        }
+
+        const key = `../views/page/${routeItem.page}.vue`
+        const component = modules[key]
+        if (!component) return
+
+        // 使用后端路由 id 或路径作为路由 name，避免多个菜单共用同一个 page 导致 name 冲突
+        const routeName = routeItem.id || routeItem.path || routeItem.page
+
         router.addRoute('page', {
           path: routeItem.path,
-          name: routeItem.page,
-          meta: { title: routeItem.name, icon: routeItem.icon, requiresAuth: true, dynamicAdded: true },
-          component: () => import(`@/views/page/${routeItem.page}.vue`)
+          name: routeName,
+          meta: {
+            title: routeItem.name,
+            icon: routeItem.icon,
+            requiresAuth: true,
+            dynamicAdded: true,
+            hideMenu: routeItem.hideMenu,
+            hideChildrenInMenu: routeItem.hideChildrenInMenu
+          },
+          component
         })
       }
     }
@@ -92,19 +122,37 @@ router.beforeEach(async (to: any, _from: any, next: any) => {
       data: { icon: to.meta.icon, path: to.path, title: to.meta.title }
     })
   }
+  const store = userStore() // 拿到用户对象id信息判断是否登录
   const {
     loginInfo: { token }
-  } = userStore() // 拿到用户对象id信息判断是否登录
+  } = store
   /*判断页面是否需要分页*/
   paginationPage.includes(to.name) ? (to.meta.pagination = true) : (to.meta.pagination = false)
+
+  // 如果已登录但还没有加载动态路由，则加载动态路由
+  if (token && (!store.loginInfo.menus || store.loginInfo.menus.length === 0)) {
+    try {
+      await store.initUserInfo()
+      // 动态路由加载完成后，重新导航到目标路由
+      return next({ ...to, replace: true })
+    } catch (error) {
+      console.error('加载用户信息失败:', error)
+      // 加载失败，清除登录状态并跳转到登录页
+      store.$reset()
+      return next('/login')
+    }
+  }
+
   // 如果未登录并且要访问的路径需要登录权限
   if (!token && !noPermissionPaths.includes(to.path)) {
     return next('/login') // 重定向到登录页
   }
+
   // 如果要访问的路径不存在(没有匹配的路由记录)
   if (!to.matched.length) {
     return next('/:catchAll(.*)') // 重定向到捕获所有路径的路由
   }
+
   // 其他情况，继续路由导航
   next()
 })

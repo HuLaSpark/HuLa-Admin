@@ -114,7 +114,7 @@ export const roleTable = (data: Ref<any[]>) => {
   ])
 
   /*编辑处理*/
-  const handleEditTable = (rowId: number) => {
+  const handleEditTable = (rowId: string) => {
     showDrawer.value = true
     const findItem = data.value.find((item: pageUser) => item.id === rowId)
     if (findItem) {

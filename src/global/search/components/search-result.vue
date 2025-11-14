@@ -14,7 +14,7 @@
             @mouseenter="handleMouse(item)">
             <n-space justify="space-between" align="center">
               <n-space align="center">
-                <n-icon :size="18" :component="(vicons as any)[item.icon]" />
+                <n-icon :size="18" :component="item.icon ? (vicons as any)[item.icon as string] : undefined" />
                 <n-space :size="10">
                   <span>{{ item.name }}</span>
                   <span style="font-size: 12px" :style="item.path === active.path ? 'text-decoration: underline' : ''">
