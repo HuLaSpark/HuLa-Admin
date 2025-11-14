@@ -72,7 +72,7 @@ const englishSwitch = () => {
 </script>
 
 <style lang="scss" scoped>
-@import '@/styles/scss/layout-header.scss';
+@use '@/styles/scss/layout-header.scss';
 .n-button-hover {
   font-weight: bold;
   .n-button:hover {

@@ -128,5 +128,5 @@ const handleUpdateFilter = (filters: DataTableFilterState, sourceColumn: DataTab
 </script>
 
 <style lang="scss" scoped>
-@import '@/styles/scss/user';
+@use '@/styles/scss/user';
 </style>

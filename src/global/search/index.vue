@@ -104,7 +104,7 @@ document.addEventListener('keydown', (event) => {
 </script>
 
 <style lang="scss" scoped>
-@import '@/styles/scss/layout-header.scss';
+@use '@/styles/scss/layout-header.scss';
 .search-input {
   display: flex;
   align-items: center;

@@ -1,13 +1,15 @@
 import { request } from '@/utils/http'
 import { RequestModule } from '@/enums/request'
-import type { UserInfo, PageParams, PageResponse, ApiResponse } from '@/types/api'
+import type { UserInfo, PageParams, PageResponse } from '@/types/api'
 
 /**
  * 获取用户列表（分页）
  * @param params 分页参数
  */
-export function getUserListApi(params: PageParams & Record<string, any>): Promise<ApiResponse<PageResponse<UserInfo>>> {
-  return request({
+export function getUserListApi(
+  params: PageParams & Record<string, any>
+): Promise<PageResponse<UserInfo>> {
+  return request<PageResponse<UserInfo>>({
     url: '/user/page',
     method: 'get',
     params,
@@ -19,8 +21,8 @@ export function getUserListApi(params: PageParams & Record<string, any>): Promis
  * 获取用户详情
  * @param id 用户 ID
  */
-export function getUserDetailApi(id: number | string): Promise<ApiResponse<UserInfo>> {
-  return request({
+export function getUserDetailApi(id: number | string): Promise<UserInfo> {
+  return request<UserInfo>({
     url: '/user/detail',
     method: 'get',
     params: { id },
@@ -32,8 +34,8 @@ export function getUserDetailApi(id: number | string): Promise<ApiResponse<UserI
  * 新增用户
  * @param data 用户数据
  */
-export function addUserApi(data: Partial<UserInfo>): Promise<ApiResponse> {
-  return request({
+export function addUserApi(data: Partial<UserInfo>): Promise<void> {
+  return request<void>({
     url: '/user/add',
     method: 'post',
     data,
@@ -45,8 +47,8 @@ export function addUserApi(data: Partial<UserInfo>): Promise<ApiResponse> {
  * 编辑用户
  * @param data 用户数据
  */
-export function editUserApi(data: Partial<UserInfo>): Promise<ApiResponse> {
-  return request({
+export function editUserApi(data: Partial<UserInfo>): Promise<void> {
+  return request<void>({
     url: '/user/edit',
     method: 'post',
     data,
@@ -58,8 +60,8 @@ export function editUserApi(data: Partial<UserInfo>): Promise<ApiResponse> {
  * 删除用户
  * @param data 删除参数
  */
-export function deleteUserApi(data: { id?: number; ids?: number[] }): Promise<ApiResponse> {
-  return request({
+export function deleteUserApi(data: { id?: number; ids?: number[] }): Promise<void> {
+  return request<void>({
     url: '/user/del',
     method: 'post',
     data,
@@ -71,8 +73,8 @@ export function deleteUserApi(data: { id?: number; ids?: number[] }): Promise<Ap
  * 重置用户密码
  * @param data 重置密码参数
  */
-export function resetPasswordApi(data: { id: number; password: string }): Promise<ApiResponse> {
-  return request({
+export function resetPasswordApi(data: { id: number; password: string }): Promise<void> {
+  return request<void>({
     url: '/user/resetPassword',
     method: 'post',
     data,
@@ -84,8 +86,8 @@ export function resetPasswordApi(data: { id: number; password: string }): Promis
  * 修改用户状态
  * @param data 状态参数
  */
-export function updateUserStateApi(data: { id: number; state: boolean }): Promise<ApiResponse> {
-  return request({
+export function updateUserStateApi(data: { id: number; state: boolean }): Promise<void> {
+  return request<void>({
     url: '/user/updateState',
     method: 'post',
     data,
@@ -96,8 +98,8 @@ export function updateUserStateApi(data: { id: number; state: boolean }): Promis
 /**
  * 获取当前用户信息（扩展）
  */
-export function getCurrentUserInfoApi(): Promise<ApiResponse<UserInfo>> {
-  return request({
+export function getCurrentUserInfoApi(): Promise<UserInfo> {
+  return request<UserInfo>({
     url: '/user/current',
     method: 'get',
     module: RequestModule.BASE
@@ -108,8 +110,8 @@ export function getCurrentUserInfoApi(): Promise<ApiResponse<UserInfo>> {
  * 更新当前用户信息
  * @param data 用户数据
  */
-export function updateCurrentUserApi(data: Partial<UserInfo>): Promise<ApiResponse> {
-  return request({
+export function updateCurrentUserApi(data: Partial<UserInfo>): Promise<void> {
+  return request<void>({
     url: '/user/updateCurrent',
     method: 'post',
     data,
@@ -117,15 +119,16 @@ export function updateCurrentUserApi(data: Partial<UserInfo>): Promise<ApiRespon
   })
 }
 
+
 /**
  * 上传用户头像
  * @param file 头像文件
  */
-export function uploadAvatarApi(file: File): Promise<ApiResponse<{ url: string }>> {
+export function uploadAvatarApi(file: File): Promise<{ url: string }> {
   const formData = new FormData()
   formData.append('file', file)
 
-  return request({
+  return request<{ url: string }>({
     url: '/user/uploadAvatar',
     method: 'post',
     data: formData,
@@ -135,4 +138,5 @@ export function uploadAvatarApi(file: File): Promise<ApiResponse<{ url: string }
     module: RequestModule.BASE
   })
 }
+
 

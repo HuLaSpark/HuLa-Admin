@@ -219,5 +219,5 @@ provide('onLoginSuccess', async () => {
 </script>
 
 <style lang="scss" scoped>
-@import '@/styles/scss/login';
+@use '@/styles/scss/login';
 </style>

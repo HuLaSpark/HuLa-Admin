@@ -1,13 +1,13 @@
 import { request } from '@/utils/http'
 import { RequestModule } from '@/enums/request'
-import type { TenantInfo, ApiResponse } from '@/types/api'
+import type { TenantInfo } from '@/types/api'
 
 /**
  * 获取所有正常状态的租户列表
  * 需要登录后调用
  */
-export function getTenantListApi(): Promise<ApiResponse<TenantInfo[]>> {
-  return request({
+export function getTenantListApi(): Promise<TenantInfo[]> {
+  return request<TenantInfo[]>({
     url: '/defTenant/all',
     method: 'get',
     module: RequestModule.BASE
@@ -19,8 +19,8 @@ export function getTenantListApi(): Promise<ApiResponse<TenantInfo[]>> {
  * 需要登录后调用
  * 后端会从 token 中解析 userId，无需前端传递
  */
-export function getUserTenantListApi(): Promise<ApiResponse<TenantInfo[]>> {
-  return request({
+export function getUserTenantListApi(): Promise<TenantInfo[]> {
+  return request<TenantInfo[]>({
     url: `/defTenant/listTenantByUserId`,
     method: 'get',
     module: RequestModule.BASE
@@ -31,8 +31,8 @@ export function getUserTenantListApi(): Promise<ApiResponse<TenantInfo[]>> {
  * 检测租户编码是否存在
  * @param code 租户编码
  */
-export function checkTenantCodeApi(code: string): Promise<ApiResponse<boolean>> {
-  return request({
+export function checkTenantCodeApi(code: string): Promise<boolean> {
+  return request<boolean>({
     url: `/defTenant/check/${code}`,
     method: 'get',
     module: RequestModule.BASE
@@ -43,8 +43,8 @@ export function checkTenantCodeApi(code: string): Promise<ApiResponse<boolean>> 
  * 获取租户详情
  * @param id 租户 ID
  */
-export function getTenantDetailApi(id: string): Promise<ApiResponse<TenantInfo>> {
-  return request({
+export function getTenantDetailApi(id: string): Promise<TenantInfo> {
+  return request<TenantInfo>({
     url: `/defTenant/detail`,
     method: 'get',
     params: { id },

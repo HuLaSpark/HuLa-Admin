@@ -16,7 +16,11 @@
         @contextmenu="handleContextMenu($event, item.path)"
         @click.stop="router.push(item.path)">
         <div class="tabs-left" />
-        <n-icon class="tab-icon" size="18" :component="(vicons as any)[item.icon]" />
+        <n-icon
+          class="tab-icon"
+          size="18"
+          :component="(vicons as any)[item.icon] || (vicons as any)[DEFAULT_TAB_ICON]"
+        />
         {{ item.title }}
         <n-icon class="del" size="14" :component="X" @click.stop="removeTabs(item.path)" />
       </div>
@@ -52,6 +56,8 @@
 <script setup lang="ts">
 import * as vicons from '@vicons/tabler'
 import { BrowserX, DotsVertical, LetterA, LetterO, SmartHome, X } from '@vicons/tabler'
+
+const DEFAULT_TAB_ICON = 'LayoutGrid'
 import { mainStore } from '@/stores/main'
 import { storeToRefs } from 'pinia'
 import { tabs } from '@/stores/tabs'

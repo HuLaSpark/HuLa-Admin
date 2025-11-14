@@ -101,10 +101,12 @@ const handleCollapsed = () => {
   emit('collapsed', collapsed.value)
 }
 
-/* 渲染菜单图标（兼容后端返回的任意 icon 字符串，不存在的直接不渲染） */
+const DEFAULT_MENU_ICON = 'LayoutGrid'
+
+/* 渲染菜单图标（兼容后端返回的任意 icon 字符串，找不到则使用默认图标） */
 const renderIcon = (icon?: string) => {
-  if (!icon) return undefined
-  const Comp = (vicons as any)[icon]
+  const iconName = icon && (vicons as any)[icon] ? icon : DEFAULT_MENU_ICON
+  const Comp = (vicons as any)[iconName]
   if (!Comp) return undefined
   return () => <NIcon component={Comp} />
 }

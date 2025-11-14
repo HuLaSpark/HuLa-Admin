@@ -47,7 +47,7 @@ const Content = defineComponent({
 </script>
 
 <style lang="scss">
-@import '@/styles/scss/global-app';
+@use '@/styles/scss/global-app';
 #app {
   background-color: v-bind(LOGIN_BGC);
 }
