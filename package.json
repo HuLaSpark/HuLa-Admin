@@ -39,8 +39,10 @@
     "lint:staged": "lint-staged"
   },
   "dependencies": {
+    "@fingerprintjs/fingerprintjs": "^5.0.1",
     "@intlify/unplugin-vue-i18n": "^0.11.0",
     "@types/crypto-js": "^4.2.1",
+    "@vicons/ionicons5": "^0.13.0",
     "@vicons/tabler": "^0.12.0",
     "@vueuse/core": "^10.7.0",
     "animate.css": "^4.1.1",

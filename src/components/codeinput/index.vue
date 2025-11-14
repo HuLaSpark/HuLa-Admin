@@ -1,7 +1,7 @@
 <template>
   <div class="code-input">
-    <!-- 循环生成6个输入框 -->
-    <div v-for="(item, index) in codeLength" :key="index">
+    <!-- 循环生成指定数量的输入框 -->
+    <div v-for="(_, index) in codeLength" :key="index">
       <!-- 输入框 -->
       <input
         ref="inputRefs"
@@ -18,39 +18,19 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
 import { mainStore } from '@/stores/main'
-import useState from '@/hooks/useState.ts'
-import { i18n } from '@/i18n'
-import { useLogin } from '@/hooks/useLogin'
 
-const { codeMsg } = useLogin()
-const { showCode, showModal } = useState
-const { t } = i18n.global
 const store = mainStore()
 const { BGC_OTHER } = storeToRefs(store)
-const { codeLength, inputSize, email } = defineProps({
+const { codeLength, inputSize } = defineProps({
   // 验证码长度
   codeLength: { type: Number, default: 0 },
   // 输入框大小
-  inputSize: { type: Number, default: 0 },
-  // email
-  email: { default: null }
+  inputSize: { type: Number, default: 0 }
 })
 
 const code = ref<Array<string>>(Array(codeLength).fill('')) // 验证码数组
 const inputRefs = ref<Array<HTMLInputElement | null>>([]) // 输入框引用数组
 const focusedIndex = ref<number>(0) // 当前聚焦的输入框索引
-
-onMounted(() => {
-  // 页面加载时自动聚焦第一个输入框
-  inputRefs.value[0]?.focus()
-})
-
-onUnmounted(() => {
-  // 页面卸载时移除所有输入框的键盘事件监听
-  inputRefs.value.forEach((input, index) =>
-    input?.removeEventListener('keydown', (event: KeyboardEvent) => onKeyDown(event, index))
-  )
-})
 
 // 当输入框的值发生变化时，执行以下函数
 const onInput = async (value: string, index: number) => {
@@ -124,24 +104,7 @@ const onPaste = (event: ClipboardEvent) => {
 
 /*重置密码方法*/
 const handlePawReset = async () => {
-  const emailCode = code.value.join('')
-  // await passwordReset({ email, emailCode }).then((r) => {
-  //   if (r.code === '00000') {
-  //     window.$notification.success({
-  //       title: t('reset_success'),
-  //       content: r.msg,
-  //       duration: 0
-  //     })
-  //     animation.value = 'modal-container animate__animated animate__rotateOutDownRight'
-  //     nextTick(() => {
-  //       showCode.value = false
-  //       showModal.value = false
-  //       animation.value = 'modal-container animate__animated animate__shakeX'
-  //     })
-  //   } else {
-  //     codeMsg.value = r.msg
-  //   }
-  // })
+
 }
 
 onMounted(() => {
@@ -152,10 +115,7 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
-  // 页面卸载时移除所有输入框的键盘事件监听和粘贴事件监听
-  inputRefs.value.forEach((input, index) => {
-    input?.removeEventListener('keydown', (event: KeyboardEvent) => onKeyDown(event, index))
-  })
+  // 页面卸载时移除粘贴事件监听
   document.removeEventListener('paste', onPaste)
 })
 </script>

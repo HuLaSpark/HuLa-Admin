@@ -3,7 +3,7 @@ import { ref } from 'vue'
 import { i18n } from '@/i18n'
 import { RegExp } from '@/utils/RegExp.ts'
 
-const { tagType1, tagType2, tagType3, passwordComplexity, complexityShow, loadingPaw, ValidationStatus } = typeState
+const { tagType1, tagType2, tagType3, passwordComplexity, complexityShow, ValidationStatus } = typeState
 const butShow = ref<boolean>()
 const { t } = i18n.global
 
@@ -17,8 +17,9 @@ const validateLoginUsername = (_rule: any, value: any, callback: any) => {
   // TODO 验证函数只在值变更时运行一次，并且错误信息只在这个时候生成。如果之后用户更改了语言，这个错误信息将不会自动更新 (nyh-2023-12-11 17:09:05)
   if (!value) {
     callback(new Error(t('input_username')))
-  } else if (!RegExp.isEngORNub(value) || value.length > 12) {
-    callback(new Error(t(!RegExp.isEngORNub(value) ? 'is_standard' : 'UN_EX_limit')))
+  } else if (value.length > 50) {
+    // 放宽限制：只限制最大长度为50，允许任何字符（包括中文、特殊字符等）
+    callback(new Error(t('UN_EX_limit')))
   } else {
     callback()
   }
@@ -34,18 +35,9 @@ const validatePassword = (_rule: any, value: any, callback: any) => {
     ValidationStatus.value = 'error'
     callback(new Error(t('input_paw')))
   } else {
-    loadingPaw.value = true
-    setTimeout(() => {
-      if (value.length < 6) {
-        ValidationStatus.value = 'warning'
-        callback(t('paw_length'))
-        loadingPaw.value = false
-      } else {
-        ValidationStatus.value = ''
-        callback()
-        loadingPaw.value = false
-      }
-    }, 1000)
+    // 移除密码长度限制和延迟验证，允许任何非空密码
+    ValidationStatus.value = ''
+    callback()
   }
 }
 // TODO 这些校验还需要解决一些bug

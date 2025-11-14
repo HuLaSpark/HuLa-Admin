@@ -25,7 +25,7 @@ export default {
   /*新增 用户*/
   addUser: (form: User): Promise<Response> => POST(urls.user, form),
   /*删除单个 用户*/
-  deleteUser: (id: number, username: string, uid: string): Promise<Response> =>
+  deleteUser: (id: string, username: string, uid: string): Promise<Response> =>
     DELETE(urls.user + '/' + id + '/' + username + '/' + uid),
   /*批量删除 用户*/
   batchDeleteUsers: (data: BatchDelete): Promise<Response> => POST(urls.user + '/delete/batch', data),
@@ -38,7 +38,7 @@ export default {
   /*新增 角色*/
   addRole: (form: any): Promise<Response> => POST(urls.role, form),
   /*删除单个 角色*/
-  deleteRole: (id: number): Promise<Response> => DELETE(urls.role + '/' + id),
+  deleteRole: (id: string): Promise<Response> => DELETE(urls.role + '/' + id),
   /*批量删除 角色*/
   batchDeleteRoles: (data: BatchDelete): Promise<Response> => POST(urls.role + '/delete/batch', data),
   /*修改 角色*/

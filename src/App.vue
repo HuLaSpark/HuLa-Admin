@@ -3,7 +3,11 @@
     <div id="app">
       <n-notification-provider :max="3">
         <n-message-provider :max="3">
-          <router-view />
+          <n-dialog-provider>
+            <n-loading-bar-provider>
+              <Content />
+            </n-loading-bar-provider>
+          </n-dialog-provider>
         </n-message-provider>
       </n-notification-provider>
     </div>
@@ -13,7 +17,8 @@
 <script setup lang="ts">
 import { mainStore } from '@/stores/main'
 import { storeToRefs } from 'pinia'
-import { darkTheme, dateZhCN, zhCN } from 'naive-ui'
+import { darkTheme, dateZhCN, zhCN, useDialog, useMessage, useNotification, useLoadingBar } from 'naive-ui'
+import { RouterView } from 'vue-router'
 
 const store = mainStore()
 const NLanguage = ref(zhCN)
@@ -25,6 +30,19 @@ const theme = ref<any>(EYE_THEME.value)
 /*监听深色主题颜色变化*/
 watchEffect(() => {
   theme.value = EYE_THEME.value ? darkTheme : null
+})
+
+const Content = defineComponent({
+  setup() {
+    // 挂载全局 API 到 window
+    window.$dialog = useDialog()
+    window.$message = useMessage()
+    window.$notification = useNotification()
+    window.$loadingBar = useLoadingBar()
+  },
+  render() {
+    return h(RouterView)
+  }
 })
 </script>
 

@@ -14,7 +14,7 @@ import { visualizer } from 'rollup-plugin-visualizer'
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }: ConfigEnv) => {
-  // 获取当前环境的配置,如何设置第三个参数则加载所有变量，而不是以“VITE_”前缀的变量
+  // 获取当前环境的配置,如何设置第三个参数则加载所有变量，而不是以"VITE_"前缀的变量
   const config = loadEnv(mode, process.cwd())
   return {
     resolve: {
@@ -97,14 +97,41 @@ export default defineConfig(({ mode }: ConfigEnv) => {
     // 配置前端服务地址和端口
     server: {
       //配置跨域
-      proxy: {
-        '/api': {
-          // “/api” 以及前置字符串会被替换为真正域名
-          target: config.VITE_SERVICE_URL, // 请求域名
-          changeOrigin: true, // 是否跨域
-          rewrite: (path) => path.replace(/^\/api/, '')
-        }
-      },
+      proxy:
+        config.VITE_HTTP_PROXY === 'Y'
+          ? {
+              // oauth 模块代理
+              '/proxy-oauth': {
+                target: config.VITE_API_BASE_URL,
+                changeOrigin: true,
+                rewrite: (path) => path.replace(/^\/proxy-oauth/, '/oauth')
+              },
+              // base 模块代理
+              '/proxy-base': {
+                target: config.VITE_API_BASE_URL,
+                changeOrigin: true,
+                rewrite: (path) => path.replace(/^\/proxy-base/, '/base')
+              },
+              // system 模块代理
+              '/proxy-system': {
+                target: config.VITE_API_BASE_URL,
+                changeOrigin: true,
+                rewrite: (path) => path.replace(/^\/proxy-system/, '/system')
+              },
+              // ai 模块代理
+              '/proxy-ai': {
+                target: config.VITE_API_BASE_URL,
+                changeOrigin: true,
+                rewrite: (path) => path.replace(/^\/proxy-ai/, '/ai')
+              },
+              // gateway 模块代理
+              '/proxy-gateway': {
+                target: config.VITE_API_BASE_URL,
+                changeOrigin: true,
+                rewrite: (path) => path.replace(/^\/proxy-gateway/, '/gateway')
+              }
+            }
+          : undefined,
       cors: true, // 配置 CORS
       hmr: true, // 热更新
       host: '0.0.0.0',
@@ -113,3 +140,4 @@ export default defineConfig(({ mode }: ConfigEnv) => {
     }
   }
 })
+

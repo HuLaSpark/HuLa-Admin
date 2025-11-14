@@ -52,7 +52,7 @@ const handleShowSelect = () => {
         {
           type: string
           label: string
-          key: number
+          key: string
           children: Array<{ label: string; value: string; disabled?: boolean }>
         }
       >()

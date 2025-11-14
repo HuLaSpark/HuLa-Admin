@@ -12,8 +12,10 @@ declare module '*.vue' {
 我们可以使用 if (window.$message) 来进行判断，避免出现类型错误。*/
 declare interface Window {
   $message: ReturnType<typeof useMessage>
+  $dialog: ReturnType<typeof useDialog>
   $notification: ReturnType<typeof useNotification>
   $loadingBar: ReturnType<typeof useLoadingBar>
+  $router: import('vue-router').Router
 }
 
 /**
@@ -42,37 +44,43 @@ interface ServiceEnvConfigWithProxyPattern extends ServiceEnvConfig {
 
 interface ImportMetaEnv {
   /** 后端项目地址 */
-  readonly VITE_SERVICE_URL: string
+  readonly VITE_SERVICE_URL?: string
+  /** Gateway 地址 */
+  readonly VITE_API_BASE_URL: string
   /** 项目名称 */
-  readonly VITE_APP_NAME: string
+  readonly VITE_APP_NAME?: string
   /** 项目标题 */
   readonly VITE_APP_TITLE: string
   /** 页面标题后缀*/
-  readonly VITE_TITLE_SUFFIX: string
+  readonly VITE_TITLE_SUFFIX?: string
   /** 项目ICP备案号 */
-  readonly VITE_APP_ICP: string
+  readonly VITE_APP_ICP?: string
   /** 项目描述 */
-  readonly VITE_APP_DESC: string
+  readonly VITE_APP_DESC?: string
   /** 后端服务的环境类型 */
   readonly VITE_SERVICE_ENV?: ServiceEnvType
+  /** 应用环境 */
+  readonly VITE_APP_ENV?: string
   /**
    * 权限路由模式:
    * - static - 前端声明的静态
    * - dynamic - 后端返回的动态
    */
-  readonly VITE_AUTH_ROUTE_MODE: 'static' | 'dynamic'
+  readonly VITE_AUTH_ROUTE_MODE?: 'static' | 'dynamic'
   /** 路由首页的路径 */
-  readonly VITE_ROUTE_HOME_PATH: AuthRoute.RoutePath
+  readonly VITE_ROUTE_HOME_PATH?: string
   /** iconify图标作为组件的前缀 */
-  readonly VITE_ICON_PREFIX: string
+  readonly VITE_ICON_PREFIX?: string
   /**
    * 本地SVG图标作为组件的前缀, 请注意一定要包含 VITE_ICON_PREFIX
    * - 格式 {VITE_ICON_PREFIX}-{本地图标集合名称}
    * - 例如：icon-local
    */
-  readonly VITE_ICON_LOCAL_PREFIX: string
+  readonly VITE_ICON_LOCAL_PREFIX?: string
   /** 开启请求代理 */
   readonly VITE_HTTP_PROXY?: 'Y' | 'N'
+  /** Authorization 密钥 */
+  readonly VITE_SECRET_KEY?: string
   /** 是否开启打包文件大小结果分析 */
   readonly VITE_VISUALIZER?: 'Y' | 'N'
   /** 是否开启打包压缩 */

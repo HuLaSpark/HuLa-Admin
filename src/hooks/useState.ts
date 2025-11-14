@@ -92,8 +92,6 @@ const provinces = [
   '宁',
   '琼'
 ]
-/*输入框loading*/
-const loadingPaw = ref(false)
 /*输入框验证的状态*/
 const ValidationStatus = ref()
 
@@ -128,6 +126,5 @@ export default {
   violationsInfo,
   isDispose,
   provinces,
-  loadingPaw,
   ValidationStatus
 }

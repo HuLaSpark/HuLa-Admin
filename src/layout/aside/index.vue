@@ -57,9 +57,22 @@ import { i18n } from '@/i18n'
 import { RouterLink, useRoute } from 'vue-router'
 import { Menu } from '@/services/types'
 
+// 动态收集当前项目中实际存在的页面组件，用于过滤菜单和添加路由
+const pageModules = import.meta.glob('../../views/page/*.vue') as Record<string, () => Promise<any>>
+const availablePages = new Set(
+  Object.keys(pageModules)
+    .map((key) => {
+      const match = key.match(/\/([^/]+)\.vue$/)
+      return match ? match[1] : ''
+    })
+    .filter(Boolean)
+)
+
+
 const { t } = i18n.global
 const route = useRoute()
-const activeKey = ref<any>(route.path.split('/')[1])
+// 使用完整路由路径作为菜单选中 key，避免层级不一致导致的高亮问题
+const activeKey = ref<any>(route.path)
 const collapsed = ref(false)
 const menuInstRef = ref()
 const store = mainStore()
@@ -77,7 +90,7 @@ watch(
   () => route.path,
   (newPath) => {
     // 在路径变化时更新 activeKey
-    activeKey.value = newPath.split('/')[1]
+    activeKey.value = newPath
     menuInstRef.value?.showOption(activeKey.value)
   }
 )
@@ -88,30 +101,54 @@ const handleCollapsed = () => {
   emit('collapsed', collapsed.value)
 }
 
-/*渲染菜单图标*/
-const renderIcon = (icon: string) => {
-  return () => <NIcon component={(vicons as any)[icon]} />
+/* 渲染菜单图标（兼容后端返回的任意 icon 字符串，不存在的直接不渲染） */
+const renderIcon = (icon?: string) => {
+  if (!icon) return undefined
+  const Comp = (vicons as any)[icon]
+  if (!Comp) return undefined
+  return () => <NIcon component={Comp} />
 }
-/*菜单数据 注意:排除了主页的路由*/
+
+/* 菜单数据 排除了主页的路由，实现 hideMenu / hideChildrenInMenu，且仅展示当前项目中真实存在页面的菜单 */
 const menuOptions: MenuOption[] = menus
   .filter((menu: Menu) => menu.path !== 'home')
+  .filter((menu: Menu) => !menu.hideMenu)
   .map((menu: Menu) => {
-    const menuOption: MenuOption = {
-      label: () => <RouterLink to={{ name: menu.page }}>{() => menu.name}</RouterLink>,
-      key: menu.path as string,
-      icon: renderIcon(menu.icon)
-    }
-    if (menu.path) {
-      return menuOption
+    const hasChildren = Array.isArray(menu.children) && menu.children.length > 0 && !menu.hideChildrenInMenu
+
+    // 没有子菜单的普通菜单项；如果对应的页面不存在，则不展示
+    if (!hasChildren && menu.page && menu.path) {
+      if (!availablePages.has(menu.page)) return null as any
+
+      return {
+        // 使用 path 进行跳转，避免依赖路由 name，适配动态路由 name 使用 id/path 的情况
+        label: () => <RouterLink to={{ path: menu.path as string }}>{() => menu.name}</RouterLink>,
+        key: menu.path as string,
+        icon: renderIcon(menu.icon)
+      } as MenuOption
     }
 
-    menuOption.children = menu.children?.map((child) => ({
-      label: () => <RouterLink to={{ name: child.page }}>{() => child.name}</RouterLink>,
-      key: child.path as string,
-      icon: renderIcon(child.icon)
-    }))
-    return menuOption
+    // 作为分组存在的菜单（多级菜单）
+    const childrenOptions: MenuOption[] = (menu.children || [])
+      .filter((child) => !child.hideMenu && (!child.page || availablePages.has(child.page)))
+      .map((child) => ({
+        // 同样通过 path 导航，保证和动态路由 path 对齐
+        label: () => <RouterLink to={{ path: child.path as string }}>{() => child.name}</RouterLink>,
+        key: child.path as string,
+        icon: renderIcon(child.icon)
+      }))
+
+    // 如果分组下没有可展示的子菜单，则不展示该分组
+    if (!childrenOptions.length) return null as any
+
+    return {
+      label: () => <span>{menu.name}</span>,
+      key: (menu.path || menu.id || menu.name) as string,
+      icon: renderIcon(menu.icon),
+      children: childrenOptions
+    } as MenuOption
   })
+  .filter(Boolean) as MenuOption[]
 </script>
 <style scoped>
 .aside {
