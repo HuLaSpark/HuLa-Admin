@@ -271,7 +271,7 @@ const userExit = () => {
 </script>
 
 <style lang="scss" scoped>
-@import '@/styles/scss/layout-header.scss';
+@use '@/styles/scss/layout-header.scss';
 :deep(.n-tabs-capsule) {
   width: 122px !important;
   height: 33px !important;

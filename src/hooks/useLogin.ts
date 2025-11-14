@@ -3,8 +3,6 @@ import useState from '@/hooks/useState.ts'
 import { i18n } from '@/i18n'
 import { NForm } from 'naive-ui'
 import { remember } from '@/stores/remember'
-import apis from '@/services/apis'
-import { RCodeEnum } from '@/enums'
 import { Loading } from 'notiflix'
 import { tabs } from '@/stores/tabs.ts'
 import { getEnhancedFingerprint } from '@/utils/fingerprint'
@@ -135,25 +133,26 @@ export const useLogin = () => {
    * @param notifi 是否显示提示
    */
   const exit = async (notifi = true) => {
-    await apis.logout().then((res) => {
-      if (res.code !== RCodeEnum.OK) {
-        window.$notification.error({
-          title: res.msg ? res.msg : t('logout_error'),
-          duration: 1500,
-          keepAliveOnHover: true
-        })
-        return false
-      }
-      userInfoStore.logout()
+    try {
+      await userInfoStore.logout()
       tabsStore.resetState()
       if (notifi) {
         window.$notification.success({
-          title: res.msg,
+          title: t('logout'),
           duration: 1500,
           keepAliveOnHover: true
         })
       }
-    })
+    } catch (error) {
+      console.error('退出登录失败:', error)
+      if (notifi) {
+        window.$notification.error({
+          title: t('logout_error'),
+          duration: 1500,
+          keepAliveOnHover: true
+        })
+      }
+    }
   }
   /*弹出验证码输入框*/
   const handleCodeInput = async (formInstance: any) => {

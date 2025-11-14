@@ -75,6 +75,11 @@ export default defineConfig(({ mode }: ConfigEnv) => {
         }
       })
     ],
+    css: {
+      preprocessorOptions: {
+        scss: {}
+      }
+    },
     build: {
       cssCodeSplit: true, // 启用 CSS 代码拆分
       minify: 'terser', // 指定使用哪种混淆器

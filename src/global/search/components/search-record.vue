@@ -87,5 +87,5 @@ const handleDel = async (item: any) => {
 }
 </script>
 <style lang="scss" scoped>
-@import '@/styles/scss/global-search';
+@use '@/styles/scss/global-search';
 </style>

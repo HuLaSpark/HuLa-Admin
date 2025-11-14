@@ -32,9 +32,19 @@ const routes: Array<RouteRecordRaw> = [
     path: '/',
     name: 'page',
     component: () => import('@/layout/index.vue'),
-    //斜杠重定向路由到/home
+    // 斜杠重定向路由到 /home
     redirect: '/home',
-    children: []
+    children: [
+      {
+        path: '/home',
+        name: 'Home',
+        meta: {
+          title: '主页',
+          requiresAuth: true
+        },
+        component: () => import('@/views/page/Home.vue')
+      }
+    ]
   }
 ]
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="footer">Copyright © 2023-2024 HuLa.All Rights Reserved.</div>
+  <div class="footer">Copyright © 2023-2026 HuLa.All Rights Reserved.</div>
 </template>
 
 <script setup lang="ts">

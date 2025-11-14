@@ -115,9 +115,7 @@ const createAxiosInstance = (): AxiosInstance => {
       console.log('✅ Response:', config.url, data)
 
       // 判断响应是否成功
-      const isSuccess = data.code === 200 || data.code === '200' || data.code === '00000' || data.success === true
-
-      if (isSuccess) {
+      if (data.code === 200 || data.success) {
         return response
       }
 
@@ -283,8 +281,9 @@ const http = createAxiosInstance()
  * @param url 请求地址
  * @param config 请求配置
  */
-export function get<T = any>(url: string, config?: RequestConfig): Promise<ApiResponse<T>> {
-  return http.get(url, config).then((res) => res.data)
+export async function get<T = any>(url: string, config?: RequestConfig): Promise<T> {
+  const res = await http.get<ApiResponse<T>>(url, config)
+  return res.data.data
 }
 
 /**
@@ -293,8 +292,9 @@ export function get<T = any>(url: string, config?: RequestConfig): Promise<ApiRe
  * @param data 请求数据
  * @param config 请求配置
  */
-export function post<T = any>(url: string, data?: any, config?: RequestConfig): Promise<ApiResponse<T>> {
-  return http.post(url, data, config).then((res) => res.data)
+export async function post<T = any>(url: string, data?: any, config?: RequestConfig): Promise<T> {
+  const res = await http.post<ApiResponse<T>>(url, data, config)
+  return res.data.data
 }
 
 /**
@@ -303,8 +303,9 @@ export function post<T = any>(url: string, data?: any, config?: RequestConfig): 
  * @param data 请求数据
  * @param config 请求配置
  */
-export function put<T = any>(url: string, data?: any, config?: RequestConfig): Promise<ApiResponse<T>> {
-  return http.put(url, data, config).then((res) => res.data)
+export async function put<T = any>(url: string, data?: any, config?: RequestConfig): Promise<T> {
+  const res = await http.put<ApiResponse<T>>(url, data, config)
+  return res.data.data
 }
 
 /**
@@ -312,16 +313,18 @@ export function put<T = any>(url: string, data?: any, config?: RequestConfig): P
  * @param url 请求地址
  * @param config 请求配置
  */
-export function del<T = any>(url: string, config?: RequestConfig): Promise<ApiResponse<T>> {
-  return http.delete(url, config).then((res) => res.data)
+export async function del<T = any>(url: string, config?: RequestConfig): Promise<T> {
+  const res = await http.delete<ApiResponse<T>>(url, config)
+  return res.data.data
 }
 
 /**
  * 通用请求方法
  * @param config 请求配置
  */
-export function request<T = any>(config: RequestConfig): Promise<ApiResponse<T>> {
-  return http.request(config).then((res) => res.data)
+export async function request<T = any>(config: RequestConfig): Promise<T> {
+  const res = await http.request<ApiResponse<T>>(config)
+  return res.data.data
 }
 
 export default http
