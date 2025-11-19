@@ -143,8 +143,17 @@ const createAxiosInstance = (): AxiosInstance => {
 function handleBusinessError(data: ApiResponse, config: RequestConfig) {
   const store = userStore()
   const responseCode = String(data.code)
+  const msg = data.msg || ''
 
-  // 获取环境变量配置的错误码
+  // 无权限错误：
+  if (responseCode === '403' || msg.includes('无此权限')) {
+    if (config.showError !== false) {
+      window.$message?.error(msg || '无权限访问')
+    }
+    return
+  }
+
+  // 获取环境变量配置的错误码（如 401 未登录、token 失效等）
   const logoutCodes = import.meta.env.VITE_SERVICE_LOGOUT_CODES?.split(',') || []
   const modalLogoutCodes = import.meta.env.VITE_SERVICE_MODAL_LOGOUT_CODES?.split(',') || []
 
@@ -224,12 +233,6 @@ function handleBusinessError(data: ApiResponse, config: RequestConfig) {
         handleLogout()
       }
     })
-    return
-  }
-
-  // 403 无权限
-  if (responseCode === '403') {
-    window.$message?.error(data.msg || '无权限访问')
     return
   }
 

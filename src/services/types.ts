@@ -41,7 +41,15 @@ export type Menu = {
 export type parameter = {
   pageNum: number
   pageSize: number
-  userName: string
+  userName?: string
+}
+
+/*IM用户搜索参数*/
+export type ImUserSearchParams = {
+  pageNo: number
+  pageSize: number
+  keyword?: string
+  id?: string
 }
 /*登录类型*/
 export type login = {
@@ -95,6 +103,51 @@ export type Renew = {
   userName: string
   password: string
 }
+
+/*IM用户信息*/
+export type ImUser = {
+  /** 用户UID */
+  uid: string
+  /** 用户名 */
+  name: string
+  /** 账号 */
+  account: string
+  /** 头像 */
+  avatar: string
+}
+
+/*好友信息*/
+export type FriendItem = {
+  /** 好友uid */
+  uid: string
+  /** 好友备注 */
+  remark: string
+  /** 在线状态 1在线 2离线 */
+  activeStatus: number
+  /** 不让他看我（0-允许，1-禁止） */
+  hideMyPosts: boolean
+  /** 不看他（0-允许，1-禁止） */
+  hideTheirPosts: boolean
+}
+
+/*游标分页请求*/
+export type CursorPageReq = {
+  /** 页面大小 */
+  pageSize: number
+  /** 游标（首次为空） */
+  cursor?: string
+}
+
+/*游标分页响应*/
+export type CursorPageResp<T> = {
+  /** 游标（下次翻页带上这参数） */
+  cursor: string
+  /** 是否最后一页 */
+  isLast: boolean
+  /** 数据列表 */
+  list: T[]
+}
+
 /*角色*/
 export type Role = {
   id: string

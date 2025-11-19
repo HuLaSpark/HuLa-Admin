@@ -1,7 +1,7 @@
 import { ConfigEnv, defineConfig, loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import AutoImport from 'unplugin-auto-import/vite' //自动导入
-import Components from 'unplugin-vue-components/vite' //组件注册
+import AutoImport from 'unplugin-auto-import/vite'
+import Components from 'unplugin-vue-components/vite'
 import { NaiveUiResolver } from 'unplugin-vue-components/resolvers'
 import viteCompression from 'vite-plugin-compression' //vite开启gzip压缩
 import vueDevTools from 'vite-plugin-vue-devtools'
@@ -105,6 +105,12 @@ export default defineConfig(({ mode }: ConfigEnv) => {
       proxy:
         config.VITE_HTTP_PROXY === 'Y'
           ? {
+              // api 统一代理到 gateway
+              '/api': {
+                target: config.VITE_API_BASE_URL,
+                changeOrigin: true,
+                rewrite: (path) => path.replace(/^\/api/, '')
+              },
               // oauth 模块代理
               '/proxy-oauth': {
                 target: config.VITE_API_BASE_URL,
@@ -128,6 +134,12 @@ export default defineConfig(({ mode }: ConfigEnv) => {
                 target: config.VITE_API_BASE_URL,
                 changeOrigin: true,
                 rewrite: (path) => path.replace(/^\/proxy-ai/, '/ai')
+              },
+              // im 模块代理
+              '/proxy-im': {
+                target: config.VITE_API_BASE_URL,
+                changeOrigin: true,
+                rewrite: (path) => path.replace(/^\/proxy-im/, '/im')
               },
               // gateway 模块代理
               '/proxy-gateway': {

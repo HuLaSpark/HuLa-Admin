@@ -43,6 +43,69 @@ const routes: Array<RouteRecordRaw> = [
           requiresAuth: true
         },
         component: () => import('@/views/page/Home.vue')
+      },
+      {
+        path: '/im/user',
+        name: 'ImUser',
+        meta: {
+          title: '用户 / 黑名单管理',
+          requiresAuth: true
+        },
+        component: () => import('@/views/page/ImUser.vue')
+      },
+      {
+        path: '/im/black',
+        name: 'ImBlack',
+        meta: {
+          title: '黑名单列表',
+          requiresAuth: true
+        },
+        component: () => import('@/views/page/ImBlack.vue')
+      },
+      {
+        path: '/im/group',
+        name: 'ImGroup',
+        meta: {
+          title: '群聊管理',
+          requiresAuth: true
+        },
+        component: () => import('@/views/page/ImGroup.vue')
+      },
+      {
+        path: '/im/moment',
+        name: 'ImMoment',
+        meta: {
+          title: '朋友圈管理',
+          requiresAuth: true
+        },
+        component: () => import('@/views/page/ImMoment.vue')
+      },
+      {
+        path: '/ai/model',
+        name: 'AiModel',
+        meta: {
+          title: 'AI 能力中心',
+          requiresAuth: true
+        },
+        component: () => import('@/views/page/AiModel.vue')
+      },
+      {
+        path: '/im/config',
+        name: 'ImConfig',
+        meta: {
+          title: 'IM 配置',
+          requiresAuth: true
+        },
+        component: () => import('@/views/page/ImConfig.vue')
+      },
+      {
+        path: '/im/contact',
+        name: 'ImContact',
+        meta: {
+          title: '联系人 / 好友管理',
+          requiresAuth: true
+        },
+        component: () => import('@/views/page/ImContact.vue')
       }
     ]
   }
