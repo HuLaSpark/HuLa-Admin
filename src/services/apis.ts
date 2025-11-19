@@ -1,6 +1,15 @@
 import { createAxios } from '@/services/request'
 import urls from '@/services/urls'
-import type { BatchDelete, login, parameter, Response, UpdateUser, User } from '@/services/types'
+import type {
+  BatchDelete,
+  CursorPageReq,
+  ImUserSearchParams,
+  login,
+  parameter,
+  Response,
+  UpdateUser,
+  User
+} from '@/services/types'
 
 const request = createAxios()
 
@@ -46,5 +55,14 @@ export default {
   /*角色分页 请求*/
   rolePage: (params: parameter): Promise<Response> => GET(urls.role + '/page', { params }),
   /*获取角色列表*/
-  getRoleList: (): Promise<Response> => GET(urls.role)
+  getRoleList: (): Promise<Response> => GET(urls.role),
+
+  /*  ====================IM用户管理==================== */
+  /*搜索IM用户*/
+  searchImUser: (params: ImUserSearchParams): Promise<Response> => GET(urls.imUserSearch, { params }),
+
+  /*  ====================好友管理==================== */
+  /*获取用户的好友列表*/
+  getFriendList: (uid: string, params: CursorPageReq): Promise<Response> =>
+    GET(urls.friendList, { params: { ...params, uid } })
 }

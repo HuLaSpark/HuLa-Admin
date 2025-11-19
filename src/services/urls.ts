@@ -11,5 +11,8 @@ export default {
   tenantList: `${prefix + URLEnum.TENANT}/tenantList`,
   renew: `${prefix + URLEnum.PASS}/renew`,
   user: `${prefix + URLEnum.USER}`,
-  role: `${prefix + URLEnum.ROLE}`
+  role: `${prefix + URLEnum.ROLE}`,
+  // IM相关接口
+  imUserSearch: `${prefix + URLEnum.IM}/user/search`,
+  friendList: `${prefix + URLEnum.IM}/user/friend/page`
 }

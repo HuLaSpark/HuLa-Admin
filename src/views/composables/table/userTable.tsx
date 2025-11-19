@@ -36,6 +36,9 @@ export const userTable = (data: Ref<any[]>) => {
   const { pagingLoad, contentData, rawData, showDrawer, total } = useBase()
   const checkedRowKeys = ref<DataTableRowKey[]>([])
 
+  // 用户画像弹窗引用
+  const userProfileModalRef = ref<any>(null)
+
   /*受控过滤器*/
   const statusColumn = reactive<DataTableBaseColumn<pageUser>>({
     title: t('status'),
@@ -90,8 +93,14 @@ export const userTable = (data: Ref<any[]>) => {
       render: (row) => {
         return (
           <NSpace justify={'start'} align={'center'}>
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <NAvatar size={'large'}></NAvatar>
+            <div
+              class="user-avatar-wrapper"
+              onClick={() => handleShowProfile(row)}>
+              <NAvatar
+                size={'large'}
+                src={row.avatar || '/logoD.png'}
+                fallbackSrc={'/logoD.png'}
+              ></NAvatar>
             </div>
             <NSpace vertical size={5}>
               <p
@@ -324,12 +333,21 @@ export const userTable = (data: Ref<any[]>) => {
     checkedRowKeys.value = rowKeys
   }
 
+  /*显示用户画像*/
+  const handleShowProfile = (row: pageUser) => {
+    if (userProfileModalRef.value) {
+      userProfileModalRef.value.openProfile(row)
+    }
+  }
+
   return {
     columns,
     statusColumn,
     pagination,
     checkedRowKeys,
-    handleCheck
+    handleCheck,
+    userProfileModalRef,
+    handleShowProfile
   }
 }
 

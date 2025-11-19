@@ -1,6 +1,14 @@
 import { request } from '@/utils/http'
 import { RequestModule } from '@/enums/request'
-import type { UserInfo, PageParams, PageResponse } from '@/types/api'
+import type { UserInfo, PageParams } from '@/types/api'
+
+interface PageBaseResp<T> {
+  pageNo: number
+  pageSize: number
+  totalRecords: number
+  isLast?: boolean
+  list: T[]
+}
 
 /**
  * 获取用户列表（分页）
@@ -18,10 +26,28 @@ export function getUserListApi(
 }
 
 /**
+ * 搜索用户
+ * @param params 分页参数和搜索关键词
+ */
+export function searchUserByNicknameApi(params: {
+  pageNo: number
+  pageSize: number
+  keyword?: string
+  id?: string
+}): Promise<PageBaseResp<UserInfo>> {
+  return request<PageBaseResp<UserInfo>>({
+    url: '/user/search',
+    method: 'get',
+    params,
+    module: RequestModule.IM
+  })
+}
+
+/**
  * 获取用户详情
  * @param id 用户 ID
  */
-export function getUserDetailApi(id: number | string): Promise<UserInfo> {
+export function getUserDetailApi(id: string): Promise<UserInfo> {
   return request<UserInfo>({
     url: '/user/detail',
     method: 'get',
@@ -60,7 +86,7 @@ export function editUserApi(data: Partial<UserInfo>): Promise<void> {
  * 删除用户
  * @param data 删除参数
  */
-export function deleteUserApi(data: { id?: number; ids?: number[] }): Promise<void> {
+export function deleteUserApi(data: { id?: string; ids?: string[] }): Promise<void> {
   return request<void>({
     url: '/user/del',
     method: 'post',
@@ -73,7 +99,7 @@ export function deleteUserApi(data: { id?: number; ids?: number[] }): Promise<vo
  * 重置用户密码
  * @param data 重置密码参数
  */
-export function resetPasswordApi(data: { id: number; password: string }): Promise<void> {
+export function resetPasswordApi(data: { id: string; password: string }): Promise<void> {
   return request<void>({
     url: '/user/resetPassword',
     method: 'post',
@@ -86,7 +112,7 @@ export function resetPasswordApi(data: { id: number; password: string }): Promis
  * 修改用户状态
  * @param data 状态参数
  */
-export function updateUserStateApi(data: { id: number; state: boolean }): Promise<void> {
+export function updateUserStateApi(data: { id: string; state: boolean }): Promise<void> {
   return request<void>({
     url: '/user/updateState',
     method: 'post',
@@ -138,5 +164,4 @@ export function uploadAvatarApi(file: File): Promise<{ url: string }> {
     module: RequestModule.BASE
   })
 }
-
 

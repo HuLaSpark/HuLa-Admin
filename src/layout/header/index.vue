@@ -122,7 +122,7 @@
         <n-popover trigger="hover" placement="bottom" :width="250">
           <template #trigger>
             <n-badge :type="networkIcon" dot processing>
-              <n-avatar :size="34" :src="url" style="border-radius: 8px" />
+              <n-avatar :size="34" :src="avatar" style="border-radius: 8px" />
             </n-badge>
           </template>
           <template #header>
@@ -132,7 +132,7 @@
                   {{ userInfoStore.getCompanyName }}
                 </n-tag>
                 <div class="info-content">
-                  <n-avatar :size="64" :src="url" style="border-radius: 8px" />
+                  <n-avatar :size="64" :src="avatar" style="border-radius: 8px" />
                   <div>
                     <span>{{ userName }}</span>
                     <div>{{ email }}</div>
@@ -219,7 +219,7 @@ const message = useMessage()
 const store = mainStore()
 const userInfoStore = userStore()
 const user = userInfoStore.getUser
-const { userName, email, url } = user
+const { userName, email, avatar } = user
 const { BGC, TEXT_COLOR, BGC_OTHER } = storeToRefs(store)
 const showModal = ref(false)
 const fullIcon = ref(false)

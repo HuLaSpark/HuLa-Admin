@@ -36,7 +36,9 @@ export enum URLEnum {
   /**角色*/
   ROLE = '/SysRole',
   /**租户*/
-  TENANT = '/SysTenant'
+  TENANT = '/SysTenant',
+  /**IM服务*/
+  IM = '/im'
 }
 /**权限类型*/
 export enum FlagEnum {

@@ -46,6 +46,9 @@
 
   <!--添加弹出框-->
   <UserModal :title="title" />
+
+  <!--用户画像弹窗-->
+  <UserProfileModal :ref="(el: any) => userProfileModalRef = el" @edit="handleEditFromProfile" />
 </template>
 
 <script setup lang="ts">
@@ -58,14 +61,22 @@ import { i18n } from '@/i18n'
 import { RotateClockwise2 } from '@vicons/tabler'
 import userVar from '@/views/composables/drawer/userDrawer/userVar'
 import { userTable } from '@/views/composables/table/userTable'
+import UserProfileModal from '@/views/composables/modal/userProfileModal/index.vue'
 
 const { t } = i18n.global
 const { pageNum, pageSize } = paging
 const loadingBarTargetRef = ref()
 const title = ref('添加用户')
 const { input } = userVar()
-const { pagingLoad, tableData, loading, NoAccess } = useBase()
-const { handleCheck, columns, statusColumn, pagination } = userTable(tableData)
+const { pagingLoad, tableData, loading, NoAccess, showDrawer, contentData, rawData } = useBase()
+const { handleCheck, columns, statusColumn, pagination, userProfileModalRef } = userTable(tableData)
+
+// 从用户画像弹窗编辑
+const handleEditFromProfile = (user: pageUser) => {
+  showDrawer.value = true
+  Object.assign(rawData.value, user)
+  Object.assign(contentData.value, user)
+}
 
 /**使用defineComponent重新构建组件*/
 const LoadingBarTrigger = defineComponent({
@@ -129,4 +140,19 @@ const handleUpdateFilter = (filters: DataTableFilterState, sourceColumn: DataTab
 
 <style lang="scss" scoped>
 @use '@/styles/scss/user';
+
+:deep(.user-avatar-wrapper) {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+
+  &:active {
+    transform: scale(1.05);
+  }
+}
 </style>

@@ -7,7 +7,9 @@ export enum RequestModule {
   /** System 模块 - 系统后台 */
   SYSTEM = 'system',
   /** AI 模块 - AI 相关 */
-  AI = 'ai'
+  AI = 'ai',
+  /** IM 模块 - 即时通讯服务 */
+  IM = 'im'
 }
 
 /**

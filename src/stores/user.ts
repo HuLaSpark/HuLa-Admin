@@ -187,7 +187,10 @@ export const userStore = defineStore('localUserInfo', {
             if (rawComponent.includes('/basic/system/baseRole/')) {
               return 'Role'
             }
-            if (rawComponent.includes('/basic/system/') || rawComponent.includes('/basic/msg/')) {
+            if (rawComponent.includes('/basic/msg/')) {
+              return 'MsgCenter'
+            }
+            if (rawComponent.includes('/basic/system/')) {
               return 'Home'
             }
 
