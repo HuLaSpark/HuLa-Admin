@@ -41,6 +41,7 @@ export interface HomeStatsResponse {
   blackStats: BlackStats
   /** AI 统计 */
   aiStats: AiStats
+  monthlyLogin3PlusUserCount: number
 }
 
 /**
@@ -51,5 +52,51 @@ export function getHomeStats(): Promise<HomeStatsResponse> {
     url: '/admin/stats/home',
     method: 'get',
     module: RequestModule.IM
+  })
+}
+
+export interface LoginRankItem {
+  userId: string
+  username: string
+  nickName: string
+  total: number
+}
+
+export function getLoginRank(params: {
+  start?: string
+  end?: string
+  rangeDays?: number
+  limit?: number
+}): Promise<LoginRankItem[]> {
+  return request<LoginRankItem[]>({
+    url: '/admin/stats/login-rank',
+    method: 'get',
+    module: RequestModule.IM,
+    params
+  })
+}
+
+export interface ActiveUserItem {
+  username: string
+  nickName: string
+  avatar: string
+  lastOptTime: string
+  ip: string
+  location: string
+  isp: string
+  loginTimes: number
+}
+
+export function getActiveUsers(params: {
+  start?: string
+  end?: string
+  rangeDays?: number
+  limit?: number
+}): Promise<ActiveUserItem[]> {
+  return request<ActiveUserItem[]>({
+    url: '/admin/stats/active-users',
+    method: 'get',
+    module: RequestModule.IM,
+    params
   })
 }

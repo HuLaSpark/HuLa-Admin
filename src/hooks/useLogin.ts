@@ -19,8 +19,8 @@ export const useLogin = () => {
   const signInLoading = ref<boolean>(false)
   const formRef = ref(<InstanceType<typeof NForm>>{})
   const ruleForm = reactive({
-    userName: '',
-    password: '',
+    userName: '24396462341',
+    password: '123456',
     tenantName: '',
     tenantId: '',
     tenantUrl: ''

@@ -98,7 +98,8 @@ const stats = ref({
   todayActiveUser: 0,
   totalGroup: 0,
   blackCount: 0,
-  aiCallToday: 0
+  aiCallToday: 0,
+  monthlyLogin3PlusUserCount: 0
 })
 
 // 黑名单统计
@@ -125,7 +126,8 @@ const loadStats = async () => {
       todayActiveUser: response.todayActiveUser,
       totalGroup: response.totalGroup,
       blackCount: response.blackCount,
-      aiCallToday: response.aiCallToday
+      aiCallToday: response.aiCallToday,
+      monthlyLogin3PlusUserCount: response.monthlyLogin3PlusUserCount || 0
     }
 
     // 更新黑名单统计
@@ -171,6 +173,13 @@ const overviewCards = computed(() => [
     value: stats.value.aiCallToday || 0,
     icon: Robot
   }
+  ,
+  {
+    key: 'monthlyLogin3PlusUserCount',
+    label: '最近一月登录≥次3的用户',
+    value: stats.value.monthlyLogin3PlusUserCount || 0,
+    icon: Users
+  }
 ])
 
 const quickEntries = computed(() => [
@@ -208,6 +217,20 @@ const quickEntries = computed(() => [
     desc: '配置 AI 平台与模型，查看调用情况',
     icon: SmartHome,
     path: '/ai/model'
+  },
+  {
+    key: 'loginRank',
+    label: '登录排行',
+    desc: '按时间范围查看用户登录次数排行榜',
+    icon: Users,
+    path: '/stats/login-rank'
+  },
+  {
+    key: 'activeUsers',
+    label: '活跃用户',
+    desc: '按时间范围查看活跃用户列表',
+    icon: Users,
+    path: '/im/active'
   },
   {
     key: 'config',

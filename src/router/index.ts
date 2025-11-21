@@ -90,6 +90,15 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import('@/views/page/AiModel.vue')
       },
       {
+        path: '/stats/login-rank',
+        name: 'LoginRank',
+        meta: {
+          title: '登录排行',
+          requiresAuth: true
+        },
+        component: () => import('@/views/page/LoginRank.vue')
+      },
+      {
         path: '/im/config',
         name: 'ImConfig',
         meta: {
@@ -106,6 +115,16 @@ const routes: Array<RouteRecordRaw> = [
           requiresAuth: true
         },
         component: () => import('@/views/page/ImContact.vue')
+      }
+      ,
+      {
+        path: '/im/active',
+        name: 'ActiveUsers',
+        meta: {
+          title: '活跃用户',
+          requiresAuth: true
+        },
+        component: () => import('@/views/page/ActiveUsers.vue')
       }
     ]
   }
