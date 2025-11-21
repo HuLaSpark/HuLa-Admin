@@ -64,6 +64,24 @@ export interface ApiKeySimpleItem {
   platform: string
 }
 
+export interface ApiKeyBalanceInfo {
+  currency: string
+  totalBalance: number
+  grantedBalance?: number
+  toppedUpBalance?: number
+  available?: boolean
+}
+
+export interface ApiKeyBalanceResp {
+  id: string
+  platform: string
+  supported: boolean
+  success: boolean
+  errorMessage?: string
+  balanceInfos: ApiKeyBalanceInfo[]
+  totalBalance: number
+}
+
 export function getPlatformList(): Promise<PlatformItem[]> {
   return request<PlatformItem[]>({
     url: '/platform/list',
@@ -85,6 +103,15 @@ export function getApiKeyAdminPage(params: ApiKeyPageParams): Promise<PageResult
     url: '/api-key/admin/page',
     method: 'get',
     params,
+    module: RequestModule.AI
+  })
+}
+
+export function getApiKeyBalance(id: string): Promise<ApiKeyBalanceResp> {
+  return request<ApiKeyBalanceResp>({
+    url: '/api-key/balance',
+    method: 'get',
+    params: { id },
     module: RequestModule.AI
   })
 }

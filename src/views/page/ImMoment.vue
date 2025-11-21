@@ -48,8 +48,9 @@
       :bordered="false"
       :segmented="{ content: 'soft', footer: 'soft' }"
       style="width: 880px; max-width: 100%"
+      @update:show="onCommentModalShow"
     >
-      <div class="space-y-4">
+      <div class="space-y-4" ref="commentModalFocusEl" tabindex="-1">
         <div class="p-4 bg-gray-50 rounded">
           <div class="flex items-center gap-3 mb-3">
             <n-avatar
@@ -61,9 +62,9 @@
             <div class="flex-1 min-w-0">
               <div class="flex items-center justify-between">
                 <div class="text-sm font-medium truncate">{{ currentFeed?.userName }}</div>
-                <div class="text-xs text-gray-500">{{ currentFeed?.createTime }}</div>
+                <div class="text-xs text-gray-500">{{ formatTime(currentFeed?.createTime) }}</div>
               </div>
-              <div class="text-sm text-gray-700 mt-2 break-words">{{ currentFeed?.content }}</div>
+              <n-ellipsis class="text-sm text-gray-700 mt-2" :line-clamp="4" :tooltip="true">{{ currentFeed?.content }}</n-ellipsis>
             </div>
           </div>
         </div>
@@ -96,7 +97,7 @@
                     <div class="text-xs text-gray-500 truncate">UID: {{ comment.uid }}</div>
                   </div>
                   <div class="flex items-center gap-2">
-                    <div class="text-xs text-gray-400">{{ comment.createTime }}</div>
+                    <div class="text-xs text-gray-400">{{ formatTime(comment.createTime) }}</div>
                     <n-popconfirm @positive-click="handleDeleteComment(comment.id)">
                       <template #trigger>
                         <n-button size="tiny" type="error" quaternary>
@@ -110,7 +111,7 @@
                 <div v-if="comment.replyUserName" class="text-xs text-gray-500 mt-1">
                   回复 @{{ comment.replyUserName }}
                 </div>
-                <div class="text-sm text-gray-700 mt-2 break-words">{{ comment.content }}</div>
+                <n-ellipsis class="text-sm text-gray-700 mt-2" :line-clamp="3" :tooltip="true">{{ comment.content }}</n-ellipsis>
               </div>
             </div>
           </div>
@@ -121,9 +122,9 @@
 </template>
 
 <script setup lang="ts">
-import { h, onMounted, ref } from 'vue'
+import { h, onMounted, ref, nextTick } from 'vue'
 import type { DataTableColumns } from 'naive-ui'
-import { NButton, NSpace } from 'naive-ui'
+import { NButton, NSpace, useDialog } from 'naive-ui'
 import {
   deleteImFeed,
   deleteImFeedComment,
@@ -143,9 +144,23 @@ const query = ref({
 })
 
 const showCommentModal = ref(false)
+const commentModalFocusEl = ref<HTMLElement | null>(null)
+const lastFocusedEl = ref<HTMLElement | null>(null)
 const commentLoading = ref(false)
 const commentList = ref<any[]>([])
 const currentFeed = ref<ImFeedItem | null>(null)
+const dialog = useDialog()
+const formatTime = (v?: string) => {
+  if (!v) return '-'
+  const d = new Date(v)
+  const y = d.getFullYear()
+  const m = String(d.getMonth() + 1).padStart(2, '0')
+  const dd = String(d.getDate()).padStart(2, '0')
+  const hh = String(d.getHours()).padStart(2, '0')
+  const mm = String(d.getMinutes()).padStart(2, '0')
+  const ss = String(d.getSeconds()).padStart(2, '0')
+  return `${y}-${m}-${dd} ${hh}:${mm}:${ss}`
+}
 
 const columns: DataTableColumns<ImFeedItem> = [
   {
@@ -274,6 +289,9 @@ function loadMore() {
 async function handleViewComments(row: ImFeedItem) {
   if (!row.id) return
   currentFeed.value = row
+  lastFocusedEl.value = document.activeElement as HTMLElement | null
+  lastFocusedEl.value && lastFocusedEl.value.blur()
+  document.querySelector('#app')?.setAttribute('inert', '')
   showCommentModal.value = true
   commentLoading.value = true
   commentList.value = []
@@ -286,6 +304,20 @@ async function handleViewComments(row: ImFeedItem) {
     window.$message?.error(msg)
   } finally {
     commentLoading.value = false
+    await nextTick()
+    commentModalFocusEl.value?.focus()
+  }
+}
+
+function onCommentModalShow(show: boolean) {
+  if (show) {
+    document.querySelector('#app')?.setAttribute('inert', '')
+    nextTick(() => {
+      commentModalFocusEl.value?.focus()
+    })
+  } else {
+    document.querySelector('#app')?.removeAttribute('inert')
+    lastFocusedEl.value?.focus?.()
   }
 }
 
@@ -302,23 +334,28 @@ async function handleDeleteComment(commentId: string) {
 
 async function handleDelete(row: ImFeedItem) {
   if (!row.id) return
-  const ok = window.confirm('确定删除该朋友圈吗？')
-  if (!ok) return
-
-  try {
-    loading.value = true
-    await deleteImFeed(row.id)
-    window.$message?.success('删除成功')
-    // 删除后重新加载列表，从第一页开始
-    cursor.value = null
-    isLast.value = false
-    await fetchList(true)
-  } catch (error: any) {
-    const msg = (error && (error.msg || error.message)) || '删除朋友圈失败'
-    window.$message?.error(msg)
-  } finally {
-    loading.value = false
-  }
+  dialog.warning({
+    title: '删除确认',
+    content: '确定删除该朋友圈吗？',
+    positiveText: '删除',
+    negativeText: '取消',
+    async onPositiveClick() {
+      try {
+        loading.value = true
+        await deleteImFeed(row.id)
+        window.$message?.success('删除成功')
+        tableData.value = tableData.value.filter(item => item.id !== row.id)
+        cursor.value = null
+        isLast.value = false
+        await fetchList(true)
+      } catch (error: any) {
+        const msg = (error && (error.msg || error.message)) || '删除朋友圈失败'
+        window.$message?.error(msg)
+      } finally {
+        loading.value = false
+      }
+    }
+  })
 }
 
 onMounted(() => {

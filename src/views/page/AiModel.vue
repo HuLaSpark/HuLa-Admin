@@ -1,6 +1,6 @@
 <template>
   <div class="p-4">
-    <n-card title="AI 能力中心">
+    <n-card title="AI 能力中心" class="mx-auto" style="max-width: 1400px">
       <n-tabs type="line" animated>
         <!-- API Key 管理 -->
         <n-tab-pane name="apiKey" tab="API Key 管理">
@@ -319,10 +319,11 @@ const apiKeyColumns: DataTableColumns<ApiKeyItem> = [
   {
     title: 'API Key',
     key: 'apiKey',
+    width: 480,
     ellipsis: { tooltip: true },
     render: (row) => {
       const key = row.apiKey || ''
-      return key.length > 20 ? `${key.substring(0, 20)}...` : key
+      return key.length > 60 ? `${key.substring(0, 60)}...` : key
     }
   },
   {
@@ -342,7 +343,7 @@ const apiKeyColumns: DataTableColumns<ApiKeyItem> = [
   {
     title: '操作',
     key: 'actions',
-    width: 150,
+    width: 220,
     render: (row) =>
       h('div', { class: 'flex gap-2' }, [
         h(
@@ -352,6 +353,14 @@ const apiKeyColumns: DataTableColumns<ApiKeyItem> = [
             onClick: () => handleEditApiKey(row)
           },
           () => '编辑'
+        ),
+        h(
+          NButton,
+          {
+            size: 'small',
+            onClick: () => handleCopyApiKey(row)
+          },
+          () => '复制Key'
         ),
         h(
           NButton,
@@ -543,6 +552,29 @@ const handleDeleteApiKey = (row: ApiKeyItem) => {
       }
     }
   })
+}
+
+const handleCopyApiKey = async (row: ApiKeyItem) => {
+  const key = row.apiKey || ''
+  if (!key) {
+    message.error('无可复制的 API Key')
+    return
+  }
+  try {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      await navigator.clipboard.writeText(key)
+    } else {
+      const input = document.createElement('input')
+      input.value = key
+      document.body.appendChild(input)
+      input.select()
+      document.execCommand('copy')
+      document.body.removeChild(input)
+    }
+    message.success('已复制 API Key')
+  } catch (e) {
+    message.error('复制失败')
+  }
 }
 
 const handleAddModel = async () => {
