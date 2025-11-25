@@ -158,6 +158,12 @@
             :options="modelTypeOptions"
             placeholder="请选择模型类型" />
         </n-form-item>
+        <n-form-item label="思考模式" path="supportsReasoning">
+          <n-switch v-model:value="modelForm.supportsReasoning">
+            <template #checked>开启</template>
+            <template #unchecked>关闭</template>
+          </n-switch>
+        </n-form-item>
         <n-form-item label="状态" path="status">
           <n-switch v-model:value="modelForm.status" :checked-value="0" :unchecked-value="1">
             <template #checked>启用</template>
@@ -262,7 +268,8 @@ const modelForm = ref({
   type: 1,
   status: 0,
   sort: 0,
-  publicStatus: 0
+  publicStatus: 0,
+  supportsReasoning: false
 })
 const modelModalTitle = computed(() => (modelForm.value.id ? '编辑模型' : '添加模型'))
 
@@ -588,7 +595,8 @@ const handleAddModel = async () => {
     type: 1,
     status: 0,
     sort: 0,
-    publicStatus: 0
+    publicStatus: 0,
+    supportsReasoning: false
   }
   showModelModal.value = true
 }
@@ -604,7 +612,8 @@ const handleEditModel = async (row: ModelItem) => {
     type: row.type,
     status: row.status,
     sort: row.sort || 0,
-    publicStatus: row.publicStatus || 0
+    publicStatus: row.publicStatus || 0,
+    supportsReasoning: row.supportsReasoning ?? false
   }
   showModelModal.value = true
 }
