@@ -33,6 +33,7 @@ export interface ModelItem {
   maxTokens?: number
   maxContexts?: number
   publicStatus?: number
+  supportsReasoning?: boolean
 }
 
 export interface ModelPageParams {
@@ -70,6 +71,7 @@ export interface ApiKeyBalanceInfo {
   grantedBalance?: number
   toppedUpBalance?: number
   available?: boolean
+  usageTotal?: number
 }
 
 export interface ApiKeyBalanceResp {
