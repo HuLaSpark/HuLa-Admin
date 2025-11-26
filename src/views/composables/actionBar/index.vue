@@ -33,7 +33,7 @@
         </template>
       </n-input>
 
-      <n-button circle secondary type="primary">
+      <n-button circle secondary type="primary" @click="handleRefresh">
         <template #icon>
           <n-icon :component="Refresh" />
         </template>
@@ -59,6 +59,7 @@ const { pageNum, pageSize } = paging
 const { input } = userVar()
 const { pagingLoad, tableData, contentData, showModal } = useBase()
 const { checkedRowKeys } = userTable(tableData)
+const emit = defineEmits<{ (e: 'refresh'): void }>()
 
 /*处理新增事件*/
 const handleAdd = () => {
@@ -108,6 +109,9 @@ const handleSearch = useDebounceFn(async () => {
     })
   })
 }, 300)
+const handleRefresh = () => {
+  emit('refresh')
+}
 </script>
 
 <style scoped lang="scss"></style>

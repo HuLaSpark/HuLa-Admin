@@ -1,7 +1,18 @@
 <template>
   <n-space vertical>
-    <!--操作栏-->
-    <ActionBar />
+    <n-card :bordered="false" size="small">
+      <n-form inline :model="query">
+        <n-form-item label="关键词">
+          <n-input v-model:value="query.keyword" placeholder="姓名/用户ID" class="w-52" />
+        </n-form-item>
+        <n-form-item>
+          <n-space>
+            <n-button type="primary" @click="handleSearch">查询</n-button>
+            <n-button @click="handleReset">重置</n-button>
+          </n-space>
+        </n-form-item>
+      </n-form>
+    </n-card>
 
     <!--表格-->
     <n-loading-bar-provider :to="loadingBarTargetRef" container-style="position: relative">
@@ -16,9 +27,7 @@
         :row-key="rowKey"
         :columns="columns"
         :data="tableData"
-        :pagination="pagination"
-        @update:filters="handleUpdateFilter"
-        @update:checked-row-keys="handleCheck">
+        :pagination="pagination" remote>
         <!--为空时表格状态-->
         <template #empty>
           <n-result v-if="!NoAccess" status="403" :title="t('403')" :description="t('403_content')"> </n-result>
@@ -41,41 +50,54 @@
     </n-loading-bar-provider>
   </n-space>
 
-  <!--抽屉-->
-  <UserDrawer />
-
-  <!--添加弹出框-->
-  <UserModal :title="title" />
-
-  <!--用户画像弹窗-->
-  <UserProfileModal :ref="(el: any) => userProfileModalRef = el" @edit="handleEditFromProfile" />
-</template>
+  
+  </template>
 
 <script setup lang="ts">
 import { useBase } from '@/hooks/useBase'
-import type { DataTableBaseColumn, DataTableFilterState } from 'naive-ui'
 import apis from '@/services/apis'
 import paging from '@/hooks/usePaging'
-import { pageUser, Response } from '@/services/types'
+import { Response } from '@/services/types'
 import { i18n } from '@/i18n'
 import { RotateClockwise2 } from '@vicons/tabler'
-import userVar from '@/views/composables/drawer/userDrawer/userVar'
-import { userTable } from '@/views/composables/table/userTable'
-import UserProfileModal from '@/views/composables/modal/userProfileModal/index.vue'
+import { employeeTable } from '@/views/composables/table/employeeTable'
 
 const { t } = i18n.global
 const { pageNum, pageSize } = paging
 const loadingBarTargetRef = ref()
-const title = ref('添加用户')
-const { input } = userVar()
-const { pagingLoad, tableData, loading, NoAccess, showDrawer, contentData, rawData } = useBase()
-const { handleCheck, columns, statusColumn, pagination, userProfileModalRef } = userTable(tableData)
+const { pagingLoad, tableData, loading, NoAccess, total } = useBase()
+const { columns } = employeeTable(tableData)
+const pagination = reactive({
+  page: pageNum.value,
+  pageSize: pageSize.value,
+  pageSizes: [10, 20, 50],
+  showSizePicker: true,
+  showQuickJumper: true,
+  itemCount: 0,
+  onChange: (p: number) => {
+    pagination.page = p
+    query.pageNum = p
+    reload()
+  },
+  onUpdatePageSize: (s: number) => {
+    pagination.pageSize = s
+    query.pageSize = s
+    query.pageNum = 1
+    pagination.page = 1
+    reload()
+  }
+})
+const query = reactive<{ keyword?: string; pageNum: number; pageSize: number }>({ pageNum: pageNum.value, pageSize: pageSize.value })
 
-// 从用户画像弹窗编辑
-const handleEditFromProfile = (user: pageUser) => {
-  showDrawer.value = true
-  Object.assign(rawData.value, user)
-  Object.assign(contentData.value, user)
+const reload = async () => {
+  await pagingLoad(async () => {
+    return await apis.employeePage({
+      pageSize: query.pageSize,
+      pageNum: query.pageNum,
+      userName: query.keyword || ''
+    })
+  })
+  ;(pagination as any).itemCount = Number(total.value || 0)
 }
 
 /**使用defineComponent重新构建组件*/
@@ -85,57 +107,38 @@ const LoadingBarTrigger = defineComponent({
     const loadingBar = useLoadingBar()
     pagingLoad(async () => {
       try {
-        return await apis.userPage({
-          pageSize: pageSize.value,
-          pageNum: pageNum.value,
-          userName: input.value
+        return await apis.employeePage({
+          pageSize: query.pageSize,
+          pageNum: query.pageNum,
+          userName: query.keyword || ''
         })
       } catch (error) {
         loadingBar.error()
-        return {} as Response // 返回一个默认的 Response
+        return {} as Response
       }
-    }, loadingBar)
+    }, loadingBar).then(() => {
+      ;(pagination as any).itemCount = Number(total.value || 0)
+    })
   },
   render() {
     return null
   }
 })
 
-/*表格中每个key值*/
-const rowKey = (row: pageUser) => row.id
-
-/*受控过滤方法*/
-const handleUpdateFilter = (filters: DataTableFilterState, sourceColumn: DataTableBaseColumn) => {
-  statusColumn.filterOptionValue = filters[sourceColumn.key] as number
+const rowKey = (row: any) => row.id
+const handleSearch = () => {
+  query.pageNum = 1
+  pagination.page = 1
+  reload()
+}
+const handleReset = () => {
+  query.keyword = ''
+  query.pageNum = 1
+  pagination.page = 1
+  reload()
 }
 
-/*点击表格栏事件*/
-// const rowProps = (row: pageUser) => {
-//   return {
-//     style: 'cursor: pointer',
-//     onClick: (event: MouseEvent) => {
-//       event.stopPropagation()
-//       if ('Notification' in window) {
-//         // 请求通知权限
-//         Notification.requestPermission().then((permission) => {
-//           if (permission === 'granted') {
-//             // 用户同意通知权限
-//             new Notification('Hello, World!', {
-//               body: row.role,
-//               icon: 'icon.png' // 可以替换成你的图标路径
-//             })
-//           } else if (permission === 'denied') {
-//             // 用户拒绝通知权限
-//             console.warn('用户拒绝了通知权限。')
-//           } else {
-//             // 用户还未做出选择
-//             console.warn('用户尚未做出通知权限选择。')
-//           }
-//         })
-//       }
-//     }
-//   }
-// }
+ 
 </script>
 
 <style lang="scss" scoped>

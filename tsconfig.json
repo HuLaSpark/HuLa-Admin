@@ -6,7 +6,7 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
-    "lib": ["ESNext", "DOM"],
+    "lib": ["ES2015", "ESNext", "DOM"],
     "skipLibCheck": true,
     "types": [
       "vite/client",

@@ -1,7 +1,7 @@
 <template>
   <n-space vertical>
     <!--操作栏-->
-    <ActionBar />
+    <ActionBar @refresh="reloadRoles" />
 
     <!--表格-->
     <n-loading-bar-provider :to="loadingBarTargetRef" container-style="position: relative">
@@ -16,8 +16,7 @@
         :row-key="rowKey"
         :columns="columns"
         :data="tableData"
-        :pagination="pagination"
-        @update:checked-row-keys="handleCheck">
+        :pagination="pagination" remote>
         <!--为空时表格状态-->
         <template #empty>
           <n-result v-if="!NoAccess" status="403" :title="t('403')" :description="t('403_content')"> </n-result>
@@ -49,15 +48,32 @@ import { pageUser, Response } from '@/services/types'
 import { i18n } from '@/i18n'
 import { RotateClockwise2 } from '@vicons/tabler'
 import userVar from '@/views/composables/drawer/userDrawer/userVar'
-import { roleTable } from '@/views/composables/table/roleTable'
+import { baseRoleTable } from '@/views/composables/table/baseRoleTable'
 
 const { t } = i18n.global
 const { pageNum, pageSize } = paging
 const loadingBarTargetRef = ref()
 // const title = ref('添加角色')
 const { input } = userVar()
-const { pagingLoad, tableData, loading, NoAccess } = useBase()
-const { handleCheck, columns, pagination } = roleTable(tableData)
+const { pagingLoad, tableData, loading, NoAccess, total } = useBase()
+const { columns } = baseRoleTable(tableData)
+const pagination = reactive({
+  page: pageNum.value,
+  pageSize: pageSize.value,
+  pageSizes: [10, 20, 50],
+  showSizePicker: true,
+  showQuickJumper: true,
+  itemCount: 0,
+  onChange: (p: number) => {
+    pagination.page = p
+    reloadRoles(p)
+  },
+  onUpdatePageSize: (s: number) => {
+    pagination.pageSize = s
+    pagination.page = 1
+    reloadRoles(1)
+  }
+})
 
 /**使用defineComponent重新构建组件*/
 const LoadingBarTrigger = defineComponent({
@@ -67,75 +83,35 @@ const LoadingBarTrigger = defineComponent({
     pagingLoad(async () => {
       try {
         return await apis.rolePage({
-          pageSize: pageSize.value,
-          pageNum: pageNum.value,
+          pageSize: pagination.pageSize,
+          pageNum: pagination.page,
           userName: input.value
         })
       } catch (error) {
         loadingBar.error()
         return {} as Response // 返回一个默认的 Response
       }
-    }, loadingBar)
+    }, loadingBar).then(() => {
+      ;(pagination as any).itemCount = Number(total.value || 0)
+    })
   },
   render() {
     return null
   }
 })
 /*表格中每个key值*/
-const rowKey = (row: pageUser) => row.id
+const rowKey = (row: any) => row.id
 /*受控过滤方法*/
-// const handleUpdateFilter = (filters: DataTableFilterState, sourceColumn: DataTableBaseColumn) => {
-//   statusColumn.filterOptionValue = filters[sourceColumn.key] as number
-// }
-
-/*处理新增事件*/
-// const handleAdd = () => {
-//   showModal.value = true
-//   /*重新打开弹框的时候清空表单内容*/
-//   contentData.value = {}
-// }
-
-/*批量删除事件*/
-// TODO 考虑系统用户应该是第三方登录或者是超级管理员或者管理员创建的用户所以批量删除是否有必要存在，建议逻辑删除或者不需要删除的功能 (nyh-2023-12-02 06:27:30)
-// const handleBatch = async () => {
-//   if (checkedRowKeys.value.length === 0) {
-//     Report.failure(t('delete_batch_error'), t('batch_error_msg'), t('close'), {
-//       titleFontSize: '18px',
-//       messageFontSize: '16px'
-//     })
-//     return
-//   }
-//   const uids = tableData.value
-//     .filter((item: any) => checkedRowKeys.value.includes(item.id))
-//     .map((item: any) => item.uid)
-//   const data = { ids: checkedRowKeys.value, uids }
-//   const res = await apis.batchDeleteUsers(data)
-//   if (res.code !== RCodeEnum.OK) {
-//     return window.$message.error(res.code === RCodeEnum.PARAM_ERROR ? (res.data as any)[0] : res.msg)
-//   }
-//   await pagingLoad(() =>
-//     apis.userPage({
-//       pageSize: pageSize.value,
-//       pageNum: pageNum.value,
-//       userName: input.value
-//     })
-//   ).then(() => {
-//     window.$message.success(res.msg)
-//     /*初始化选中的行*/
-//     checkedRowKeys.value.length = 0
-//   })
-// }
-
-/*搜索事件*/
-// const handleSearch = useDebounceFn(async () => {
-//   await pagingLoad(() => {
-//     return apis.userPage({
-//       pageSize: pageSize.value,
-//       pageNum: pageNum.value,
-//       userName: input.value
-//     })
-//   })
-// }, 300)
+const reloadRoles = async (page?: number) => {
+  await pagingLoad(() =>
+    apis.rolePage({
+      pageSize: pagination.pageSize,
+      pageNum: page || pagination.page,
+      userName: input.value
+    })
+  )
+  ;(pagination as any).itemCount = Number(total.value || 0)
+}
 </script>
 
 <style scoped></style>
