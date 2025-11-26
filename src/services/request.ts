@@ -8,11 +8,17 @@ import { useLogin } from '@/hooks/useLogin'
 /*用户状态图标*/
 export const networkIcon = ref()
 //请求配置
+const isHttpProxy = import.meta.env.DEV && import.meta.env.VITE_HTTP_PROXY === 'Y'
+const getBaseURL = (): string => {
+  if (isHttpProxy) return ''
+  return import.meta.env.VITE_API_BASE_URL || '/api'
+}
+
 export const createAxios = (config?: AxiosRequestConfig): AxiosInstance => {
   const instance = axios.create({
     //请求头
     // baseURL: import.meta.env.VITE_BASE_URL,
-    baseURL: '/api',
+    baseURL: getBaseURL(),
     //超时配置
     timeout: 10000,
     //跨域携带cookie

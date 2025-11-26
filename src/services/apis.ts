@@ -1,15 +1,9 @@
 import { createAxios } from '@/services/request'
 import urls from '@/services/urls'
-import type {
-  BatchDelete,
-  CursorPageReq,
-  ImUserSearchParams,
-  login,
-  parameter,
-  Response,
-  UpdateUser,
-  User
-} from '@/services/types'
+import { RequestModule } from '@/enums/request'
+import { request as httpRequest } from '@/utils/http'
+import { RCodeEnum } from '@/enums'
+import type { BatchDelete, CursorPageReq, ImUserSearchParams, login, parameter, Response, UpdateUser, User } from '@/services/types'
 
 const request = createAxios()
 
@@ -53,7 +47,10 @@ export default {
   /*修改 角色*/
   editRole: (form: any): Promise<Response> => PUT(urls.role, form),
   /*角色分页 请求*/
-  rolePage: (params: parameter): Promise<Response> => GET(urls.role + '/page', { params }),
+  rolePage: async (params: parameter): Promise<Response> => {
+    const page = await httpRequest<any>({ url: '/baseRole/page', method: 'post', data: { model: { name: params.userName }, size: params.pageSize, current: params.pageNum }, module: RequestModule.BASE })
+    return { code: RCodeEnum.OK, msg: 'ok', data: { records: page?.records || [], total: Number(page?.total || 0) }, fail: false, success: true, version: '' }
+  },
   /*获取角色列表*/
   getRoleList: (): Promise<Response> => GET(urls.role),
 
@@ -65,4 +62,11 @@ export default {
   /*获取用户的好友列表*/
   getFriendList: (uid: string, params: CursorPageReq): Promise<Response> =>
     GET(urls.friendList, { params: { ...params, uid } })
+  ,
+  /*  ====================员工维护==================== */
+  /*员工分页 请求*/
+  employeePage: async (params: parameter): Promise<Response> => {
+    const page = await httpRequest<any>({ url: '/baseEmployee/page', method: 'post', data: { model: { username: params.userName }, size: params.pageSize, current: params.pageNum }, module: RequestModule.BASE })
+    return { code: RCodeEnum.OK, msg: 'ok', data: { records: page?.records || [], total: Number(page?.total || 0) }, fail: false, success: true, version: '' }
+  }
 }

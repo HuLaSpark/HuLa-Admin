@@ -182,10 +182,22 @@ export const userStore = defineStore('localUserInfo', {
             if (!rawComponent || rawComponent === 'LAYOUT') return undefined
 
             if (rawComponent.includes('/basic/user/')) {
+              if (rawComponent.includes('/basic/user/baseOrg/')) return 'Org'
+              if (rawComponent.includes('/basic/user/basePosition/')) return 'Position'
               return 'User'
             }
             if (rawComponent.includes('/basic/system/baseRole/')) {
               return 'Role'
+            }
+            // 跳过附件管理页面
+            if (rawComponent.includes('/basic/system/baseFile/')) {
+              return undefined
+            }
+            if (rawComponent.includes('/basic/system/baseOperationLog/')) {
+              return 'OperationLog'
+            }
+            if (rawComponent.includes('/basic/system/baseLoginLog/')) {
+              return 'LoginLog'
             }
             if (rawComponent.includes('/basic/msg/')) {
               return 'MsgCenter'
