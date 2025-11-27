@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
+import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
 import { userStore } from '@/stores/user'
 import type { MenuItem } from '@/interface/IRouter'
 import { noPermissionPaths, paginationPage } from './options.ts'
@@ -132,7 +132,7 @@ const routes: Array<RouteRecordRaw> = [
 
 // 创建路由
 const router: any = createRouter({
-  history: createWebHistory(BASE_URL),
+  history: createWebHashHistory(BASE_URL),
   routes
 })
 
